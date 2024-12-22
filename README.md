@@ -1,9 +1,9 @@
 # Sumo 2024 Robot 📎
 
-Welcome to my Sumo 2024 Robot repo🌐,
-a cutting-edge tool
+Welcome to my Sumo 2024 Robot repo🌐, a cutting-edge tool
 designed to win the next sumo competition.
-Crafted with arduino and solidworks.
+
+Crafted with Arduino and Solidworks.
 
 <div align="center">
     <a href="https://github.com/DefinetlyNotAI/Sumo_2024/issues"><img src="https://img.shields.io/github/issues/DefinetlyNotAI/Sumo_2024" alt="GitHub Issues"></a>
@@ -13,6 +13,6 @@ Crafted with arduino and solidworks.
 </div>
 
 
-For the parts, check the [pdf file](https://github.com/DefinetlyNotAI/Sumo_2024/blob/main/Solidworks/Part%20list.pdf)
+For the parts, check the [pdf file](Full Project\Solidworks\Part_list.pdf)
 
 This is for the sumo competition in HTU.
