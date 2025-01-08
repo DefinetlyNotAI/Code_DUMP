@@ -1,64 +1,94 @@
-class IndefiniteIntegralSolver:
-    def __init__(self, expression):
-        self.expression = expression
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
 
-    def integrate(self):
-        try:
-            terms = self.parse_expression(self.expression)
-            integrated_terms = [self.integrate_term(term) for term in terms]
-            result = " + ".join(integrated_terms) + " + C"
-            return result
-        except Exception as e:
-            return str(e)
 
-    def parse_expression(self, expression):
-        expression = expression.replace(" ", "")
-        terms = []
-        term = ""
-        in_parentheses = 0
+def to_fraction(x, tolerance=1e-10):
+    n = 1
+    while abs(n * x - round(n * x)) > tolerance:
+        n *= 10
+    numerator = round(n * x)
+    denominator = n
+    common_divisor = gcd(numerator, denominator)
+    numerator //= common_divisor
+    denominator //= common_divisor
+    return f"{numerator}/{denominator}" if denominator != 1 else f"{numerator}"
 
-        for char in expression:
-            if char == "(":
-                in_parentheses += 1
-            elif char == ")":
-                in_parentheses -= 1
 
-            if char == "+" and in_parentheses == 0:
-                terms.append(term)
-                term = ""
-            else:
-                term += char
+def parse_term(term):
+    # Remove spaces and handle negative signs
+    term = term.replace(' ', '')
+    if term[0] == '-':
+        sign = -1
+        term = term[1:]
+    else:
+        sign = 1
 
-        terms.append(term)
-        return terms
-
-    def integrate_term(self, term):
-        if "x" not in term:
-            if "/" in term:
-                num, denom = term.split("/")
-                return f"{float(num) / float(denom)}*x"
-            return f"{term}*x"
-
-        if "^" in term:
-            base, exponent = term.split("^")
-            if base == "x":
-                new_exponent = float(exponent) + 1
-                coefficient = 1 / new_exponent
-                return f"{coefficient}*x^{new_exponent}"
-            else:
-                coefficient, base = base.split("*")
-                new_exponent = float(exponent) + 1
-                coefficient = float(coefficient) / new_exponent
-                return f"{coefficient}*x^{new_exponent}"
-        elif "*" in term:
-            coefficient, base = term.split("*")
-            if base == "x":
-                return f"{float(coefficient) / 2}*x^2"
-            else:
-                raise ValueError("Invalid term")
-        elif term == "x":
-            return "0.5*x^2"
-        elif term == "0":
-            return "0*x"
+    # Split the term into coefficient and variable parts
+    if 'x' in term:
+        parts = term.split('x')
+        if parts[0] == '':
+            coefficient = 1
+        elif parts[0] == '-':
+            coefficient = -1
         else:
-            raise ValueError("Invalid term")
+            coefficient = float(parts[0])
+        if len(parts) > 1 and parts[1] != '':
+            exponent = int(parts[1][2:])  # Assuming the form is x**n
+        else:
+            exponent = 1
+    else:
+        coefficient = float(term)
+        exponent = 0
+
+    return sign * coefficient, exponent
+
+
+def integrate_term(coefficient, exponent):
+    if exponent == -1:
+        return coefficient, 'ln|x|'
+    new_exponent = exponent + 1
+    new_coefficient = to_fraction(coefficient / new_exponent)
+    return new_coefficient, new_exponent
+
+
+def format_term(coefficient, exponent):
+    if exponent == 'ln|x|':
+        return f"{coefficient}ln|x|"
+
+    if coefficient == 0:
+        return ""
+
+    if exponent == 0:
+        return f"{coefficient}"
+    elif exponent == 1:
+        if coefficient == "1":
+            return "x"
+        return f"{coefficient}x"
+    else:
+        if coefficient == "1":
+            return f"x^{exponent}"
+        return f"{coefficient}x^{exponent}"
+
+
+def integrate_polynomial(expression):
+    terms = expression.split('+')
+    integrated_terms = []
+
+    for term in terms:
+        coefficient, exponent = parse_term(term.strip())
+        new_coefficient, new_exponent = integrate_term(coefficient, exponent)
+        integrated_terms.append(format_term(new_coefficient, new_exponent))
+
+    return ' + '.join(integrated_terms)
+
+
+def main():
+    formula = input("Enter the formula: ")
+    integral = integrate_polynomial(formula)
+    print(f"The indefinite integral is: {integral} + C")
+
+
+if __name__ == "__main__":
+    main()
