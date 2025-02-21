@@ -41,8 +41,7 @@
       "name": "Killer Bot",
       "description": "Simple bot that murders people, fun.",
       "imageUrl": "https://images.unsplash.com/photo-1588597575483-f4e43e191c94?w=800&q=80",
-      "tags": ["Kill", "Every", "Human"],
-      "rank": "🎖️"
+      "tags": ["Kill", "Every", "Human"]
     }
   ]
 }

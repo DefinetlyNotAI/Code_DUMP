@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ProjectGrid } from './components/ProjectGrid.tsx';
-import { Project } from './types/project.ts';
+import { ProjectGrid } from './components/ProjectGrid';
+import { Project } from './types/project';
 import projectsData from './data/projects.json';
 import { Code2 } from 'lucide-react';
 
@@ -31,49 +31,60 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="min-h-screen">
+        <img
+            src="https://raw.githubusercontent.com/hackclub/scrapyard/main/public/elements/orpheus-flag.svg"
+            alt="Orpheus Flag"
+            className="orpheus-flag"
+        />
+        <img
+            src="https://raw.githubusercontent.com/hackclub/scrapyard/main/public/elements/orpheus-doodle.svg"
+            alt="Orpheus Doodle"
+            className="orpheus-doodle"
+        />
+
+        <header className="bg-transparent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex items-center gap-4"
+            >
+              <Code2 className="w-8 h-8 text-[#4c8a7c]" />
+              <h1 className="text-3xl font-bold text-[#4c8a7c]">
+                Project Showcase
+              </h1>
+            </motion.div>
+            <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mt-2 text-black"
+            >
+              All the stupid ideas in a stupid page🧏
+            </motion.p>
+          </div>
+        </header>
+
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <Code2 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Project Showcase
-            </h1>
+            <ProjectGrid projects={projects} />
           </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-2 text-gray-600 dark:text-gray-300"
-          >
-            Exploring innovation through code and design
-          </motion.p>
-        </div>
-      </header>
+        </main>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <ProjectGrid projects={projects} />
-        </motion.div>
-      </main>
-
-      <footer className="bg-white dark:bg-gray-800 border-t dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-gray-600 dark:text-gray-300">
-            © {new Date().getFullYear()} Project Showcase. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+        <footer className="bg-transparent border-t border-[#4c8a7c]/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p className="text-center text-[#4c8a7c]">
+              © {new Date().getFullYear()} Project Showcase. No rights reserved (FLOSS YEAH).
+            </p>
+          </div>
+        </footer>
+      </div>
   );
 }
 
