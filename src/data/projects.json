@@ -1,0 +1,48 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "E-Commerce Platform",
+      "description": "A full-featured e-commerce platform with real-time inventory management and AI-powered product recommendations.",
+      "imageUrl": "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+      "tags": ["React", "Node.js", "MongoDB", "AI"],
+      "rank": "🥇",
+      "githubUrl": "https://github.com/example/ecommerce",
+      "demoUrl": "https://demo.example.com"
+    },
+    {
+      "id": "2",
+      "name": "Task Management System",
+      "description": "Enterprise-grade task management system with real-time collaboration and advanced analytics.",
+      "imageUrl": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
+      "tags": ["TypeScript", "React", "PostgreSQL"],
+      "rank": "🥈",
+      "githubUrl": "https://github.com/example/tasks"
+    },
+    {
+      "id": "3",
+      "name": "Social Media Dashboard",
+      "description": "Unified dashboard for managing multiple social media accounts with analytics and scheduling.",
+      "imageUrl": "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&q=80",
+      "tags": ["React", "Redux", "GraphQL"],
+      "rank": "🥉",
+      "demoUrl": "https://dashboard.example.com"
+    },
+    {
+      "id": "4",
+      "name": "Weather App",
+      "description": "Beautiful weather application with advanced forecasting and location-based alerts.",
+      "imageUrl": "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=800&q=80",
+      "tags": ["React", "Weather API", "PWA"],
+      "rank": "🎖️"
+    },
+    {
+      "id": "5",
+      "name": "Killer Bot",
+      "description": "Simple bot that murders people, fun.",
+      "imageUrl": "https://images.unsplash.com/photo-1588597575483-f4e43e191c94?w=800&q=80",
+      "tags": ["Kill", "Every", "Human"],
+      "rank": "🎖️"
+    }
+  ]
+}
