@@ -1,0 +1,5 @@
+scapy~=2.5.0
+numpy~=2.2.3
+matplotlib~=3.10.0
+Flask~=3.1.0
+DateTime~=5.5
