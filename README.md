@@ -13,6 +13,6 @@ Crafted with Arduino and Solidworks.
 </div>
 
 
-For the parts, check the [pdf file](Full Project\Solidworks\Part_list.pdf)
+For the parts, check the [pdf file](https://github.com/DefinetlyNotAI/Sumo_2024/blob/main/Full%20Project/Solidworks/Part_list.pdf)
 
 This is for the sumo competition in HTU.
