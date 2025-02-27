@@ -12,7 +12,7 @@ and manipulation. Here's how to use it:
 To start the application, run the following command in your terminal:
 
 ```bash
-python app.py
+python Colortomata.py
 ```
 
 This will start the Flask server on `http://127.0.0.1:5000/`. 
@@ -73,7 +73,8 @@ ensuring that certain colors (especially those near the start of the custom rule
 have a higher chance of appearing.
 
 ```python
-from app import np, COLOR_KEYS, lambda_
+from Colortomata import np, COLOR_KEYS, lambda_
+
 
 def generate_cluster_bias():
     base_prob = np.ones(len(COLOR_KEYS) - 1) / (len(COLOR_KEYS) - 1)
