@@ -9,6 +9,8 @@ and manipulation. Here's how to use it:
 
 ### 1. **Run the Application**
 
+If you want to use locally:
+
 To start the application, run the following command in your terminal:
 
 ```bash
