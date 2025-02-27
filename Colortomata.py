@@ -22,6 +22,7 @@ available_rules = custom_rule_order
 seed = 42
 current_grid = None
 MAX_TIME = 60  # 1 minutes due to it being resource intensive
+MAX_GRID_SIZE = 500  # Anything larger and it impedes the system
 
 # Colors definition
 COLORS = {
@@ -62,12 +63,12 @@ def generate():
         seed = int(seed)
 
         # Validate inputs
-        if grid_size < 0 or grid_size > 65536:
-            return jsonify({"error": "Grid Size must be between 0 and 65536."}), 400
+        if grid_size < 0 or grid_size > MAX_GRID_SIZE:
+            return jsonify({"error": "Grid Size must be between 0.1 and 500."}), 400
         if theta < 0 or theta > 1:
-            return jsonify({"error": "Theta must be between 0 and 1."}), 400
+            return jsonify({"error": "Theta must be between 0.1 and 1."}), 400
         if delta < 0 or delta > 1:
-            return jsonify({"error": "Delta must be between 0 and 1."}), 400
+            return jsonify({"error": "Delta must be between 0.1 and 1."}), 400
         if lambda_ < 0 or lambda_ > 1:
             return jsonify({"error": "Lambda must be between 0 and 1."}), 400
         if seed < 0:
