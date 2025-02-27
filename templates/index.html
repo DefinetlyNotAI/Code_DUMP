@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Automaton Generator</title>
+    <!--suppress HtmlUnknownTarget -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- SweetAlert2 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1>Cellular Automaton Generator</h1>
+        <p>Generate complex patterns based on customizable parameters</p>
+        <br>
+    </header>
+
+    <form id="settings-form" class="form">
+        <fieldset>
+            <legend>Settings</legend>
+            <div class="input-group">
+                <label for="grid_size">Grid Size:</label>
+                <input type="number" id="grid_size" name="grid_size" value="{{ grid_size }}" min="1" required>
+                <small>Defines the grid dimensions for the automaton.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="theta">θ (Threshold):</label>
+                <input type="number" id="theta" name="theta" value="{{ theta }}" min="0" step="any" required>
+                <small>The threshold value that influences cell transitions.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="delta">δ (Noise):</label>
+                <input type="number" id="delta" name="delta" value="{{ delta }}" min="0" step="any" required>
+                <small>Controls the noise level, affecting cell randomness.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="lambda_">λ (Cluster Bias):</label>
+                <input type="number" id="lambda_" name="lambda_" value="{{ lambda_ }}" min="0" step="any" required>
+                <small>Determines the bias towards clustered cell states.</small>
+            </div>
+
+            <div class="input-group">
+                <label for="seed">Seed:</label>
+                <input type="number" id="seed" name="seed" value="{{ seed }}" min="1">
+                <small>Initial seed for randomization to ensure reproducibility.</small>
+                <small>Not required, default seed 42</small>
+            </div>
+
+            <div class="input-group">
+                <label for="custom_rule_order">Custom Rule Order (Comma Separated):</label>
+                <input type="text" id="custom_rule_order" name="custom_rule_order" value="{{ ','.join(custom_rule_order) }}">
+                <small>Specify custom rule order for automaton state transitions.</small>
+                <small>Available ordering: Red, Orange, Yellow, Green, Blue, Purple, Pink, Magenta</small>
+                <small>Not required, will use default if left empty</small>
+            </div>
+
+            <div class="input-group">
+                <label for="evolve-checkbox">Evolve for 1 minute:</label>
+                <input type="checkbox" id="evolve-checkbox" name="evolve-checkbox">
+                <small>Enable to evolve the automaton for 1 minute after generation. So it will keep changing until maturing after 1 minute</small>
+            </div>
+
+            <button type="submit" class="submit-button">Generate</button>
+        </fieldset>
+    </form>
+
+    <div id="image-container" class="image-container">
+        <h2>Generated Image</h2>
+        <img id="generated-image" src="" alt="Generated Automaton Image" class="generated-image">
+    </div>
+
+</div>
+
+<!--suppress HtmlUnknownTarget -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

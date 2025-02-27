@@ -1,0 +1,133 @@
+/* General Body Styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Allow page height to grow */
+    margin: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Main container for the app */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    overflow: auto; /* Allow vertical scrolling when necessary */
+}
+
+/* Title */
+h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Input Group styling */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    padding: 0 20px;
+}
+
+.input-group label {
+    font-size: 1.1em;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fafafa;
+}
+
+.input-group input:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Button styling */
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Image container */
+.image-container {
+    margin-top: 30px;
+    display: none; /* Hidden initially */
+}
+
+.image-container h2 {
+    font-size: 1.8em;
+    color: #333;
+}
+
+#generated-image {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Checkbox container */
+.input-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Checkbox label */
+.input-group label[for="evolve-checkbox"] {
+    font-size: 1.1em;
+    color: #555;
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+/* Checkbox styling when checked */
+.input-group input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Checkbox styling on hover */
+.input-group input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+/* Styling for the small text under the checkbox */
+.input-group small {
+    font-size: 0.9em;
+    color: #777;
+    display: block;
+    margin-top: 5px;
+}
