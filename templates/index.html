@@ -30,19 +30,19 @@
 
             <div class="input-group">
                 <label for="theta">θ (Threshold):</label>
-                <input type="number" id="theta" name="theta" value="{{ theta }}" min="0" step="any" required>
+                <input type="number" id="theta" name="theta" value="{{ theta }}" min="0.1" step="any" required>
                 <small>The threshold value that influences cell transitions.</small>
             </div>
 
             <div class="input-group">
                 <label for="delta">δ (Noise):</label>
-                <input type="number" id="delta" name="delta" value="{{ delta }}" min="0" step="any" required>
+                <input type="number" id="delta" name="delta" value="{{ delta }}" min="0.1" step="any" required>
                 <small>Controls the noise level, affecting cell randomness.</small>
             </div>
 
             <div class="input-group">
                 <label for="lambda_">λ (Cluster Bias):</label>
-                <input type="number" id="lambda_" name="lambda_" value="{{ lambda_ }}" min="0" step="any" required>
+                <input type="number" id="lambda_" name="lambda_" value="{{ lambda_ }}" min="0.1" step="any" required>
                 <small>Determines the bias towards clustered cell states.</small>
             </div>
 
