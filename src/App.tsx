@@ -4,8 +4,9 @@ import { ProjectGrid } from './components/ProjectGrid';
 import { Project } from './types/project';
 import projectsData from './data/projects.json';
 import { Code2 } from 'lucide-react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Guide from './pages/Guide';
+
 
 const rankOrder = {
   '🥇': 1,
@@ -81,21 +82,20 @@ function App() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <Switch>
-            <Route exact path="/">
+          <Routes>
+            <Route path="/" element={
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <ProjectGrid projects={projects} />
               </motion.div>
-            </Route>
-            <Route path="/guide">
-              <Guide />
-            </Route>
-          </Switch>
+            } />
+            <Route path="/guide" element={<Guide />} />
+          </Routes>
         </main>
+
 
         <footer className="bg-transparent border-t border-[#4c8a7c]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
