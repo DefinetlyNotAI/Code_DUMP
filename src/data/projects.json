@@ -42,6 +42,16 @@
       "description": "Simple bot that murders people, fun.",
       "imageUrl": "https://images.unsplash.com/photo-1588597575483-f4e43e191c94?w=800&q=80",
       "tags": ["Kill", "Every", "Human"]
+    },
+    {
+      "id": "6",
+      "name": "Guide to Contributing",
+      "description": "A detailed guide for beginners on how to contribute to the project.",
+      "imageUrl": "https://example.com/guide-image.jpg",
+      "tags": ["Guide", "Beginner", "Contribution"],
+      "rank": "🎖️",
+      "githubUrl": "https://github.com/DefinetlyNotAI/Scrapyard_Showcase",
+      "demoUrl": "https://example.com/guide-demo"
     }
   ]
 }
