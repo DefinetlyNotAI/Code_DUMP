@@ -57,15 +57,15 @@
     <inspection_tool class="ProblematicWhitespace" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PyAugmentAssignmentInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PyBroadExceptionInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="PyCompatibilityInspection" enabled="false" level="WARNING" enabled_by_default="false">
+    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ourVersions">
         <value>
           <list size="5">
             <item index="0" class="java.lang.String" itemvalue="3.13" />
-            <item index="1" class="java.lang.String" itemvalue="3.9" />
-            <item index="2" class="java.lang.String" itemvalue="3.10" />
-            <item index="3" class="java.lang.String" itemvalue="3.12" />
-            <item index="4" class="java.lang.String" itemvalue="3.11" />
+            <item index="1" class="java.lang.String" itemvalue="3.10" />
+            <item index="2" class="java.lang.String" itemvalue="3.12" />
+            <item index="3" class="java.lang.String" itemvalue="3.11" />
+            <item index="4" class="java.lang.String" itemvalue="3.9" />
           </list>
         </value>
       </option>
@@ -75,11 +75,12 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="4">
+          <list size="5">
             <item index="0" class="java.lang.String" itemvalue="torch" />
             <item index="1" class="java.lang.String" itemvalue="numpy" />
             <item index="2" class="java.lang.String" itemvalue="psutil" />
             <item index="3" class="java.lang.String" itemvalue="win32gui" />
+            <item index="4" class="java.lang.String" itemvalue="Faker" />
           </list>
         </value>
       </option>
@@ -120,6 +121,7 @@
     </inspection_tool>
     <inspection_tool class="PyVulnerableApiCodeInspection" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
     <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SqlResolveInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="TodoComment" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="DUPLICATE_FROM_SERVER" />
   </profile>
 </component>

@@ -7,25 +7,71 @@
     @apply antialiased;
     background-image: url('https://raw.githubusercontent.com/hackclub/scrapyard/main/public/backgrounds/lined-paper.png');
     background-repeat: repeat;
+    font-family: 'Arial', sans-serif;
+  }
+
+  h1, h2 {
+    color: #333;
   }
 }
 
 @layer components {
+  .guide-container ol li code {
+    @apply block bg-gray-200 p-4 rounded-md font-mono text-sm overflow-x-auto whitespace-pre-wrap w-full;
+  }
+
+  h1 {
+    @apply text-4xl font-bold text-center my-4;
+    color: #2D3748; /* Darker shade for main title */
+  }
+
+  h2 {
+    @apply text-2xl font-semibold text-[#4c8a7c] my-2;
+  }
+
+  ol {
+    @apply list-decimal pl-6;
+  }
+
+  li {
+    @apply my-6;
+  }
+
+  img {
+    @apply w-full max-w-lg mx-auto my-4;
+  }
+
+  pre {
+    @apply bg-gray-100 p-4 rounded-md font-mono text-sm overflow-x-auto;
+  }
+
+  code {
+    @apply text-sm text-blue-600 font-mono;
+  }
+
+  p {
+    @apply text-lg leading-relaxed text-gray-700;
+  }
+
   .btn {
-    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm
-    text-[#4c8a7c] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4c8a7c];
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-[#4c8a7c] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4c8a7c];
   }
 
   .project-card {
-    @apply relative h-full;
+    @apply relative h-full overflow-hidden; /* Prevent any overflow from images or content */
   }
 
+
   .project-card-inner {
-    @apply h-full;
+    @apply h-full bg-no-repeat bg-center; /* Ensure sticky note background is applied correctly */
     background-image: url('https://raw.githubusercontent.com/hackclub/scrapyard/main/public/elements/sticky-note.svg');
-    background-size: 100% 100%;
+    background-size: cover; /* Ensure background covers the entire area without stretching */
     background-position: center;
     background-repeat: no-repeat;
+    border: none; /* Remove any border or pop-up box effect */
+    width: 100%; /* Ensure it takes the full width */
+    height: 100%; /* Ensure it takes the full height of the parent */
+    object-fit: cover; /* Ensures content fits and clips within the container */
   }
 
   .pin {
@@ -42,6 +88,15 @@
     z-index: 10;
     pointer-events: none;
   }
+
+
+  .guide-container ol li code {
+    @apply bg-gray-200 p-2 rounded-md font-mono text-sm;
+  }
+
+  .guide-container ol li p {
+    @apply mt-2;
+  }
 }
 
 .orpheus-flag {
@@ -52,9 +107,15 @@
 }
 
 .orpheus-doodle {
-  position: absolute;  /* Same status as flag */
-  top: 5px;  /* Align with flag's top */
-  right: 10px;  /* Move to the top-right */
+  position: absolute; /* Same status as flag */
+  top: 5px; /* Align with flag's top */
+  right: 10px; /* Move to the top-right */
   width: 250px; /* Enlarged size */
   height: auto;
+}
+
+@layer utilities {
+  .btn {
+    @apply text-[#4c8a7c] bg-white hover:bg-gray-50;
+  }
 }
