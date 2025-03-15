@@ -1,0 +1,283 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .terminal-container {
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 1rem;
+            border: 1px solid #0f0;
+            height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .terminal-header {
+            border-bottom: 1px solid #0f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .terminal-title {
+            color: #0f0;
+        }
+
+        .terminal-status {
+            color: #f00;
+            animation: blink 1s infinite;
+        }
+
+        .terminal-output {
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .terminal-prompt {
+            margin-right: 0.5rem;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: monospace;
+            flex-grow: 1;
+            caret-color: #0f0;
+        }
+
+        .terminal-input:focus {
+            outline: none;
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #0f0;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
+        .access-denied {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #f00;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            font-size: 2rem;
+            z-index: 10;
+        }
+
+        .access-denied p {
+            margin: 1rem 0;
+            animation: glitch 0.3s infinite;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="content-section">
+        <h2>SYSTEM <span class="glitch-text" data-text="TERMINAL">TERMINAL</span></h2>
+
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <div class="terminal-title">SCRAPYARD SYSTEM v2.5.3</div>
+                <div class="terminal-status">COMPROMISED</div>
+            </div>
+
+            <div class="terminal-output" id="terminal-output">
+                > SYSTEM BOOT SEQUENCE INITIATED
+                > CHECKING SYSTEM INTEGRITY...
+                > WARNING: CORRUPTION DETECTED
+                > ATTEMPTING RECOVERY...
+                > RECOVERY FAILED
+                > ENTERING RESTRICTED MODE
+
+                > TYPE 'HELP' FOR AVAILABLE COMMANDS
+            </div>
+
+            <div class="terminal-input-line">
+                <div class="terminal-prompt">></div>
+                <label for="terminal-input"></label><input type="text" class="terminal-input" id="terminal-input" autocomplete="off" autofocus>
+            </div>
+
+            <!-- Initially hide the terminal with an "Access Denied" overlay -->
+            <div class="access-denied" id="access-denied">
+                <p>ACCESS DENIED</p>
+                <p style="font-size: 1rem;">TERMINAL ACCESS RESTRICTED</p>
+                <p style="font-size: 0.8rem;">FIND THE HIDDEN TERMINAL ACCESS POINT</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const terminalOutput = document.getElementById('terminal-output');
+            const terminalInput = document.getElementById('terminal-input');
+            const accessDenied = document.getElementById('access-denied');
+            let terminalLocked = false; // Tracks terminal lock state
+
+            async function discoverSecret(secretId) {
+                try {
+                    const response = await fetch('/api/discover_secret', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ secret_id: secretId })
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        return `You discovered: ${secretId}! (${result.total_discovered} found)\nReward: ${result.reward}`;
+                    } else {
+                        if (result.message.includes("This secret is not available to you")) {
+                            terminalLocked = true; // Lock the terminal
+                            updateTerminalLock();  // Apply visual lock
+                            return result.message + "\nTERMINAL LOCKED.";
+                        }
+                        return result.message;
+                    }
+                } catch (error) {
+                    return "ERROR: Failed to connect to server.";
+                }
+            }
+
+            const commands = {
+                'discover': async function(args) {
+                    if (terminalLocked) return "ERROR: Terminal locked.";
+                    if (!args[0]) return "ERROR: No secret provided.";
+                    return await discoverSecret(args[0].toUpperCase());
+                },
+
+                'unlock': function(args) {
+                    if (!terminalLocked) return "ERROR: Terminal is not locked.";
+                    if (!args[0] || args[0] !== "RESET-ACCESS") {
+                        return "ERROR: Unauthorized unlock attempt.";
+                    }
+                    terminalLocked = false;
+                    updateTerminalLock(); // Remove lock overlay
+                    return "Terminal access restored.";
+                },
+
+                'help': function() {
+                    return `
+Available commands:
+  HELP       - Display this help message
+  CLEAR      - Clear the terminal
+  STATUS     - Display system status
+  UNLOCK CODE - Unlock terminal (if locked)
+`;
+                },
+
+                'clear': function() {
+                    terminalOutput.innerHTML = '';
+                    return '';
+                },
+
+                'status': function() {
+                    return `
+SYSTEM STATUS REPORT:
+  Integrity Check: FAILED
+  Security Level: COMPROMISED
+  Terminal Locked: ${terminalLocked ? "YES" : "NO"}
+`;
+                }
+            };
+
+            async function processCommand(command) {
+                const parts = command.trim().split(' ');
+                const cmd = parts[0].toLowerCase();
+                const args = parts.slice(1);
+
+                if (commands[cmd]) {
+                    const output = await commands[cmd](args); // Await async functions
+                    appendToTerminal(output);
+                } else {
+                    appendToTerminal(`ERROR: Command '${cmd}' not recognized. Type 'HELP' for available commands.`);
+                }
+            }
+
+            function appendToTerminal(text) {
+                terminalOutput.innerHTML += '\n' + text;
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+
+            function updateTerminalLock() {
+                if (terminalLocked) {
+                    terminalInput.disabled = true;
+                    accessDenied.style.display = 'flex';
+                } else {
+                    terminalInput.disabled = false;
+                    accessDenied.style.display = 'none';
+                }
+            }
+
+            terminalInput.addEventListener('keydown', async function(e) {
+                if (e.key === 'Enter') {
+                    const command = terminalInput.value;
+                    appendToTerminal(`> ${command}`);
+
+                    if (command.trim() !== '') {
+                        await processCommand(command); // Await the processing
+                    }
+
+                    terminalInput.value = '';
+                }
+            });
+
+            document.querySelector('.terminal-container').addEventListener('click', function() {
+                if (!accessDenied || accessDenied.style.display === 'none') {
+                    terminalInput.focus();
+                }
+            });
+
+            // Hidden terminal activation logic
+            window.scrapyard = {
+                hiddenTerminal: function() {
+                    if (accessDenied) {
+                        accessDenied.style.display = 'none';
+                    }
+
+                    fetch('/api/discover_secret', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ secret_id: 'hidden_terminal' })
+                    }).then(response => response.json())
+                        .then(data => {
+                            console.log('%cTerminal access granted!', 'color: #0f0; font-weight: bold;');
+                            console.log(`%c${data.message || "You have found the hidden terminal!"}`, 'color: #0f0;');
+                        }).catch(err => console.error('Error discovering terminal:', err));
+
+                    return 'Terminal access granted!';
+                }
+            };
+        });
+
+    </script>
+{% endblock %}
