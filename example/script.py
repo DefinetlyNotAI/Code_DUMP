@@ -9,13 +9,13 @@ if os.path.exists(log_file):
     os.remove(log_file)
 
 colors = {
-    'info': TPrintColors.BRIGHT_BLUE,
-    'warning': TPrintColors.BRIGHT_YELLOW,
-    'error': TPrintColors.BRIGHT_RED,
-    'debug': TPrintColors.BRIGHT_CYAN,
-    'critical': TPrintColors.BRIGHT_MAGENTA,
+    'info': TPrintColors.WHITE,
+    'warning': TPrintColors.YELLOW,
+    'error': TPrintColors.RED,
+    'debug': TPrintColors.CYAN,
+    'critical': TPrintColors.BRIGHT_RED,
     'success': TPrintColors.BRIGHT_GREEN,
-    'input': TPrintColors.BRIGHT_WHITE
+    'input': TPrintColors.WHITE
 }
 
 tprint = TPrint(
