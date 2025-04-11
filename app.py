@@ -38,6 +38,18 @@ puzzle_solutions = {
 }
 
 
+# Deprecated site
+@app.before_request
+def redirect_to_deprecated():
+    # Redirect all requests to /deprecated
+    return redirect(url_for('deprecated'))
+
+
+@app.route('/deprecated')
+def deprecated():
+    return render_template('deprecate.html'), 200
+    
+
 # Middleware to add glitches and track visitors
 @app.before_request
 def before_request():
