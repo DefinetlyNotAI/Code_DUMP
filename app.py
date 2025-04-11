@@ -38,10 +38,13 @@ puzzle_solutions = {
 }
 
 
-# Deprecated site
+# Depreacting site
 @app.before_request
 def redirect_to_deprecated():
-    # Redirect all requests to /deprecated
+    # Skip redirect if the URL is already /deprecated
+    if request.path == '/deprecated':
+        return
+    # Redirect all other requests to /deprecated
     return redirect(url_for('deprecated'))
 
 
