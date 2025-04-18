@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This has been moved to [PyUtils](https://github.com/DefinetlyNotAI/PyUtils) which includes TPrint and its updates as well as ExceptionHandler AND UpdateManager!!
+
 # TPrint - A Python Logging and Printing Library
 
 ## Overview
