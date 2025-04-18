@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This has been moved to [PyUtils](https://github.com/DefinetlyNotAI/PyUtils) which includes ExceptionHandler and its updates as well as TPrint AND UpdateManager!!
+
 # Exception Handler
 
 A Python-based exception handling utility that provides customizable exception messages,
