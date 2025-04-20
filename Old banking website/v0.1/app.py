@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 load_dotenv()
 
 app = Flask(__name__)
+# PS - This is a revoked secret so like, its useless
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('POSTGRESQL_DB_URL',
                                                   'postgres://avnadmin:AVNS_ElrjFLH4xd4d0mw1sUM@hackathon-banking-service-scrapyard-bounty.h.aivencloud.com:18653/defaultdb?sslmode=require')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
