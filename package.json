@@ -60,8 +60,7 @@
     "zod": "^3.24.1",
     "react-markdown": "latest",
     "remark-gfm": "latest",
-    "react-syntax-highlighter": "latest",
-    "prismjs": ">=1.30.0"
+    "react-syntax-highlighter": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
