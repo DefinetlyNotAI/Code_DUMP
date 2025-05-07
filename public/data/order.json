@@ -1,0 +1,16 @@
+[
+  {
+    "event": "start.json"
+  },
+  {
+    "condition": "user_choice == 'Yes'",
+    "event": "happy.json"
+  },
+  {
+    "condition": "user_choice == 'No'",
+    "event": "sad.json"
+  },
+  {
+    "event": "end.json"
+  }
+]
