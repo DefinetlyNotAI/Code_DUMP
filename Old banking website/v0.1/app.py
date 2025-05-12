@@ -17,7 +17,7 @@ load_dotenv()
 app = Flask(__name__)
 # PS - This is a revoked secret so like, its useless
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('POSTGRESQL_DB_URL',
-                                                  'postgres://avnadmin:AVNS_ElrjFLH4xd4d0mw1sUM@hackathon-banking-service-scrapyard-bounty.h.aivencloud.com:18653/defaultdb?sslmode=require')
+                                                  'PS I HAD MY DB URL LEAKED HERE, JOKES ON ANYONE THO AS ITS USELESS AND DOESNT ACTUALLY WORK OR EXIST AKA A PLACEHOLDER, A FAKE! SO IMMA LEAVE IT IN THE COMMIT HISTORY CUZ WHY NOT')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'dev-secret-key')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
