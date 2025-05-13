@@ -97,14 +97,6 @@ def index():
                            visitor_id=session['visitor_id'][:8],
                            available_secrets=available_secrets)
 
-
-@app.route('/terminal')
-def terminal():
-    # Only accessible if the user has found the terminal secret or directly navigated
-    terminal_found = 'hidden_terminal' in session.get('discovered_secrets', [])
-    return render_template('terminal.html', terminal_found=terminal_found)
-
-
 @app.route('/glitch')
 def glitch():
     # Random glitch intensity
