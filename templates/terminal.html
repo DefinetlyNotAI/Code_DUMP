@@ -224,7 +224,8 @@ SYSTEM STATUS REPORT:
             }
 
             function appendToTerminal(text) {
-                terminalOutput.innerHTML += '\n' + text;
+                const textNode = document.createTextNode('\n' + text);
+                terminalOutput.appendChild(textNode);
                 terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
 
