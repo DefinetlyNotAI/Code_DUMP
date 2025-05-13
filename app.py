@@ -1,6 +1,7 @@
 import base64
 import random
 import string
+from waitress import serve
 from datetime import datetime
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
@@ -254,4 +255,4 @@ def unlock_secret():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    serve(app, host='0.0.0.0', port=8080)
