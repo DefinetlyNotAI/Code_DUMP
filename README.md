@@ -13,55 +13,55 @@ A modular, JSON-driven visual novel engine built with React and Vite, inspired b
 ### Creating Your First Visual Novel
 
 1. **Create JSON files** in the `public/data` folder:
-   - `start.json` - Your first scene
-   - `order.json` - Controls the flow of your story
+    - `start.json` - Your first scene
+    - `order.json` - Controls the flow of your story
 
 2. **Minimal `start.json` example**:
-```json
-[
-    {
-    "text": "Welcome to my visual novel!",
-    "speaker": "Narrator",
-    "background": "room.jpg"
-    },
-    {
-    "text": "Would you like to continue?",
-    "speaker": "Narrator",
-    "type": "choice",
-    "choices": [
-      {
-        "text": "Yes",
-        "value": "Yes"
-      },
-      {
-        "text": "No",
-        "value": "No"
-      }
+    ```json
+    [
+        {
+        "text": "Welcome to my visual novel!",
+        "speaker": "Narrator",
+        "background": "room.jpg"
+        },
+        {
+        "text": "Would you like to continue?",
+        "speaker": "Narrator",
+        "type": "choice",
+        "choices": [
+          {
+            "text": "Yes",
+            "value": "Yes"
+          },
+          {
+            "text": "No",
+            "value": "No"
+          }
+        ]
+        }
     ]
-    }
-]
-```
+    ```
 
 3. **Minimal `order.json` example**:
-```json
-[
-    {
-    "event": "start.json"
-    },
-    {
-    "condition": "user_choice == 'Yes'",
-    "event": "continue.json"
-    },
-    {
-    "condition": "user_choice == 'No'",
-    "event": "end.json"
-    }
-]
-```
+    ```json
+    [
+        {
+        "event": "start.json"
+        },
+        {
+        "condition": "user_choice == 'Yes'",
+        "event": "continue.json"
+        },
+        {
+        "condition": "user_choice == 'No'",
+        "event": "end.json"
+        }
+    ]
+    ```
 
 4. **Add assets**:
-   - Place background images in `public/assets/backgrounds/`
-   - Place audio files in `public/assets/audio/music/` and `public/assets/audio/sfx/`
+    - Place background images in `public/assets/backgrounds/`
+    - Place audio files in `public/assets/audio/music/` and `public/assets/audio/sfx/`
 
 5. **Run your visual novel** with `npm run dev`
 
@@ -95,24 +95,24 @@ Each event file is an array of nodes that define the visual novel's content:
     "background": "background-image.jpg",
     "music": "background-music.mp3",
     "sfx": "sound-effect.mp3",
-    "effect": "fade" or { "variableName": "value" }
+    "effect": "\"fade\" OR { \"variableName\": \"value\" }"
   }
 ]
 ```
 
 ##### Node Properties
 
-| Property | Type | Description | Example |
-|----------|------|-------------|---------|
-| `type` | string | Node type (dialogue, choice, jump, etc.) | `"dialogue"` |
-| `text` | string | The text to display | `"Hello world"` |
-| `speaker` | string\|null | Character name or null for narration | `"Alice"` |
-| `background` | string | Background image filename | `"forest.jpg"` |
-| `music` | string | Background music filename or "stop" | `"theme.mp3"` |
-| `sfx` | string\|array | Sound effect(s) to play | `"click.mp3"` |
-| `effect` | string\|object | Visual effect or variable assignment | `"fade"` or `{"var1": "value"}` |
-| `choices` | array | Array of choices (for choice nodes) | See below |
-| `target` | string | Target event file (for jump nodes) | `"chapter2.json"` |
+| Property     | Type           | Description                              | Example                         |
+|--------------|----------------|------------------------------------------|---------------------------------|
+| `type`       | string         | Node type (dialogue, choice, jump, etc.) | `"dialogue"`                    |
+| `text`       | string         | The text to display                      | `"Hello world"`                 |
+| `speaker`    | string\|null   | Character name or null for narration     | `"Alice"`                       |
+| `background` | string         | Background image filename                | `"forest.jpg"`                  |
+| `music`      | string         | Background music filename or "stop"      | `"theme.mp3"`                   |
+| `sfx`        | string\|array  | Sound effect(s) to play                  | `"click.mp3"`                   |
+| `effect`     | string\|object | Visual effect or variable assignment     | `"fade"` or `{"var1": "value"}` |
+| `choices`    | array          | Array of choices (for choice nodes)      | See below                       |
+| `target`     | string         | Target event file (for jump nodes)       | `"chapter2.json"`               |
 
 ##### Choice Objects
 
@@ -141,9 +141,9 @@ The `order.json` file defines the flow of events:
 
 ##### Order Properties
 
-| Property | Type | Description | Example |
-|----------|------|-------------|---------|
-| `event` | string | Event file to load | `"start.json"` |
+| Property    | Type   | Description           | Example                  |
+|-------------|--------|-----------------------|--------------------------|
+| `event`     | string | Event file to load    | `"start.json"`           |
 | `condition` | string | Condition to evaluate | `"user_choice == 'Yes'"` |
 
 ### Condition Syntax
@@ -207,11 +207,11 @@ The engine provides a comprehensive save/load system:
 
 - Saves are stored in localStorage with the prefix `vn_save_`
 - Each save contains the full game state, including:
-  - Current event
-  - Current node index
-  - All choice variables
-  - Event status tracking
-  - Timestamp
+    - Current event
+    - Current node index
+    - All choice variables
+    - Event status tracking
+    - Timestamp
 
 ### UI Customization
 
@@ -243,6 +243,7 @@ Adjust the typing speed of the text with the text speed control in the settings 
 #### Event Viewer
 
 The event viewer shows all events and their status:
+
 - White: Unseen
 - Orange: In Progress
 - Green: Completed
