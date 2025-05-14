@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Don't use this, it is OUTDATED, UNTESTED and USELESS, [use this instead](https://github.com/DefinetlyNotAI/FlaskBank)
+
 # Hackathon Banking API
 
 A ready-to-use banking API server for hackathon projects. This Flask-based API provides a comprehensive set of features
@@ -47,46 +50,46 @@ for managing virtual currencies, wallets, and transactions.
 ### Installation
 
 1. Clone the repository:
-   \`\`\`
-   git clone https://github.com/yourusername/hackathon-banking-api.git
-   cd hackathon-banking-api
-   \`\`\`
+   ```
+   git clone https://github.com/DefinetlyNotAI/Code_DUMP.git
+   ```
+    Then `cd` to the directory.
 
 2. Create a virtual environment:
-   \`\`\`
+   ```
    python -m venv venv
    source venv/bin/activate # On Windows: venv\Scripts\activate
-   \`\`\`
+   ```
 
 3. Install dependencies:
-   \`\`\`
+   ```
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 4. Set up environment variables:
    Create a .env file in the root directory with:
-   \`\`\`
+   ```
    POSTGRESQL_DB_URL=postgresql://username:password@localhost:5432/banking_db
    JWT_SECRET=your_jwt_secret_key
    FLASK_ENV=development
-   \`\`\`
+   ```
 
 5. Initialize the database:
-   \`\`\`
+   ```
    flask db init
    flask db migrate -m "Initial migration"
    flask db upgrade
-   \`\`\`
+   ```
 
 6. Create an admin user:
-   \`\`\`
+   ```
    flask create-admin --username admin --password secure_password
-   \`\`\`
+   ```
 
 7. Run the server:
-   \`\`\`
+   ```
    flask run
-   \`\`\`
+   ```
 
 The API will be available at http://localhost:5000
 
