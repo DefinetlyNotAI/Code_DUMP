@@ -32,7 +32,9 @@ Each project is self-contained and can be found in its own directory.
 ### 📄 Configuration Files
 Each project may require specific configuration files.
 Refer to the README.md file in each project directory for details on how to configure each project.
-(WIP And not all will contain documentation yet)
+
+> [!WARNING]
+> Not all projects have a requirements file, such as for python... my bad!
 
 ## 🚦 Usage
 Once installed and configured, follow the usage instructions specific to each project.
