@@ -1,5 +1,0 @@
-LIBRARY "SystemCoreInfo"
-EXPORTS
-    GetMotherboardSerial
-    GetCPUInfo
-    GetRAMInfo
