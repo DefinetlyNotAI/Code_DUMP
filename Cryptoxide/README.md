@@ -1,14 +1,5 @@
 # Cryptography Project
 
-<div align="center">
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide/issues"><img src="https://img.shields.io/github/issues/DefinetlyNotAI/Cryptoxide" alt="GitHub Issues"></a>
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide/tags"><img src="https://img.shields.io/github/v/tag/DefinetlyNotAI/Cryptoxide" alt="GitHub Tag"></a>
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide/graphs/commit-activity"><img src="https://img.shields.io/github/commit-activity/t/DefinetlyNotAI/Cryptoxide" alt="GitHub Commit Activity"></a>
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide/languages"><img src="https://img.shields.io/github/languages/count/DefinetlyNotAI/Cryptoxide" alt="GitHub Language Count"></a>
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide/actions"><img src="https://img.shields.io/github/check-runs/DefinetlyNotAI/Cryptoxide/main" alt="GitHub Branch Check Runs"></a>
-    <a href="https://github.com/DefinetlyNotAI/Cryptoxide"><img src="https://img.shields.io/github/repo-size/DefinetlyNotAI/Cryptoxide" alt="GitHub Repo Size"></a>
-</div>
-
 ## Overview
 
 This project provides a simple command-line tool for encrypting and decrypting files 
@@ -17,14 +8,7 @@ The configuration for the encryption key and initialization vector (IV) is read 
 
 ## Download
 
-Clone the repository using the following command:
-
-```sh
-git clone https://github.com/DefinetlyNotAI/Cryptoxide.git
-cd Cryptoxide/Cryptoxide
-```
-
-Now you may build and run the project. After doing the prerequisites and configuration steps.
+Clone the repository, and then you may build and run the project. After doing the prerequisites and configuration steps.
 
 ## Prerequisites
 
