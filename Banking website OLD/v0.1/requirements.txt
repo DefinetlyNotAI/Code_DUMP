@@ -1,0 +1,7 @@
+flask==2.3.3
+flask-migrate==4.0.5
+flask-jwt-extended==4.5.3
+python-dotenv==1.0.0
+werkzeug==3.0.6
+DateTime~=5.5
+click~=8.1.8
