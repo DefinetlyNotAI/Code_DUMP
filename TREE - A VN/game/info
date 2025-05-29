@@ -1,0 +1,74 @@
+# Audio | Duration | Note
+"""
+audio/mus/aholyplacewhereudontexist.mp3 | 00:00:43 | a reversed like audio that is pretty creepy
+audio/mus/bloodandtears.mp3 | 00:01:29 | ambient like and condescending music
+audio/mus/condescending.mp3 | 00:02:26 | music that invokes feeling of sadness, piano that plays and drops and repeats 
+audio/mus/daisydaisy.mp3 | 00:00:37 | the famous daisy daisy give me your answer do, audio
+audio/mus/heartbeat.mp3 | 00:01:00 | Just heartbeat audio, though I advise to not have sfx ontop of this especially with asterisks
+audio/mus/holy.mp3 | 00:03:31 | A pretty holy like audio like a aaaaa but in a relaxed and smooth way, used in the start menu before the game begins, dont use for the game tho
+audio/mus/itsbrokenitsbrokenitsbrokenitsbrokenitsbrokenitsbroken.mp3 | 00:02:06 | A broken like audio, like it has reversed parts that sound... wrong? Creepy
+audio/mus/itsoktocry.mp3 | 00:02:51 | more audio that invokes sadness, but rather than due to choice, it more like whats playing in the story, its outta control
+audio/mus/maybethereishopeafterall.mp3 | 00:01:24 | pretty cheerful compared to itsoktocry, like things may be getting better, piano
+audio/mus/nohopeleft.mp3 | 00:02:26 | condescending.mp3 but softer quieter and more broken-like
+audio/mus/nowhereissafe.mp3 | 00:01:35 | Very creepy ambient music, it invokes feelings of something broken as well as wrong,
+audio/mus/retrospect.mp3 | 00:02:06 | Audibly weird and catchy, has reversed parts as well, works amazingly with nowhereissafe.mp3 aka overlapping each other, tho manage the time
+audio/mus/singwithmehowevercreepyitmaybe.mp3 | 00:01:58 | Creepy ambient background noise, its like it knows something and feels pity for u
+
+audio/sfx/computerboo.mp3 | 00:00:01 | Ding-Ding sound effect
+audio/sfx/computeryay.mp3 | 00:00:01 | X (Errr) Sound effect
+audio/sfx/crack.mp3 | 00:00:01 | Egg crack sound effect, creepy
+audio/sfx/creepyknock.mp3 | 00:00:15 | Knocking on door sound with background music alr embedded*
+audio/sfx/error.mp3 | 00:00:35 | Loud repeating ERROR computer sounds that are very loud*
+audio/sfx/explosion.mp3 | 00:00:02 | Big metal thudding explosion sound
+audio/sfx/happybaby.mp3 | 00:00:16 | Baby sounds tho sound pretty weird like gurgling maybe happy or sad
+audio/sfx/humstillitgetslouder.mp3 | 00:00:20 | Error computer humming that gets very loud*
+audio/sfx/iamyou.mp3 | 00:00:02 | TTS Saying I AM YOU
+audio/sfx/SCREAM.wav | 00:00:36 | A animal screaming very loudly and horrendesly aka earrape*
+audio/sfx/static.mp3 | 00:00:10 | In code either speed this up or run part of it, for 1 sec
+
+Any with an asterisk -> This should only run with no music on and also stop when a sfx gets played or music gets played afterwards
+"""
+
+
+# Images - Comment
+"""
+images/3.png  # 3 on a black background
+images/black.png # black background
+images/bloodeye.jpeg # Small image of a bloody eye
+images/brokenscreen.jpeg # black background with a glass shatter effect
+images/burningsky.png # A very pixelated sky image thats red
+images/clock.png  # Just a clock on 10:10:35
+images/destructionpoem.png # Background of a shattered house-in-a-dome and a poem abt how destruction is just a form of creation
+images/faceglitch.jpeg  # Glitched up face
+images/gougemyeyes.png  # Full background that works well with brokenscreen overlayed on it with opacity 40 percent, it is a random incoherent mess of text and creepy imagery
+images/roachofpain.png  # White background that has a upside down roach and text overlay repeating sayin "andsoami" over and over
+images/sad.png  # Sad black and white emoji face
+images/whydowehurt.png # Black background saying upsidedown why do we hurt
+images/youtheclown.webp # A medieval clown sitting and staring down, his eyes and mouth replaced with ms paint black, his forehead has words "time is empty"
+
+images/contentwarning.png # Just a black screen saying this is a happy game but even happy games can go wrong and says face your fears
+images/connectionattempt.webp # Black background with faint hints of text saying attempting connection
+images/ohno.png # A man with no face where his eyes are replaced with text OHNO and his mouth is a D but in upside down form as a sad face, also his hands on his ears shocked and text in background faint saying Something went wrong
+images/oopserrscreenfrog.png  # Just a frog hanging on a branch and text saying "Hang in there baby" and bottom text is of the worker rambling how a team will fix it but then says he is the only one and he is tired on how no one shares his bad days and then rambles LET ME DO SOMETHING FUN
+images/wewillberightback.png  # Aka the color tv error bars
+images/tobecontinued.png # Text saying To be continued and black background
+images/turnoffanduninstall.png # Text saying ur not meant to see what comes next and asks to uninstall and black background
+images/theend.png # Text saying the end and black background
+
+images/help/1.png # help written backwards, once
+images/help/2.png # help written backwards, five times
+images/help/3.png # help written backwards, five times in 3 rows aka 15
+images/help/4.png # help written backwards, in random places five time in 7 rows aka 35
+
+images/rambling/1.png # random rambling abt giving a man a fish and he will fish,
+images/rambling/2.png # then a man a moth and he will put in his mouth
+images/rambling/3.png # then I WANT TO BURY YOU ALIVE
+images/rambling/4.png # I WANNA BITE OF YOUR TONGUE in a very corrupted text
+
+# Very disturbing imagery of dead animals rotting with text over them and maggots
+images/wtf/1.png # Text says feel the light of the sun
+images/wtf/2.png # Feel the glow of the moon
+images/wtf/3.png # Feel the pain in her heart
+images/wtf/4.png # Lock urself in a room
+images/wtf/5.png # Then a weird img of a lamb? and faded text saying What is it you keep in your pockets?
+"""
