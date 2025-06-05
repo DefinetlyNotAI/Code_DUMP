@@ -63,7 +63,7 @@ Enemies have different difficulty tiers with:
 
 ### 📄 Page Schemas
 
-More info about schemas can be found [here](src\pages\SCHEMA_GUIDE.md)
+More info about schemas can be found [here](src/pages/SCHEMA_GUIDE.md)
 
 ### 🔧 Type System
 
