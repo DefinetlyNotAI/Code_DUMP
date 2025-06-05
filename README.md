@@ -2,6 +2,9 @@
 
 A flexible, developer-friendly wiki system for games and media content. Create rich, interconnected wiki pages using a simple folder structure and TypeScript/JSON definitions.
 
+> [!IMPORTANT]
+> The example provided is bare-bones, and not even complete, this is a template and so the example is just the minimum for you to see how it actually works
+
 ### 📁 Getting Started
 
 1. Clone this repository
