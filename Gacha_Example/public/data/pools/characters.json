@@ -1,0 +1,19 @@
+{
+  "rarity_rates": {
+    "5": 0.006,
+    "4": 0.051,
+    "3": 0.943
+  },
+  "pity": {
+    "hard": 80,
+    "guaranteed_4star_every": 10
+  },
+  "currency_costs": {
+    "orb_per_wish": 1,
+    "orb_cost": 100
+  },
+  "featured": ["Eris"],
+  "standard": ["Lumen", "Dusk"],
+  "pool_4star": ["Zara", "Thane", "Luna"],
+  "pool_5star": ["Eris", "Lumen", "Dusk"]
+}
