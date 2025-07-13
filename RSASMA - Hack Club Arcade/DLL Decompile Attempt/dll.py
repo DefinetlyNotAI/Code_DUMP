@@ -5,35 +5,36 @@ import sys
 try:
     username = os.environ.get("USERNAME")
 except Exception as e:
-    print(f"An error occured fetching your username: {e}")
-    exit(e)
+    print(f"An error occurred fetching your username: {e}")
+    sys.exit(e)
 
-# Construct path
-path = f"C:\\Users\\{username}\\AppData\\Local\\JetBrains\\Installations\\dotPeek242\\dotPeek64.exe"
+# Construct path to dotPeek
+dotpeek_path = f"C:\\Users\\{username}\\AppData\\Local\\JetBrains\\Installations\\dotPeek242\\dotPeek64.exe"
 
-if sys.argv[1] is None:
-    print("You need to include the dll path AFTER typing `python open.dll.py`")
-    exit("No file parsed")
-elif not sys.argv[1].endswith(".dll")
-    print("The path MUST lead to a `.dll` file, the file path given does not!")
+# Ensure DLL path is provided
+if len(sys.argv) < 2 or sys.argv[1] is None:
+    print("You need to include the DLL path AFTER typing `python open.dll.py`")
+    sys.exit("No file parsed")
+
+# Validate that the path ends with .dll
+if not sys.argv[1].endswith(".dll"):
+    print("The path MUST lead to a `.dll` file. The file path given does not!")
     print(sys.argv[1])
-    exit("Non DLL file parsed")
+    sys.exit("Non-DLL file parsed")
 
 try:
-    # Check if path exists
-    if os.path.exists(path):
+    # Check if dotPeek exists
+    if os.path.exists(dotpeek_path):
         # Get DLL path from command line arguments
         dll_path = sys.argv[1]
-    
-        # Construct full command
-        command = f'"{path}" "{dll_path}"'
-    
-        # Execute command
+        
+        # Construct and execute the command
+        command = f'"{dotpeek_path}" "{dll_path}"'
         os.system(command)
     else:
-        print(f"dotPeek does not exist: {path}")
+        print(f"dotPeek does not exist: {dotpeek_path}")
         print("Please make sure you have it installed in that directory")
-        exit("dotPeek does not exist")
+        sys.exit("dotPeek does not exist")
 except Exception as e:
-    print(f"An error occured executing the script dotPeek64: {e}")
-    exit(e)
+    print(f"An error occurred executing dotPeek64: {e}")
+    sys.exit(e)
