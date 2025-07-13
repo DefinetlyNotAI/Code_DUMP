@@ -1,5 +1,8 @@
 > [!IMPORTANT]
-> Don't use this, it is OUTDATED, UNTESTED and USELESS, [use this instead](https://github.com/DefinetlyNotAI/FlaskBank)
+> Don't use this, it is OUTDATED, UNTESTED and USELESS, [use this instead](https://github.com/DefinetlyNotAI/FlaskBank) as it is my proper attempt of a bank app, with security in mind as well as simplicity - Used in many of the hackathons I organised.
+
+> [!IMPORTANT]
+> Even in this archive, v0.1 (which lemme be honest was a absolute mess and was me actually "learning" coding at the time for react etc, which is why it has been removed from the main branch, if you wish to check the absolute code mess, you can check this [commit](https://github.com/DefinetlyNotAI/Code_DUMP/tree/50fc5a5db749e6916eabf51fee76a1c47220e949/Banking%20website%20OLD/v0.1)
 
 # Hackathon Banking API
 
