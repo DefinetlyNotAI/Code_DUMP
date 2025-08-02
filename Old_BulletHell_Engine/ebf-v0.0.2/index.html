@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Stand | Entity Fight</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="battleCanvas" width="800" height="600"></canvas>
+    <div id="ui-overlay">
+        <div id="textbox">The air is still. Something is coming...</div>
+        <div id="commands">
+            <button onclick="playerAction('resist')">[✧] Resist</button>
+            <button onclick="playerAction('purge')">[🩸] Purge</button>
+            <button onclick="playerAction('recall')">[☠] Recall</button>
+            <button onclick="playerAction('speak')">[👁] Speak</button>
+        </div>
+    </div>
+    <script src="js/engine.js"></script>
+</body>
+</html>
