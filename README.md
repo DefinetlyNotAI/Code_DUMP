@@ -18,4 +18,14 @@
 > [!IMPORTANT]
 > Don't trust commit history time, as most these projects were done back in 2020 covid era, but were rather archived in a USB before I discovered GitHub and created this repo, so don't judge any of the code based on commit dates!!
 
-[Check out all the languages here!](https://api.github.com/repos/DefinetlyNotAI/Code_DUMP/languages)
+
+<div align="center">
+  <a href="https://api.github.com/repos/DefinetlyNotAI/Code_DUMP/languages" target="_blank" rel="noopener noreferrer">Check out all the languages here!</a>
+</div>
+
+---
+
+### Available github webpages to test can be found here
+- [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old_BulletHell_Engine/)
+
+---
