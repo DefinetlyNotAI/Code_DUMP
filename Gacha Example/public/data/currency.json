@@ -1,0 +1,20 @@
+{
+  "coins": {
+    "name": "Coins",
+    "description": "Standard currency for upgrades and purchases",
+    "icon": "coins",
+    "color": "#FFD700"
+  },
+  "gems": {
+    "name": "Gems",
+    "description": "Premium currency obtained through gameplay and purchases",
+    "icon": "gem",
+    "color": "#4A90E2"
+  },
+  "orbs": {
+    "name": "Orbs",
+    "description": "Wish currency used for gacha pulls",
+    "icon": "zap",
+    "color": "#9B59B6"
+  }
+}
