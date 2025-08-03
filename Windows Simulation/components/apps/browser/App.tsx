@@ -8,6 +8,16 @@ interface BrowserAppProps {
   initialFilePath?: string
 }
 
+// Utility to escape HTML special characters
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export default function BrowserApp({ initialFilePath }: BrowserAppProps) {
   const [filePath, setFilePath] = useState(initialFilePath || "C:\\My Documents\\index.html")
   const [htmlContent, setHtmlContent] = useState("")
@@ -31,11 +41,11 @@ export default function BrowserApp({ initialFilePath }: BrowserAppProps) {
         setHtmlContent(content)
         api.info(`Loaded HTML from ${path}`)
       } else {
-        setHtmlContent(`<!-- Content of ${path} -->\n<pre>${content}</pre>`)
+        setHtmlContent(`<!-- Content of ${escapeHtml(path)} -->\n<pre>${escapeHtml(content)}</pre>`)
         api.warn("File is not an HTML file, displaying as plain text.")
       }
     } catch (error: any) {
-      setHtmlContent(`<!-- Error loading ${path} -->\n<pre>Error: ${error.message}</pre>`)
+      setHtmlContent(`<!-- Error loading ${escapeHtml(path)} -->\n<pre>Error: ${escapeHtml(error.message)}</pre>`)
       api.error(`Failed to load file: ${error.message}`)
     }
   }
