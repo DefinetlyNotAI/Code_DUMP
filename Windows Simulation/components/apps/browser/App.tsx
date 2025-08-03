@@ -15,8 +15,7 @@ function escapeHtml(str: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;")
-    .replace(/\//g, "&#x2F;");
+    .replace(/'/g, "&#39;");
 }
 
 export default function BrowserApp({ initialFilePath }: BrowserAppProps) {
