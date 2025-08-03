@@ -1,1 +1,2 @@
 *.dat filter=lfs diff=lfs merge=lfs -text
+Mini[[:space:]]Python[[:space:]]Projects/Face[[:space:]]detector/sp68fl.dat filter=lfs diff=lfs merge=lfs -text
