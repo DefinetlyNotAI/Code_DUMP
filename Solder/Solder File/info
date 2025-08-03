@@ -1,0 +1,118 @@
+{
+  "uuid": "58ee84cb4c829f59328635dd8fd562b8",
+  "path": "Offline/Solder%20v2",
+  "name": "Solder v2",
+  "content": "",
+  "created_at": "2025-04-23 10:11:21",
+  "updated_at": "2025-04-29 20:21:56",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "4f3e8edf9e1cd9b36287de332ff1716d",
+      "title": "Sheet_1",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "b0d4cfdf1cbc4eaa9509c1507a67b298": 3,
+        "85b53c957b6a4023935147b26662afe9": 1
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "No.52Section side by side battery box",
+          1,
+          "BAT-TH_BC2AA",
+          "BT1",
+          {
+            "Manufacturer Part": "五号2节并列电池盒",
+            "Manufacturer": "国产",
+            "Supplier": "LCSC",
+            "Supplier Part": "C5404"
+          }
+        ],
+        [
+          "LED三色(RED,YELLOW,GREEN)",
+          3,
+          "LED-TH_6P_LED4GREEN",
+          "LED1,LED2,LED3",
+          {
+            "Manufacturer Part": "LED三色(Red,Yellow,Green)",
+            "Manufacturer": "null",
+            "Supplier": "LCSC",
+            "Supplier Part": "C9900027004"
+          }
+        ]
+      ],
+      "updateTime": 1745942806,
+      "createTime": 1745388682,
+      "histories": [],
+      "created_at": "2025-04-23 10:11:22",
+      "updated_at": "2025-04-29 20:06:46"
+    },
+    {
+      "uuid": "6009562542cd8323eb266ff573eb1f43",
+      "puuid": "58ee84cb4c829f59328635dd8fd562b8",
+      "title": "PCB_Solder v2_2",
+      "filename": "PCB_Solder v2_2.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "5e2f759182744b0f8fe36fb75e936084": 1,
+        "b843e064f9b845478f12b1f2ffd9b691": 3
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "No.52Section side by side battery box",
+          1,
+          "BAT-TH_BC2AA",
+          "BT1",
+          {
+            "Manufacturer Part": "五号2节并列电池盒",
+            "Manufacturer": "国产",
+            "Supplier": "LCSC",
+            "Supplier Part": "C5404"
+          }
+        ],
+        [
+          "LED三色(RED,YELLOW,GREEN)",
+          3,
+          "LED-TH_6P_LED4GREEN",
+          "LED1,LED2,LED3",
+          {
+            "Manufacturer Part": "LED三色(Red,Yellow,Green)",
+            "Manufacturer": "null",
+            "Supplier": "LCSC",
+            "Supplier Part": "C9900027004"
+          }
+        ]
+      ],
+      "updateTime": 1745943716,
+      "createTime": 1745943270,
+      "histories": [],
+      "created_at": "2025-04-29 20:14:30",
+      "updated_at": "2025-04-29 20:21:56"
+    }
+  ],
+  "sort": [],
+  "title": "Solder v2",
+  "foldername": "Solder v2",
+  "schfilename": "Solder v2.json",
+  "schfilemtime": 1745942806514
+}

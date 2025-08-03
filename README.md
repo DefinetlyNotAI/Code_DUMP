@@ -18,10 +18,11 @@
 > [!IMPORTANT]
 > Don't trust commit history time, as most these projects were done back in 2020 covid era, but were rather archived in a USB before I discovered GitHub and created this repo, so don't judge any of the code based on commit dates!!
 
-
 <div align="center">
-  <a href="https://api.github.com/repos/DefinetlyNotAI/Code_DUMP/languages" target="_blank" rel="noopener noreferrer">Check out all the languages here!</a>
+  <a href="https://api.github.com/repos/DefinetlyNotAI/Code_DUMP/languages" target="_blank" rel="noopener noreferrer">Check out all the languages here!</a><br>
+  <a href="https://scrapbook.hackclub.com/ShahmNajeeb" target="_blank" rel="noopener noreferrer">Check out the Hack Club Scrapbook of mine here!</a>
 </div>
+
 
 ---
 
