@@ -1,5 +1,3 @@
----
-
 # ARG System Data & Performance Report
 
 This script was developed to generate a structured performance and content map of the Facility ARG. It inspects the current local build as a full simulated session, triggering all known save states and accessing every reachable page.
@@ -96,3 +94,4 @@ Structured into:
 ---
 
 *Generated automatically by a dedicated analysis tool combining page visits, browser metrics, and static asset inspection.*
+
