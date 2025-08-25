@@ -1,0 +1,1570 @@
+{
+  "pages": [
+    {
+      "route": "/black-and-white",
+      "load_time_ms": 1288,
+      "text_words": 1555,
+      "dom_nodes": 50,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.64,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.54
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 87197477,
+        "usedJSHeapSize": 67099537
+      }
+    },
+    {
+      "route": "/buttons",
+      "load_time_ms": 2551,
+      "text_words": 1542,
+      "dom_nodes": 69,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.78,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 106720965,
+        "usedJSHeapSize": 91788873
+      }
+    },
+    {
+      "route": "/choices",
+      "load_time_ms": 2183,
+      "text_words": 1525,
+      "dom_nodes": 45,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.65,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 135921987,
+        "usedJSHeapSize": 104190331
+      }
+    },
+    {
+      "route": "/dream",
+      "load_time_ms": 1404,
+      "text_words": 1548,
+      "dom_nodes": 62,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.53,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.54
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 119440366,
+        "usedJSHeapSize": 116584010
+      }
+    },
+    {
+      "route": "/file-console",
+      "load_time_ms": 1580,
+      "text_words": 1518,
+      "dom_nodes": 43,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.63,
+        "accessibility": 1,
+        "bestPractices": 0.96,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 151191525,
+        "usedJSHeapSize": 142086409
+      }
+    },
+    {
+      "route": "/file-console/tree98",
+      "load_time_ms": 2413,
+      "text_words": 1529,
+      "dom_nodes": 43,
+      "local_storage_kb": 0,
+      "cookies": [],
+      "lighthouse": {
+        "performance": null,
+        "accessibility": null,
+        "bestPractices": null,
+        "seo": null
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 195577910,
+        "usedJSHeapSize": 173799626
+      }
+    },
+    {
+      "route": "/home",
+      "load_time_ms": 1811,
+      "text_words": 1788,
+      "dom_nodes": 335,
+      "local_storage_kb": 0.02,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.52,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 197575609,
+        "usedJSHeapSize": 193735957
+      }
+    },
+    {
+      "route": "/media",
+      "load_time_ms": 1550,
+      "text_words": 1526,
+      "dom_nodes": 47,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.77,
+        "accessibility": 0.95,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 213004251,
+        "usedJSHeapSize": 209371611
+      }
+    },
+    {
+      "route": "/moonlight",
+      "load_time_ms": 1911,
+      "text_words": 1524,
+      "dom_nodes": 40,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.64,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 241079497,
+        "usedJSHeapSize": 229851521
+      }
+    },
+    {
+      "route": "/O-ARVORE-DA-CARNE",
+      "load_time_ms": 1612,
+      "text_words": 1787,
+      "dom_nodes": 334,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.56,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 269792180,
+        "usedJSHeapSize": 251169172
+      }
+    },
+    {
+      "route": "/",
+      "load_time_ms": 1170,
+      "text_words": 1522,
+      "dom_nodes": 43,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.58,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 299677407,
+        "usedJSHeapSize": 269253095
+      }
+    },
+    {
+      "route": "/scroll",
+      "load_time_ms": 1767,
+      "text_words": 1555,
+      "dom_nodes": 50,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.68,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.54
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 285477437,
+        "usedJSHeapSize": 282366509
+      }
+    },
+    {
+      "route": "/smileking",
+      "load_time_ms": 1731,
+      "text_words": 1535,
+      "dom_nodes": 44,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.63,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 305372692,
+        "usedJSHeapSize": 298515768
+      }
+    },
+    {
+      "route": "/smileking-auth",
+      "load_time_ms": 731,
+      "text_words": 1535,
+      "dom_nodes": 44,
+      "local_storage_kb": 0.04,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.66,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 324454769,
+        "usedJSHeapSize": 320886125
+      }
+    },
+    {
+      "route": "/terminal",
+      "load_time_ms": 1349,
+      "text_words": 1533,
+      "dom_nodes": 46,
+      "local_storage_kb": 0.06,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.7,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 349879062,
+        "usedJSHeapSize": 333192090
+      }
+    },
+    {
+      "route": "/the-end",
+      "load_time_ms": 1627,
+      "text_words": 1537,
+      "dom_nodes": 53,
+      "local_storage_kb": 0.06,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.69,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 351747758,
+        "usedJSHeapSize": 348587130
+      }
+    },
+    {
+      "route": "/wifi-login",
+      "load_time_ms": 2002,
+      "text_words": 1572,
+      "dom_nodes": 48,
+      "local_storage_kb": 0.06,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.61,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 388246628,
+        "usedJSHeapSize": 372910204
+      }
+    },
+    {
+      "route": "/wifi-panel",
+      "load_time_ms": 851,
+      "text_words": 1520,
+      "dom_nodes": 46,
+      "local_storage_kb": 0.06,
+      "cookies": [],
+      "lighthouse": {
+        "performance": 0.68,
+        "accessibility": 1,
+        "bestPractices": 1,
+        "seo": 0.5
+      },
+      "memory": {
+        "jsHeapSizeLimit": 4294705152,
+        "totalJSHeapSize": 408563574,
+        "usedJSHeapSize": 390311598
+      }
+    }
+  ],
+  "global": {
+    "total_routes_tested": 18,
+    "average_load_time_ms": 1641,
+    "average_dom_nodes": 80,
+    "average_text_words": 1564
+  },
+  "public_assets": {
+    "total_size": "112.97 MB",
+    "breakdown": [
+      {
+        "file": "favicon.ico",
+        "size_kb": "4.19"
+      },
+      {
+        "file": "music\\3OClock.mp3",
+        "size_kb": "253.06"
+      },
+      {
+        "file": "music\\boot.mp3",
+        "size_kb": "2834.11"
+      },
+      {
+        "file": "music\\bsod.mp3",
+        "size_kb": "30.64"
+      },
+      {
+        "file": "music\\contemplation.mp3",
+        "size_kb": "1362.02"
+      },
+      {
+        "file": "music\\contempt.mp3",
+        "size_kb": "1668.41"
+      },
+      {
+        "file": "music\\daisyBell.mp3",
+        "size_kb": "226.72"
+      },
+      {
+        "file": "music\\doTheAngelsExist.mp3",
+        "size_kb": "4382.61"
+      },
+      {
+        "file": "music\\hopeForAll.mp3",
+        "size_kb": "3311.13"
+      },
+      {
+        "file": "music\\itIsNotFine.mp3",
+        "size_kb": "3069.88"
+      },
+      {
+        "file": "music\\nowhereSafeSoWhyDoYouScroll.mp3",
+        "size_kb": "2817.34"
+      },
+      {
+        "file": "music\\oldHums.mp3",
+        "size_kb": "720.82"
+      },
+      {
+        "file": "music\\ourFinaleOurEndWillIEverSeeYouAgain.mp3",
+        "size_kb": "3146.09"
+      },
+      {
+        "file": "music\\retrospect.mp3",
+        "size_kb": "4947.04"
+      },
+      {
+        "file": "music\\theCathedralsThirdCry.mp3",
+        "size_kb": "4549.59"
+      },
+      {
+        "file": "music\\theSunWontShine.mp3",
+        "size_kb": "1396.73"
+      },
+      {
+        "file": "music\\timeIsFake.mp3",
+        "size_kb": "5721.43"
+      },
+      {
+        "file": "music\\whatICallHome.mp3",
+        "size_kb": "3433.45"
+      },
+      {
+        "file": "sfx\\alert.mp3",
+        "size_kb": "68.98"
+      },
+      {
+        "file": "sfx\\censorship.mp3",
+        "size_kb": "33.91"
+      },
+      {
+        "file": "sfx\\computerBoo.mp3",
+        "size_kb": "16.33"
+      },
+      {
+        "file": "sfx\\computerYay.mp3",
+        "size_kb": "33.47"
+      },
+      {
+        "file": "sfx\\eggCrack.mp3",
+        "size_kb": "15.09"
+      },
+      {
+        "file": "sfx\\error.mp3",
+        "size_kb": "8.18"
+      },
+      {
+        "file": "sfx\\file_delete.m4a",
+        "size_kb": "5.17"
+      },
+      {
+        "file": "sfx\\heartbeat.mp3",
+        "size_kb": "401.98"
+      },
+      {
+        "file": "sfx\\horror.mp3",
+        "size_kb": "160.80"
+      },
+      {
+        "file": "sfx\\mouseclick.mp3",
+        "size_kb": "11.43"
+      },
+      {
+        "file": "sfx\\reboot.mp3",
+        "size_kb": "51.25"
+      },
+      {
+        "file": "sfx\\static.mp3",
+        "size_kb": "169.88"
+      },
+      {
+        "file": "sfx\\█.mp3",
+        "size_kb": "74.93"
+      },
+      {
+        "file": "static\\black-and-white\\qr-doppelganger.png",
+        "size_kb": "19.97"
+      },
+      {
+        "file": "static\\black-and-white\\qr.png",
+        "size_kb": "15.77"
+      },
+      {
+        "file": "static\\dream\\allyounome.png",
+        "size_kb": "102.30"
+      },
+      {
+        "file": "static\\dream\\beautiful.png",
+        "size_kb": "1351.33"
+      },
+      {
+        "file": "static\\dream\\josh.jpg",
+        "size_kb": "28.49"
+      },
+      {
+        "file": "static\\dream\\letsplay.jpeg",
+        "size_kb": "16.69"
+      },
+      {
+        "file": "static\\dream\\perspective.png",
+        "size_kb": "116.32"
+      },
+      {
+        "file": "static\\dream\\roseye.png",
+        "size_kb": "385.10"
+      },
+      {
+        "file": "static\\dream\\siliconyou.png",
+        "size_kb": "348.91"
+      },
+      {
+        "file": "static\\dream\\treeohtree.png",
+        "size_kb": "95.45"
+      },
+      {
+        "file": "static\\dream\\weallseeyou.png",
+        "size_kb": "58.83"
+      },
+      {
+        "file": "static\\file-console\\riddle-hint.txt",
+        "size_kb": "0.59"
+      },
+      {
+        "file": "static\\file-console\\riddle.bin",
+        "size_kb": "3.65"
+      },
+      {
+        "file": "static\\file-console\\robots.txt",
+        "size_kb": "1.52"
+      },
+      {
+        "file": "static\\home\\The_Hollow_Pilgrimage.mp4",
+        "size_kb": "65409.18"
+      },
+      {
+        "file": "static\\media\\morse.wav",
+        "size_kb": "368.47"
+      },
+      {
+        "file": "static\\media\\Password_Is_Keyword[3].zip",
+        "size_kb": "0.28"
+      },
+      {
+        "file": "static\\media\\Password_Is_Keyword[4].zip",
+        "size_kb": "54.97"
+      },
+      {
+        "file": "static\\moonlight\\riddle.hex",
+        "size_kb": "0.41"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy1.png",
+        "size_kb": "243.12"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy2.png",
+        "size_kb": "345.02"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy3.png",
+        "size_kb": "334.87"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy4.png",
+        "size_kb": "77.68"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy5.png",
+        "size_kb": "233.31"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy6.png",
+        "size_kb": "194.18"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy7.png",
+        "size_kb": "287.91"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy8.png",
+        "size_kb": "135.91"
+      },
+      {
+        "file": "static\\moonlight\\TIME\\happy9.png",
+        "size_kb": "118.58"
+      },
+      {
+        "file": "static\\tree98\\bg.jpg",
+        "size_kb": "406.53"
+      }
+    ],
+    "by_extension": {
+      ".ico": [
+        {
+          "file": "favicon.ico",
+          "size_kb": "4.19"
+        }
+      ],
+      ".mp3": [
+        {
+          "file": "music\\3OClock.mp3",
+          "size_kb": "253.06"
+        },
+        {
+          "file": "music\\boot.mp3",
+          "size_kb": "2834.11"
+        },
+        {
+          "file": "music\\bsod.mp3",
+          "size_kb": "30.64"
+        },
+        {
+          "file": "music\\contemplation.mp3",
+          "size_kb": "1362.02"
+        },
+        {
+          "file": "music\\contempt.mp3",
+          "size_kb": "1668.41"
+        },
+        {
+          "file": "music\\daisyBell.mp3",
+          "size_kb": "226.72"
+        },
+        {
+          "file": "music\\doTheAngelsExist.mp3",
+          "size_kb": "4382.61"
+        },
+        {
+          "file": "music\\hopeForAll.mp3",
+          "size_kb": "3311.13"
+        },
+        {
+          "file": "music\\itIsNotFine.mp3",
+          "size_kb": "3069.88"
+        },
+        {
+          "file": "music\\nowhereSafeSoWhyDoYouScroll.mp3",
+          "size_kb": "2817.34"
+        },
+        {
+          "file": "music\\oldHums.mp3",
+          "size_kb": "720.82"
+        },
+        {
+          "file": "music\\ourFinaleOurEndWillIEverSeeYouAgain.mp3",
+          "size_kb": "3146.09"
+        },
+        {
+          "file": "music\\retrospect.mp3",
+          "size_kb": "4947.04"
+        },
+        {
+          "file": "music\\theCathedralsThirdCry.mp3",
+          "size_kb": "4549.59"
+        },
+        {
+          "file": "music\\theSunWontShine.mp3",
+          "size_kb": "1396.73"
+        },
+        {
+          "file": "music\\timeIsFake.mp3",
+          "size_kb": "5721.43"
+        },
+        {
+          "file": "music\\whatICallHome.mp3",
+          "size_kb": "3433.45"
+        },
+        {
+          "file": "sfx\\alert.mp3",
+          "size_kb": "68.98"
+        },
+        {
+          "file": "sfx\\censorship.mp3",
+          "size_kb": "33.91"
+        },
+        {
+          "file": "sfx\\computerBoo.mp3",
+          "size_kb": "16.33"
+        },
+        {
+          "file": "sfx\\computerYay.mp3",
+          "size_kb": "33.47"
+        },
+        {
+          "file": "sfx\\eggCrack.mp3",
+          "size_kb": "15.09"
+        },
+        {
+          "file": "sfx\\error.mp3",
+          "size_kb": "8.18"
+        },
+        {
+          "file": "sfx\\heartbeat.mp3",
+          "size_kb": "401.98"
+        },
+        {
+          "file": "sfx\\horror.mp3",
+          "size_kb": "160.80"
+        },
+        {
+          "file": "sfx\\mouseclick.mp3",
+          "size_kb": "11.43"
+        },
+        {
+          "file": "sfx\\reboot.mp3",
+          "size_kb": "51.25"
+        },
+        {
+          "file": "sfx\\static.mp3",
+          "size_kb": "169.88"
+        },
+        {
+          "file": "sfx\\█.mp3",
+          "size_kb": "74.93"
+        }
+      ],
+      ".m4a": [
+        {
+          "file": "sfx\\file_delete.m4a",
+          "size_kb": "5.17"
+        }
+      ],
+      ".png": [
+        {
+          "file": "static\\black-and-white\\qr-doppelganger.png",
+          "size_kb": "19.97"
+        },
+        {
+          "file": "static\\black-and-white\\qr.png",
+          "size_kb": "15.77"
+        },
+        {
+          "file": "static\\dream\\allyounome.png",
+          "size_kb": "102.30"
+        },
+        {
+          "file": "static\\dream\\beautiful.png",
+          "size_kb": "1351.33"
+        },
+        {
+          "file": "static\\dream\\perspective.png",
+          "size_kb": "116.32"
+        },
+        {
+          "file": "static\\dream\\roseye.png",
+          "size_kb": "385.10"
+        },
+        {
+          "file": "static\\dream\\siliconyou.png",
+          "size_kb": "348.91"
+        },
+        {
+          "file": "static\\dream\\treeohtree.png",
+          "size_kb": "95.45"
+        },
+        {
+          "file": "static\\dream\\weallseeyou.png",
+          "size_kb": "58.83"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy1.png",
+          "size_kb": "243.12"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy2.png",
+          "size_kb": "345.02"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy3.png",
+          "size_kb": "334.87"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy4.png",
+          "size_kb": "77.68"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy5.png",
+          "size_kb": "233.31"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy6.png",
+          "size_kb": "194.18"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy7.png",
+          "size_kb": "287.91"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy8.png",
+          "size_kb": "135.91"
+        },
+        {
+          "file": "static\\moonlight\\TIME\\happy9.png",
+          "size_kb": "118.58"
+        }
+      ],
+      ".jpg": [
+        {
+          "file": "static\\dream\\josh.jpg",
+          "size_kb": "28.49"
+        },
+        {
+          "file": "static\\tree98\\bg.jpg",
+          "size_kb": "406.53"
+        }
+      ],
+      ".jpeg": [
+        {
+          "file": "static\\dream\\letsplay.jpeg",
+          "size_kb": "16.69"
+        }
+      ],
+      ".txt": [
+        {
+          "file": "static\\file-console\\riddle-hint.txt",
+          "size_kb": "0.59"
+        },
+        {
+          "file": "static\\file-console\\robots.txt",
+          "size_kb": "1.52"
+        }
+      ],
+      ".bin": [
+        {
+          "file": "static\\file-console\\riddle.bin",
+          "size_kb": "3.65"
+        }
+      ],
+      ".mp4": [
+        {
+          "file": "static\\home\\The_Hollow_Pilgrimage.mp4",
+          "size_kb": "65409.18"
+        }
+      ],
+      ".wav": [
+        {
+          "file": "static\\media\\morse.wav",
+          "size_kb": "368.47"
+        }
+      ],
+      ".zip": [
+        {
+          "file": "static\\media\\Password_Is_Keyword[3].zip",
+          "size_kb": "0.28"
+        },
+        {
+          "file": "static\\media\\Password_Is_Keyword[4].zip",
+          "size_kb": "54.97"
+        }
+      ],
+      ".hex": [
+        {
+          "file": "static\\moonlight\\riddle.hex",
+          "size_kb": "0.41"
+        }
+      ]
+    }
+  },
+  "git_commit": "b7f8de78fd0d2890797371db4b9469cd7e69a4bf",
+  "certs": [
+    {
+      "file": "ca.pem",
+      "size_kb": "1.53"
+    }
+  ],
+  "hooks": [
+    {
+      "file": "useBackgroundAudio.ts",
+      "text_words": 81,
+      "dom_nodes": 1
+    },
+    {
+      "file": "useBootSequence.ts",
+      "text_words": 249,
+      "dom_nodes": 0
+    },
+    {
+      "file": "useSystemCorruption.ts",
+      "text_words": 176,
+      "dom_nodes": 2
+    },
+    {
+      "file": "useTypeWriter.ts",
+      "text_words": 71,
+      "dom_nodes": 0
+    },
+    {
+      "file": "useWindowManagement.ts",
+      "text_words": 427,
+      "dom_nodes": 3
+    }
+  ],
+  "components": [
+    {
+      "file": "TAS.tsx",
+      "text_words": 1016,
+      "dom_nodes": 22
+    },
+    {
+      "file": "TAScript.tsx",
+      "text_words": 653,
+      "dom_nodes": 1
+    },
+    {
+      "file": "tree98\\applications\\CMD.tsx",
+      "text_words": 667,
+      "dom_nodes": 20
+    },
+    {
+      "file": "tree98\\applications\\FileExplorer.tsx",
+      "text_words": 303,
+      "dom_nodes": 11
+    },
+    {
+      "file": "tree98\\applications\\Notepad.tsx",
+      "text_words": 199,
+      "dom_nodes": 6
+    },
+    {
+      "file": "tree98\\applications\\Paint.tsx",
+      "text_words": 949,
+      "dom_nodes": 31
+    },
+    {
+      "file": "tree98\\dialogs\\ControlPanel.tsx",
+      "text_words": 334,
+      "dom_nodes": 12
+    },
+    {
+      "file": "tree98\\dialogs\\ErrorPopup.tsx",
+      "text_words": 93,
+      "dom_nodes": 6
+    },
+    {
+      "file": "tree98\\dialogs\\FileViewer.tsx",
+      "text_words": 33,
+      "dom_nodes": 3
+    },
+    {
+      "file": "tree98\\dialogs\\VesselBootDialog.tsx",
+      "text_words": 199,
+      "dom_nodes": 11
+    },
+    {
+      "file": "tree98\\icons.tsx",
+      "text_words": 704,
+      "dom_nodes": 85
+    },
+    {
+      "file": "tree98\\ui\\BlueScreen.tsx",
+      "text_words": 47,
+      "dom_nodes": 2
+    },
+    {
+      "file": "tree98\\ui\\ContextMenu.tsx",
+      "text_words": 62,
+      "dom_nodes": 3
+    },
+    {
+      "file": "tree98\\ui\\LoadingScreen.tsx",
+      "text_words": 56,
+      "dom_nodes": 6
+    },
+    {
+      "file": "tree98\\ui\\StartMenu.tsx",
+      "text_words": 79,
+      "dom_nodes": 6
+    },
+    {
+      "file": "tree98\\WindowComponent.tsx",
+      "text_words": 597,
+      "dom_nodes": 22
+    },
+    {
+      "file": "VNRenderer.tsx",
+      "text_words": 102,
+      "dom_nodes": 1
+    }
+  ],
+  "lib": [
+    {
+      "file": "audio\\index.ts",
+      "text_words": 12,
+      "dom_nodes": 0
+    },
+    {
+      "file": "audio\\logic.ts",
+      "text_words": 234,
+      "dom_nodes": 3
+    },
+    {
+      "file": "audio\\paths.ts",
+      "text_words": 86,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\404.ts",
+      "text_words": 137,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\api.ts",
+      "text_words": 111,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\bnw.ts",
+      "text_words": 104,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\buttons.ts",
+      "text_words": 86,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\cheater.ts",
+      "text_words": 70,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\choices.ts",
+      "text_words": 889,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\dream.ts",
+      "text_words": 148,
+      "dom_nodes": 1
+    },
+    {
+      "file": "data\\fileConsole.ts",
+      "text_words": 1182,
+      "dom_nodes": 16
+    },
+    {
+      "file": "data\\h0m3.ts",
+      "text_words": 165,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\home.ts",
+      "text_words": 1550,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\media.ts",
+      "text_words": 148,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\moonlight.ts",
+      "text_words": 309,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\oArvoreDaCarne.tsx",
+      "text_words": 422,
+      "dom_nodes": 38
+    },
+    {
+      "file": "data\\root.ts",
+      "text_words": 457,
+      "dom_nodes": 1
+    },
+    {
+      "file": "data\\scroll.ts",
+      "text_words": 99,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\smileking.ts",
+      "text_words": 125,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\terminal.ts",
+      "text_words": 734,
+      "dom_nodes": 2
+    },
+    {
+      "file": "data\\theEnd.ts",
+      "text_words": 455,
+      "dom_nodes": 0
+    },
+    {
+      "file": "data\\tree98.ts",
+      "text_words": 3305,
+      "dom_nodes": 1
+    },
+    {
+      "file": "data\\wifi.ts",
+      "text_words": 331,
+      "dom_nodes": 0
+    },
+    {
+      "file": "db.ts",
+      "text_words": 30,
+      "dom_nodes": 0
+    },
+    {
+      "file": "saveData.ts",
+      "text_words": 160,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\buttons.ts",
+      "text_words": 10,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\fileConsole.ts",
+      "text_words": 30,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\home.ts",
+      "text_words": 19,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\oArvoreDaCarne.ts",
+      "text_words": 21,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\tas.ts",
+      "text_words": 16,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\terminal.ts",
+      "text_words": 49,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\theEnd.ts",
+      "text_words": 14,
+      "dom_nodes": 0
+    },
+    {
+      "file": "types\\tree98.ts",
+      "text_words": 363,
+      "dom_nodes": 5
+    },
+    {
+      "file": "types\\wifi.ts",
+      "text_words": 43,
+      "dom_nodes": 0
+    },
+    {
+      "file": "utils.tsx",
+      "text_words": 296,
+      "dom_nodes": 4
+    }
+  ],
+  "next_static_chunks": {
+    "total_size": "21.58 MB",
+    "breakdown": [
+      {
+        "file": "chunks\\app\\404\\page.js",
+        "size_kb": "628.01"
+      },
+      {
+        "file": "chunks\\app\\api\\csrf-token\\route.js",
+        "size_kb": "1.63"
+      },
+      {
+        "file": "chunks\\app\\api\\state\\route.js",
+        "size_kb": "1.63"
+      },
+      {
+        "file": "chunks\\app\\black-and-white\\page.js",
+        "size_kb": "648.10"
+      },
+      {
+        "file": "chunks\\app\\buttons\\page.js",
+        "size_kb": "1092.08"
+      },
+      {
+        "file": "chunks\\app\\choices\\page.js",
+        "size_kb": "713.37"
+      },
+      {
+        "file": "chunks\\app\\dream\\page.js",
+        "size_kb": "156.80"
+      },
+      {
+        "file": "chunks\\app\\file-console\\page.js",
+        "size_kb": "692.30"
+      },
+      {
+        "file": "chunks\\app\\file-console\\tree98\\page.js",
+        "size_kb": "1264.34"
+      },
+      {
+        "file": "chunks\\app\\home\\page.js",
+        "size_kb": "956.47"
+      },
+      {
+        "file": "chunks\\app\\layout.js",
+        "size_kb": "279.13"
+      },
+      {
+        "file": "chunks\\app\\media\\page.js",
+        "size_kb": "641.77"
+      },
+      {
+        "file": "chunks\\app\\moonlight\\page.js",
+        "size_kb": "790.66"
+      },
+      {
+        "file": "chunks\\app\\not-found.js",
+        "size_kb": "628.14"
+      },
+      {
+        "file": "chunks\\app\\O-ARVORE-DA-CARNE\\page.js",
+        "size_kb": "683.57"
+      },
+      {
+        "file": "chunks\\app\\page.js",
+        "size_kb": "667.95"
+      },
+      {
+        "file": "chunks\\app\\scroll\\page.js",
+        "size_kb": "635.00"
+      },
+      {
+        "file": "chunks\\app\\smileking\\page.js",
+        "size_kb": "1039.34"
+      },
+      {
+        "file": "chunks\\app\\smileking-auth\\page.js",
+        "size_kb": "142.30"
+      },
+      {
+        "file": "chunks\\app\\terminal\\page.js",
+        "size_kb": "696.76"
+      },
+      {
+        "file": "chunks\\app\\the-end\\page.js",
+        "size_kb": "782.64"
+      },
+      {
+        "file": "chunks\\app\\wifi-login\\page.js",
+        "size_kb": "1317.05"
+      },
+      {
+        "file": "chunks\\app\\wifi-panel\\page.js",
+        "size_kb": "663.56"
+      },
+      {
+        "file": "chunks\\app\\_not-found\\page.js",
+        "size_kb": "1.63"
+      },
+      {
+        "file": "chunks\\app-pages-internals.js",
+        "size_kb": "223.75"
+      },
+      {
+        "file": "chunks\\main-app.js",
+        "size_kb": "6399.70"
+      },
+      {
+        "file": "chunks\\polyfills.js",
+        "size_kb": "109.96"
+      },
+      {
+        "file": "chunks\\webpack.js",
+        "size_kb": "55.06"
+      },
+      {
+        "file": "chunks\\_app-pages-browser_node_modules_next_dist_client_dev_noop-turbopack-hmr_js.js",
+        "size_kb": "6.27"
+      },
+      {
+        "file": "css\\app\\buttons\\page.css",
+        "size_kb": "10.51"
+      },
+      {
+        "file": "css\\app\\choices\\page.css",
+        "size_kb": "3.30"
+      },
+      {
+        "file": "css\\app\\dream\\page.css",
+        "size_kb": "2.12"
+      },
+      {
+        "file": "css\\app\\file-console\\page.css",
+        "size_kb": "10.27"
+      },
+      {
+        "file": "css\\app\\layout.css",
+        "size_kb": "67.42"
+      },
+      {
+        "file": "css\\app\\media\\page.css",
+        "size_kb": "11.22"
+      },
+      {
+        "file": "css\\app\\smileking\\page.css",
+        "size_kb": "2.42"
+      },
+      {
+        "file": "css\\app\\terminal\\page.css",
+        "size_kb": "10.89"
+      },
+      {
+        "file": "css\\app\\wifi-login\\page.css",
+        "size_kb": "7.01"
+      },
+      {
+        "file": "css\\app\\wifi-panel\\page.css",
+        "size_kb": "11.94"
+      },
+      {
+        "file": "development\\_buildManifest.js",
+        "size_kb": "0.23"
+      },
+      {
+        "file": "development\\_ssgManifest.js",
+        "size_kb": "0.07"
+      },
+      {
+        "file": "webpack\\0e5a6c861c4d5550.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\0f71fa3a0eb8b3d2.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\1ee43612652226bc.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\215a3b2fe820aca9.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\3637c17722a5adf6.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\39ffedacc5a96116.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\3be779e451e5718e.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\4163a5bc41a5af16.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\611d94be19546582.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\633457081244afec._.hot-update.json",
+        "size_kb": "0.02"
+      },
+      {
+        "file": "webpack\\682ad469e2f30fc5.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\6fc0f9dc66d7c900.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\7e9243b650d43463.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\a662482dcc841eb3.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\a7b0a6aa221f5bf8.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\aa91f71847fcf32f.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\app\\layout.0e5a6c861c4d5550.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.1ee43612652226bc.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.39ffedacc5a96116.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.4163a5bc41a5af16.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.611d94be19546582.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.6fc0f9dc66d7c900.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.7e9243b650d43463.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.a662482dcc841eb3.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.c89a87bde48e0241.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.c977612b66e19d01.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.d2ebbce25598dc92.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\app\\layout.dc449255a6a02086.hot-update.js",
+        "size_kb": "1.79"
+      },
+      {
+        "file": "webpack\\c89a87bde48e0241.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\c977612b66e19d01.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\cd6ec508d6fb4463.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\d2ebbce25598dc92.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\d5100ded9fe71904.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\dc449255a6a02086.webpack.hot-update.json",
+        "size_kb": "0.04"
+      },
+      {
+        "file": "webpack\\f15a4cd89bec1fce.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\fc0c5d5a6087802b.webpack.hot-update.json",
+        "size_kb": "0.03"
+      },
+      {
+        "file": "webpack\\webpack.0e5a6c861c4d5550.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.0f71fa3a0eb8b3d2.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.1ee43612652226bc.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.215a3b2fe820aca9.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.3637c17722a5adf6.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.39ffedacc5a96116.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.3be779e451e5718e.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.4163a5bc41a5af16.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.611d94be19546582.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.682ad469e2f30fc5.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.6fc0f9dc66d7c900.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.7e9243b650d43463.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.a662482dcc841eb3.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.a7b0a6aa221f5bf8.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.aa91f71847fcf32f.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.c89a87bde48e0241.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.c977612b66e19d01.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.cd6ec508d6fb4463.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.d2ebbce25598dc92.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.d5100ded9fe71904.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.dc449255a6a02086.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.f15a4cd89bec1fce.hot-update.js",
+        "size_kb": "0.82"
+      },
+      {
+        "file": "webpack\\webpack.fc0c5d5a6087802b.hot-update.js",
+        "size_kb": "0.82"
+      }
+    ]
+  },
+  "vesselEXE": {
+    "zip_size_mb": 150,
+    "extracted_size_mb": 318
+  }
+}
