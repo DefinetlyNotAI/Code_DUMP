@@ -10,7 +10,5 @@ This includes all the model's and data for VulnScan module for Logicytics (v1 ti
 
 ---
 
-To start exploring,
-you can check out the Wiki [here](https://github.com/DefinetlyNotAI/VulnScan_Data/wiki)
-or go [here](https://definetlynotai.github.io/VulnScan_TrainingData/NN%20features/Loss_Landscape_3D.html) to see the 3D Loss Plot!
+To start exploring, go [here](https://definetlynotai.github.io/VulnScan_Data/NN%20features/Loss_Landscape_3D.html) to see the 3D Loss Plot!
 Go to the [releases](https://github.com/DefinetlyNotAI/VulnScan_Data/releases) to download specific model versions/types!
