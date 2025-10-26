@@ -30,4 +30,6 @@
 - [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old_BulletHell_Engine/)
 - [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
 - [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
+- [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template)
+- [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
 ---
