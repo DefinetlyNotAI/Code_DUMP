@@ -1,0 +1,198 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .corruption-banner {
+            position: relative;
+            overflow: hidden;
+            height: 300px;
+            background: #000;
+            margin-bottom: 2rem;
+        }
+
+        .banner-glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ url_for('static', filename='img/banner.jpg') }}") center/cover;
+            opacity: 0.7;
+        }
+
+        .banner-glitch:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ url_for('static', filename='img/banner-glitch.jpg') }}") center/cover;
+            opacity: 0;
+            animation: glitch-banner 8s infinite;
+        }
+
+        .welcome-message {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+        }
+
+        .lore-fragment {
+            border-left: 3px solid #ff0044;
+            padding-left: 1rem;
+            margin: 2rem 0;
+            font-style: italic;
+            position: relative;
+        }
+
+        .lore-fragment:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, #ff0044, transparent);
+        }
+
+        .secret-panel {
+            margin-top: 3rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,0,68,0.3);
+            position: relative;
+        }
+
+        .secret-panel:before {
+            content: "CLASSIFIED";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #000;
+            color: #ff0044;
+            padding: 0 10px;
+            font-size: 0.8rem;
+        }
+
+        .binary-message {
+            font-family: monospace;
+            color: #00ff00;
+            font-size: 0.8rem;
+            overflow-wrap: break-word;
+            opacity: 0.3;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .binary-message:hover {
+            opacity: 1;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="corruption-banner">
+        <div class="banner-glitch"></div>
+        <div class="welcome-message">
+            <h1 class="glitch-text" data-text="WELCOME TO SCRAPYARD">WELCOME TO SCRAPYARD</h1>
+            <p>A hackathon where corruption meets creativity</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <h2>THE SYSTEM IS <span class="glitch-text" data-text="COMPROMISED">COMPROMISED</span></h2>
+
+        <div class="lore-fragment">
+            <p>{{ lore }}</p>
+        </div>
+
+        <p>The Scrapyard Hackathon invites you to explore the boundaries between creation and corruption. Build projects that embrace the glitch, the broken, the mysterious.</p>
+
+        <p>As you navigate this site, remember: <span class="highlight-text">not everything is as it seems</span>. The corruption has spread throughout the code, leaving behind secrets and puzzles for those who dare to look deeper.</p>
+
+        <div class="secret-panel">
+            <h3>DISCOVERIES AWAIT</h3>
+            <p>Each visitor can only access a fraction of the secrets hidden within. Share your findings with others to piece together the full picture.</p>
+
+            {% if "binary_message" in available_secrets %}
+                <div class="binary-message" data-secret="binary_message">
+                    01010100 01101000 01100101 00100000 01100110 01101001 01110010 01110011 01110100 00100000 01101011 01100101 01111001 00100000 01101001 01110011 00100000 01001111 01010110 01000101 01010010 01010010 01001001 01000100 01000101
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2>JOIN THE <span class="corruption-text">CORRUPTION</span></h2>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>BUILD</h3>
+                <p>Create projects that explore the theme of corruption and mystery.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>DISCOVER</h3>
+                <p>Uncover the secrets hidden throughout this site and the hackathon.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>CONNECT</h3>
+                <p>Share your findings with others to piece together the full story.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Secret binary message
+            const binaryMessage = document.querySelector('.binary-message');
+            if (binaryMessage) {
+                binaryMessage.addEventListener('click', function() {
+                    const secretId = this.dataset.secret;
+                    fetch('/api/discover_secret', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            secret_id: secretId
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                alert('Secret discovered: ' + data.message);
+                                // Decode binary message
+                                const binary = this.textContent.trim();
+                                const decoded = binary.split(' ').map(bin =>
+                                    String.fromCharCode(parseInt(bin, 2))
+                                ).join('');
+                                console.log('Decoded message:', decoded);
+                            }
+                        });
+                });
+            }
+
+            // Random glitch effects
+            setInterval(() => {
+                const elements = document.querySelectorAll('.glitch-text');
+                const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                randomElement.classList.add('active');
+                setTimeout(() => {
+                    randomElement.classList.remove('active');
+                }, 200);
+            }, 3000);
+
+            // Hidden terminal link
+            if (Math.random() < 0.3) {
+                setTimeout(() => {
+                    document.querySelector('.hidden-nav').style.display = 'block';
+                }, 10000 + Math.random() * 20000);
+            }
+        });
+    </script>
+{% endblock %}

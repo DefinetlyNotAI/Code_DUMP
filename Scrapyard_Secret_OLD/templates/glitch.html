@@ -1,0 +1,254 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .glitch-page {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .glitch-text-large {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            animation: textGlitch 2s infinite;
+        }
+
+        .glitch-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ url_for('static', filename='img/glitch-bg.jpg') }}") center/cover;
+            opacity: 0.2;
+            mix-blend-mode: overlay;
+        }
+
+        .glitch-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                    0deg,
+                    rgba(0,0,0,0.15),
+                    rgba(0,0,0,0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+            );
+            pointer-events: none;
+        }
+
+        .hidden-message {
+            position: absolute;
+            opacity: 0.05;
+            font-family: monospace;
+            pointer-events: none;
+        }
+
+        .hidden-message:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            transform: rotate(-5deg);
+        }
+
+        .hidden-message:nth-child(2) {
+            bottom: 15%;
+            right: 10%;
+            transform: rotate(3deg);
+        }
+
+        .hidden-message:nth-child(3) {
+            top: 40%;
+            right: 20%;
+            transform: rotate(-10deg);
+        }
+
+        .secret-button {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255,0,68,0.1);
+            border: none;
+            cursor: pointer;
+            opacity: 0.1;
+            transition: opacity 0.3s;
+        }
+
+        .secret-button:hover {
+            opacity: 0.5;
+        }
+
+        .intensity-{{ intensity }} .glitch-text-large {
+            animation-duration: {{ 6 - intensity }}s;
+        }
+
+        .intensity-{{ intensity }} .glitch-image {
+            opacity: {{ intensity * 0.1 }};
+        }
+
+        @keyframes textGlitch {
+            0% {
+                transform: translate(-50%, -50%) skew(0deg);
+                text-shadow: 0.05em 0 0 rgba(255,0,0,0.75), -0.05em -0.025em 0 rgba(0,255,0,0.75), -0.025em 0.05em 0 rgba(0,0,255,0.75);
+            }
+            14% {
+                transform: translate(-50%, -50%) skew(0deg);
+                text-shadow: 0.05em 0 0 rgba(255,0,0,0.75), -0.05em -0.025em 0 rgba(0,255,0,0.75), -0.025em 0.05em 0 rgba(0,0,255,0.75);
+            }
+            15% {
+                transform: translate(-50%, -50%) skew(5deg);
+                text-shadow: -0.05em 0 0 rgba(255,0,0,0.75), 0.025em -0.025em 0 rgba(0,255,0,0.75), -0.05em -0.05em 0 rgba(0,0,255,0.75);
+            }
+            49% {
+                transform: translate(-50%, -50%) skew(0deg);
+                text-shadow: -0.05em 0 0 rgba(255,0,0,0.75), 0.025em -0.025em 0 rgba(0,255,0,0.75), -0.05em -0.05em 0 rgba(0,0,255,0.75);
+            }
+            50% {
+                transform: translate(-50%, -50%) skew(0deg);
+                text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.75), 0.05em 0 0 rgba(0,255,0,0.75), 0 -0.05em 0 rgba(0,0,255,0.75);
+            }
+            99% {
+                transform: translate(-50%, -50%) skew(0deg);
+                text-shadow: 0.025em 0.05em 0 rgba(255,0,0,0.75), 0.05em 0 0 rgba(0,255,0,0.75), 0 -0.05em 0 rgba(0,0,255,0.75);
+            }
+            100% {
+                transform: translate(-50%, -50%) skew(-5deg);
+                text-shadow: -0.025em 0 0 rgba(255,0,0,0.75), -0.025em -0.025em 0 rgba(0,255,0,0.75), -0.025em -0.05em 0 rgba(0,0,255,0.75);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="glitch-page intensity-{{ intensity }}">
+        <div class="glitch-image"></div>
+        <div class="glitch-lines"></div>
+
+        <div class="glitch-text-large" data-text="SYSTEM ERROR">SYSTEM ERROR</div>
+
+        <div class="hidden-message">The corruption is spreading</div>
+        <div class="hidden-message">Look beneath the surface</div>
+        <div class="hidden-message">The key is BENEATH</div>
+
+        <!-- Hidden clickable areas -->
+        <button class="secret-button" style="top: 25%; left: 15%;" data-secret="glitch_image"></button>
+        <button class="secret-button" style="bottom: 30%; right: 25%;" data-secret="glitch_image"></button>
+        <button class="secret-button" style="top: 60%; left: 40%;" data-secret="glitch_image"></button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add more hidden messages randomly
+            const glitchPage = document.querySelector('.glitch-page');
+            for (let i = 0; i < 10; i++) {
+                const message = document.createElement('div');
+                message.className = 'hidden-message';
+                message.textContent = 'ERROR_' + Math.floor(Math.random() * 9999);
+                message.style.top = Math.random() * 100 + '%';
+                message.style.left = Math.random() * 100 + '%';
+                message.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+                message.style.opacity = Math.random() * 0.1;
+                glitchPage.appendChild(message);
+            }
+
+            // Secret buttons
+            const secretButtons = document.querySelectorAll('.secret-button');
+            secretButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const secretId = this.dataset.secret;
+                    fetch('/api/discover_secret', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            secret_id: secretId
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                // Create a glitch effect when secret is found
+                                const glitchEffect = document.createElement('div');
+                                glitchEffect.className = 'glitch-effect';
+                                glitchEffect.style.position = 'fixed';
+                                glitchEffect.style.top = '0';
+                                glitchEffect.style.left = '0';
+                                glitchEffect.style.width = '100%';
+                                glitchEffect.style.height = '100%';
+                                glitchEffect.style.background = 'rgba(255,0,68,0.2)';
+                                glitchEffect.style.zIndex = '1000';
+                                glitchEffect.style.animation = 'glitchFlash 0.5s';
+                                document.body.appendChild(glitchEffect);
+
+                                setTimeout(() => {
+                                    document.body.removeChild(glitchEffect);
+                                    alert('You found a secret: ' + data.message);
+                                    console.log('Secret reward:', data.reward);
+                                }, 500);
+                            }
+                        });
+                });
+            });
+
+            // Random glitch effects
+            setInterval(() => {
+                const randomX = Math.random() * 10 - 5;
+                const randomY = Math.random() * 10 - 5;
+                document.querySelector('.glitch-text-large').style.transform = `translate(-50%, -50%) translate(${randomX}px, ${randomY}px)`;
+
+                setTimeout(() => {
+                    document.querySelector('.glitch-text-large').style.transform = 'translate(-50%, -50%)';
+                }, 100);
+            }, 2000);
+
+            // Keyboard sequence detection
+            let keySequence = '';
+            const targetSequence = 'beneath';
+
+            document.addEventListener('keydown', function(e) {
+                keySequence += e.key.toLowerCase();
+                if (keySequence.length > targetSequence.length) {
+                    keySequence = keySequence.substring(keySequence.length - targetSequence.length);
+                }
+
+                if (keySequence === targetSequence) {
+                    fetch('/api/verify_solution', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            puzzle: 'glitch',
+                            solution: 'beneath'
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                alert('Puzzle solved: ' + data.message);
+                                console.log('Next clue:', data.next_clue);
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+{% endblock %}

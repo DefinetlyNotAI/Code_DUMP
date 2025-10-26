@@ -1,0 +1,534 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .computer-terminal {
+            background: #000;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255,0,68,0.2);
+        }
+
+        .computer-screen {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .computer-screen:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.1));
+            pointer-events: none;
+        }
+
+        .computer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.75rem;
+        }
+
+        .computer-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            letter-spacing: 0.1em;
+        }
+
+        .computer-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #f00;
+            margin-right: 0.5rem;
+            animation: blink 2s infinite;
+        }
+
+        .computer-output {
+            font-family: monospace;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            min-height: 150px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .computer-input-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+        }
+
+        .computer-prompt {
+            color: var(--primary);
+            margin-right: 0.75rem;
+            font-family: monospace;
+        }
+
+        .computer-input {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: monospace;
+            flex-grow: 1;
+            font-size: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .computer-input:focus {
+            outline: none;
+        }
+
+        .computer-keyboard {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .computer-key {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: monospace;
+            box-shadow: 0 2px 0 #111;
+        }
+
+        .computer-key:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 #111;
+        }
+
+        .computer-key:active {
+            transform: translateY(0);
+            box-shadow: 0 0 0 #111;
+        }
+
+        .computer-enter {
+            background: rgba(255,0,68,0.2);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0.5;
+            }
+        }
+
+        .output-success {
+            color: var(--success);
+        }
+
+        .output-error {
+            color: var(--error);
+        }
+
+        .output-warning {
+            color: #ffcc00;
+        }
+
+        .output-secret {
+            color: var(--primary);
+            text-shadow: 0 0 5px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.7;
+            }
+        }
+
+        .hint-container {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,0,68,0.3);
+            border-radius: 4px;
+        }
+
+        .hint-title {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .hint-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .hint-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .hint-list li:before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="content-section">
+        <h2>SECRET <span class="glitch-text" data-text="COMPUTER">COMPUTER</span></h2>
+
+        <p>This specialized terminal allows you to input secret codes discovered throughout the site. Each valid code will reveal hidden information or unlock new areas.</p>
+
+        <div class="computer-terminal">
+            <div class="computer-header">
+                <div class="computer-title">SCRAPYARD DECODER v1.5</div>
+                <div class="computer-status">
+                    <div class="status-indicator"></div>
+                    <span>ACTIVE</span>
+                </div>
+            </div>
+
+            <div class="computer-screen">
+                <div class="computer-output" id="computer-output">
+                    > SCRAPYARD DECODER INITIALIZED
+                    > ENTER SECRET CODES TO REVEAL HIDDEN INFORMATION
+                    > TYPE 'HELP' FOR ASSISTANCE
+                </div>
+
+                <div class="computer-input-container">
+                    <div class="computer-prompt">></div>
+                    <input type="text" class="computer-input" id="computer-input" autocomplete="off" autofocus>
+                </div>
+            </div>
+
+            <div class="computer-keyboard">
+                <div class="computer-key" data-key="HELP">HELP</div>
+                <div class="computer-key" data-key="CLEAR">CLEAR</div>
+                <div class="computer-key" data-key="OVERRIDE">OVERRIDE</div>
+                <div class="computer-key" data-key="WHISPERS">WHISPERS</div>
+                <div class="computer-key" data-key="BENEATH">BENEATH</div>
+                <div class="computer-key" data-key="GATEWAY">GATEWAY</div>
+                <div class="computer-key computer-enter" data-key="ENTER">ENTER</div>
+            </div>
+        </div>
+
+        <div class="hint-container">
+            <h3 class="hint-title">HINTS</h3>
+            <ul class="hint-list">
+                <li>Secret codes can be found throughout the site</li>
+                <li>Look for patterns in glitches, hidden messages, and source code</li>
+                <li>Some codes are only revealed after solving specific puzzles</li>
+                <li>Try combining different clues you've discovered</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const computerOutput = document.getElementById('computer-output');
+            const computerInput = document.getElementById('computer-input');
+            const computerKeys = document.querySelectorAll('.computer-key');
+
+            // Secret code dictionary - maps input codes to output messages
+            const secretCodes = {
+                'help': {
+                    output: `
+AVAILABLE COMMANDS:
+  HELP       - Display this help message
+  CLEAR      - Clear the terminal
+  OVERRIDE   - System override code
+  WHISPERS   - Audio transmission code
+  BENEATH    - Glitch pattern code
+  GATEWAY    - URL parameter code
+  MOONLIGHT  - Celestial alignment code
+  STATIC     - Hidden pattern code
+  BINARY     - Decode binary message
+  COMBINE    - Combine multiple codes (format: COMBINE CODE1+CODE2)
+                `,
+                    type: 'normal'
+                },
+                'clear': {
+                    output: '> Terminal cleared',
+                    type: 'normal',
+                    clear: true
+                },
+                'override': {
+                    output: `
+> OVERRIDE CODE ACCEPTED
+> SYSTEM ACCESS GRANTED
+> SECURITY LEVEL INCREASED
+
+SECRET REVEALED: The system was compromised by an entity known as "The Corruption"
+                `,
+                    type: 'success',
+                    unlocks: 'terminal_access'
+                },
+                'whispers': {
+                    output: `
+> AUDIO DECRYPTION COMPLETE
+> HIDDEN MESSAGE EXTRACTED
+
+SECRET REVEALED: The transmission contains coordinates to a physical location
+COORDINATES: 37°14'06.1"N 115°48'40.0"W
+                `,
+                    type: 'secret',
+                    unlocks: 'audio_secret'
+                },
+                'beneath': {
+                    output: `
+> GLITCH PATTERN ANALYZED
+> HIDDEN IMAGE DETECTED
+
+SECRET REVEALED: The glitches form a QR code when arranged in sequence
+SCAN THE CODE TO ACCESS: scrapyard.hack/hidden_archive
+                `,
+                    type: 'secret',
+                    unlocks: 'glitch_pattern'
+                },
+                'gateway': {
+                    output: `
+> URL PARAMETER ACCEPTED
+> HIDDEN ROUTE UNLOCKED
+
+SECRET REVEALED: Add ?access=corruption to any URL to reveal hidden UI elements
+                `,
+                    type: 'success',
+                    unlocks: 'url_access'
+                },
+                'moonlight': {
+                    output: `
+> CELESTIAL ALIGNMENT CONFIRMED
+> MOONLIGHT PAGE FULLY UNLOCKED
+
+SECRET REVEALED: The constellation pattern forms a key that unlocks the final puzzle
+                `,
+                    type: 'secret',
+                    unlocks: 'constellation_key'
+                },
+                'static': {
+                    output: `
+> STATIC PATTERN DECODED
+> HIDDEN MESSAGE EXTRACTED
+
+SECRET REVEALED: The static contains a steganographic image
+VIEW IMAGE AT: scrapyard.hack/static_reveal
+                `,
+                    type: 'secret',
+                    unlocks: 'static_image'
+                },
+                'binary': {
+                    output: `
+> BINARY TRANSLATION COMPLETE
+
+DECODED MESSAGE: "The first key is OVERRIDE"
+                `,
+                    type: 'success',
+                    unlocks: 'binary_message'
+                },
+                'source': {
+                    output: `
+> SOURCE CODE ANALYZED
+> HIDDEN COMMENTS FOUND
+
+SECRET REVEALED: Check HTML comments for GPS coordinates
+                `,
+                    type: 'success',
+                    unlocks: 'source_secret'
+                }
+            };
+
+            // Special combination codes
+            const combinationCodes = {
+                'override+whispers': {
+                    output: `
+> COMBINATION ACCEPTED: OVERRIDE + WHISPERS
+> ADVANCED ACCESS GRANTED
+
+MAJOR SECRET REVEALED: The transmission audio played backwards reveals the master password
+MASTER PASSWORD: "CORRUPTION_NEXUS_9"
+                `,
+                    type: 'secret',
+                    unlocks: 'master_password'
+                },
+                'beneath+gateway': {
+                    output: `
+> COMBINATION ACCEPTED: BENEATH + GATEWAY
+> HIDDEN PATHWAY UNLOCKED
+
+MAJOR SECRET REVEALED: A new page has been unlocked at /nexus
+VISIT: scrapyard.hack/nexus
+                `,
+                    type: 'secret',
+                    unlocks: 'nexus_page'
+                },
+                'moonlight+static': {
+                    output: `
+> COMBINATION ACCEPTED: MOONLIGHT + STATIC
+> CELESTIAL PATTERN ALIGNED
+
+MAJOR SECRET REVEALED: The constellation and static patterns overlap to form a map
+MAP LOCATION: "The Corruption Origin Point"
+                `,
+                    type: 'secret',
+                    unlocks: 'origin_map'
+                }
+            };
+
+            // Process input command
+            function processCommand(command) {
+                const cmd = command.trim().toLowerCase();
+
+                // Check for combination command
+                if (cmd.startsWith('combine ')) {
+                    const combinationParts = cmd.substring(8).split('+');
+                    if (combinationParts.length === 2) {
+                        const combo = combinationParts[0].trim() + '+' + combinationParts[1].trim();
+                        if (combinationCodes[combo]) {
+                            return combinationCodes[combo];
+                        } else {
+                            return {
+                                output: `> ERROR: Invalid combination. Try different codes.`,
+                                type: 'error'
+                            };
+                        }
+                    } else {
+                        return {
+                            output: `> ERROR: Combination format should be "COMBINE CODE1+CODE2"`,
+                            type: 'error'
+                        };
+                    }
+                }
+
+                // Check regular commands
+                if (secretCodes[cmd]) {
+                    return secretCodes[cmd];
+                } else {
+                    return {
+                        output: `> ERROR: Unrecognized code "${command}". Try another code or type HELP.`,
+                        type: 'error'
+                    };
+                }
+            }
+
+            // Append text to output
+            function appendToOutput(text, type = 'normal', clear = false) {
+                if (clear) {
+                    computerOutput.innerHTML = '';
+                }
+
+                const outputClass = type === 'error' ? 'output-error' :
+                    type === 'success' ? 'output-success' :
+                        type === 'secret' ? 'output-secret' : '';
+
+                computerOutput.innerHTML += `<div class="${outputClass}">${text}</div>`;
+                computerOutput.scrollTop = computerOutput.scrollHeight;
+            }
+
+            // Handle input submission
+            function handleInput() {
+                const command = computerInput.value;
+
+                if (command.trim() !== '') {
+                    appendToOutput(`> ${command}`);
+
+                    const result = processCommand(command);
+                    appendToOutput(result.output, result.type, result.clear);
+
+                    // If the command unlocks something, we could trigger additional effects
+                    if (result.unlocks) {
+                        // This could be expanded to actually unlock features on the site
+                        console.log(`Unlocked: ${result.unlocks}`);
+
+                        // Send to server to track unlocked secrets
+                        fetch('/api/unlock_secret', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                secret_id: result.unlocks
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if(data && data.success) {
+                                    console.log('Secret unlocked on server');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error unlocking secret:', error);
+                            });
+                    }
+
+                    computerInput.value = '';
+                }
+            }
+
+            // Event listeners
+            computerInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    handleInput();
+                }
+            });
+
+            // Virtual keyboard
+            computerKeys.forEach(key => {
+                key.addEventListener('click', function() {
+                    const keyValue = this.dataset.key;
+
+                    if (keyValue === 'ENTER') {
+                        handleInput();
+                    } else {
+                        computerInput.value = keyValue;
+                        computerInput.focus();
+                    }
+                });
+            });
+
+            // Focus input on terminal click
+            document.querySelector('.computer-terminal').addEventListener('click', function() {
+                computerInput.focus();
+            });
+        });
+    </script>
+{% endblock %}

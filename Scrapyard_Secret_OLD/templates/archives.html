@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .archives-container {
+            position: relative;
+        }
+
+        .archives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .archive-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,0,68,0.3);
+            padding: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .archive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255,0,68,0.2);
+        }
+
+        .archive-card:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff0044, transparent);
+        }
+
+        .archive-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .archive-title {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .archive-content {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .archive-tag {
+            display: inline-block;
+            background: rgba(255,0,68,0.2);
+            color: #ff0044;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 3rem 0;
+            padding-left: 2rem;
+        }
+
+        .timeline:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #ff0044, transparent);
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1rem;
+        }
+
+        .timeline-event:before {
+            content: "";
+            position: absolute;
+            top: 0.5rem;
+            left: -2rem;
+            width: 1rem;
+            height: 1rem;
+            background: #000;
+            border: 2px solid #ff0044;
+            border-radius: 50%;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #ff0044;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .hidden-timestamp {
+            color: rgba(255,255,255,0.1);
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+        }
+
+        .moonlight-content {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="archives-container">
+        <h2>SCRAPYARD <span class="glitch-text" data-text="ARCHIVES">ARCHIVES</span></h2>
+
+        <p>Historical records of the Scrapyard project. Many files have been corrupted or lost.</p>
+
+        <div class="archives-grid">
+            <div class="archive-card">
+                <div class="archive-date">03/01/2025</div>
+                <h3 class="archive-title">Project Initialization</h3>
+                <div class="archive-content">
+                    <p>Scrapyard project officially begins. Initial team assembled. Goals established for creating a new kind of hackathon experience.</p>
+                    <div class="archive-tag">DOCUMENT</div>
+                    <div class="archive-tag">UNCLASSIFIED</div>
+                    <div class="hidden-timestamp" data-timestamp="03.01.25.0842">08:42:17</div>
+                </div>
+            </div>
+
+            <div class="archive-card">
+                <div class="archive-date">03/05/2025</div>
+                <h3 class="archive-title">System Architecture</h3>
+                <div class="archive-content">
+                    <p>Framework established for the Scrapyard network. Security protocols implemented. First tests successful.</p>
+                    <div class="archive-tag">TECHNICAL</div>
+                    <div class="archive-tag">RESTRICTED</div>
+                    <div class="hidden-timestamp" data-timestamp="03.05.25.1317">13:17:42</div>
+                </div>
+            </div>
+
+            <div class="archive-card">
+                <div class="archive-date">03/10/2025</div>
+                <h3 class="archive-title">Anomaly Detection</h3>
+                <div class="archive-content">
+                    <p>First signs of system irregularities detected. Minor glitches in the network. Investigation ongoing.</p>
+                    <div class="archive-tag">INCIDENT</div>
+                    <div class="archive-tag">CONFIDENTIAL</div>
+                    <div class="hidden-timestamp" data-timestamp="03.10.25.2203">22:03:58</div>
+                </div>
+            </div>
+
+            <div class="archive-card">
+                <div class="archive-date">03/12/2025</div>
+                <h3 class="archive-title">Security Breach</h3>
+                <div class="archive-content">
+                    <p>Unauthorized access detected in the main server. Several files corrupted. Security team working to contain the breach.</p>
+                    <div class="archive-tag">ALERT</div>
+                    <div class="archive-tag">CLASSIFIED</div>
+                    <div class="hidden-timestamp" data-timestamp="03.12.25.0317">03:17:05</div>
+                </div>
+            </div>
+
+            <div class="archive-card">
+                <div class="archive-date">03/15/2025</div>
+                <h3 class="archive-title">System Compromise</h3>
+                <div class="archive-content">
+                    <p>Full system corruption detected. Unknown entity has taken control of the network. All attempts to regain control have failed.</p>
+                    <div class="archive-tag">CRITICAL</div>
+                    <div class="archive-tag">TOP SECRET</div>
+                    <div class="hidden-timestamp" data-timestamp="03.15.25.2342">23:42:17</div>
+                </div>
+            </div>
+
+            <div class="archive-card corrupted-card">
+                <div class="archive-date">03/??/2025</div>
+                <h3 class="archive-title">DATA CORRUPTED</h3>
+                <div class="archive-content">
+                    <p>F̷̨̛̖̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰̙̙̘̙̦̠̰</p>
+                    <div class="archive-tag">ERROR</div>
+                    <div class="archive-tag">CORRUPTED</div>
+                    <div class="hidden-timestamp" data-timestamp="??.??.??.????">??:??:??</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hidden timestamps reveal
+            const hiddenTimestamps = document.querySelectorAll('.hidden-timestamp');
+            hiddenTimestamps.forEach(timestamp => {
+                timestamp.addEventListener('mouseover', function() {
+                    this.style.color = 'rgba(255,255,255,0.7)';
+                });
+
+                timestamp.addEventListener('mouseout', function() {
+                    this.style.color = 'rgba(255,255,255,0.1)';
+                });
+
+                timestamp.addEventListener('click', function() {
+                    const timestampData = this.dataset.timestamp;
+                    console.log('Timestamp clicked:', timestampData);
+
+                    // Check for moonlight parameter
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.has('moonlight') && urlParams.get('moonlight') === 'true') {
+                        // Redirect to moonlight page
+                        window.location.href = '/moonlight?activate=true';
+                    }
+                });
+            });
+
+            // Check for URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('decode') && urlParams.get('decode') === 'true') {
+                fetch('/api/discover_secret', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        secret_id: 'url_parameter'
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            alert('Secret discovered: ' + data.message);
+                            console.log('Reward:', data.reward);
+                        }
+                    });
+            }
+        });
+    </script>
+{% endblock %}
