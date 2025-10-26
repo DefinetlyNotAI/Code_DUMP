@@ -1,0 +1,94 @@
+[*] AST Dump:
+Module(
+  body=[
+    FunctionDef(
+      name='is_empty_tuple_truthy',
+      args=arguments(),
+      body=[
+        Return(
+          value=UnaryOp(
+            op=Not(),
+            operand=Tuple(ctx=Load())))]),
+    FunctionDef(
+      name='weird_addition',
+      args=arguments(),
+      body=[
+        Assign(
+          targets=[
+            Name(id='x', ctx=Store())],
+          value=Call(
+            func=Name(id='sum', ctx=Load()),
+            args=[
+              Call(
+                func=Name(id='range', ctx=Load()),
+                args=[
+                  Call(
+                    func=Name(id='ord', ctx=Load()),
+                    args=[
+                      Call(
+                        func=Name(id='min', ctx=Load()),
+                        args=[
+                          Call(
+                            func=Name(id='str', ctx=Load()),
+                            args=[
+                              UnaryOp(
+                                op=Not(),
+                                operand=Tuple(ctx=Load()))])])])])])),
+        Return(
+          value=Call(
+            func=Name(id='chr', ctx=Load()),
+            args=[
+              Name(id='x', ctx=Load())]))]),
+    FunctionDef(
+      name='greet',
+      args=arguments(),
+      body=[
+        Expr(
+          value=Call(
+            func=Name(id='print', ctx=Load()),
+            args=[
+              Constant(value='ඞ'),
+              Call(
+                func=Name(id='weird_addition', ctx=Load()))]))]),
+    ClassDef(
+      name='Impostor',
+      body=[
+        FunctionDef(
+          name='__init__',
+          args=arguments(
+            args=[
+              arg(arg='self')]),
+          body=[
+            Assign(
+              targets=[
+                Attribute(
+                  value=Name(id='self', ctx=Load()),
+                  attr='suspicious',
+                  ctx=Store())],
+              value=Constant(value=True))]),
+        FunctionDef(
+          name='act_normal',
+          args=arguments(
+            args=[
+              arg(arg='self')]),
+          body=[
+            If(
+              test=Attribute(
+                value=Name(id='self', ctx=Load()),
+                attr='suspicious',
+                ctx=Load()),
+              body=[
+                Expr(
+                  value=Call(
+                    func=Name(id='print', ctx=Load()),
+                    args=[
+                      Constant(value='Nothing to see here...')]))],
+              orelse=[
+                Expr(
+                  value=Call(
+                    func=Name(id='print', ctx=Load()),
+                    args=[
+                      Constant(value="I'm just doing tasks.")]))])])]),
+    Expr(
+      value=Call(
+        func=Name(id='greet', ctx=Load())))])
