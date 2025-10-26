@@ -1,0 +1,28 @@
+[
+  {
+    "type": "dialogue",
+    "text": "This concludes our demonstration of the Visual Novel Engine.",
+    "speaker": "Guide",
+    "background": "frozen_frame.jpg",
+    "music": "ambient3.mp3",
+    "effect": "fade"
+  },
+  {
+    "type": "dialogue",
+    "text": "You can create complex narratives with branching paths, conditions, and state management.",
+    "speaker": "Guide"
+  },
+  {
+    "type": "dialogue",
+    "text": "Thank you for trying out the engine!",
+    "speaker": "Guide",
+    "background": "black.jpg",
+    "sfx": "static.mp3"
+  },
+  {
+    "type": "jump",
+    "text": "Would you like to start over?",
+    "speaker": "Guide",
+    "target": "start.json"
+  }
+]

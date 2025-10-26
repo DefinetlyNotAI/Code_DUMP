@@ -1,0 +1,7 @@
+For some reason the sfx or music only start after the node is completed?
+Also, update the readme
+The save mechanism still is the local weird ui thing, not the new json thing, the json should include all the data current, like the quests seen, and what missed, and variables etc
+And the choices condition variables check is too late, the order.json should not be strict, and whenever a condition is needed, it allows the previous nodes etc to be finalised then after everything checks the condition if true or false etc
+Also add a optional Miss Name if the event gets missed
+Only if the clicking of the mouse was inside the box do you progress the text box/story, space however or enter auto do that,
+Dont allow mouse to select stuff, aka that blue highlight of copying
