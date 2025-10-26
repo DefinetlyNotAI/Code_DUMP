@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        body {
+            background: #000;
+        }
+
+        .moonlight-container {
+            position: relative;
+            min-height: 80vh;
+            overflow: hidden;
+        }
+
+        .moon {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 50px 20px rgba(255,255,255,0.5);
+            opacity: 0.8;
+        }
+
+        .moonlight-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .moonlight-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .moonlight-text {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hidden-in-moonlight {
+            opacity: 0;
+            transition: opacity 2s;
+        }
+
+        .constellation {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 2px 1px rgba(255,255,255,0.5);
+        }
+
+        .constellation-line {
+            position: absolute;
+            background: rgba(255,255,255,0.2);
+            transform-origin: 0 0;
+            z-index: -1;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="moonlight-container">
+        <div class="moon"></div>
+
+        <div class="moonlight-content">
+            <h1 class="moonlight-title">In the Moonlight</h1>
+
+            <p class="moonlight-text">Some secrets can only be seen in the darkness, when the moon casts its pale light upon the world. You've found a hidden realm within the corruption.</p>
+
+            <p class="moonlight-text">The Scrapyard project was never meant to be discovered in its entirety. The corruption that has spread throughout the system is not a malfunction, but a transformation.</p>
+
+            <p class="moonlight-text">As you piece together the fragments of truth scattered across this site, remember that not all who wander through the digital wasteland are lost. Some are guides, leading you deeper into the mystery.</p>
+
+            <div class="hidden-in-moonlight" id="moonlight-secret">
+                <h3>The Final Key</h3>
+                <p>You've discovered the moonlight secret. The final key is:</p>
+                <p class="highlight-text">GATEWAY</p>
+                <p>Use it wisely. The path continues elsewhere...</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create stars
+            const container = document.querySelector('.moonlight-container');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'constellation';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 2 + 1) + 'px';
+                star.style.height = star.style.width;
+                container.appendChild(star);
+            }
+
+            // Create constellation
+            const constellationPoints = [
+                {x: 30, y: 20},
+                {x: 40, y: 25},
+                {x: 50, y: 15},
+                {x: 60, y: 30},
+                {x: 70, y: 25},
+                {x: 65, y: 40},
+                {x: 55, y: 50},
+                {x: 40, y: 45},
+                {x: 35, y: 35}
+            ];
+
+            // Create constellation stars
+            constellationPoints.forEach(point => {
+                const star = document.createElement('div');
+                star.className = 'constellation';
+                star.style.top = point.y + '%';
+                star.style.left = point.x + '%';
+                star.style.width = '3px';
+                star.style.height = '3px';
+                container.appendChild(star);
+            });
+
+            // Create constellation lines
+            for (let i = 0; i < constellationPoints.length - 1; i++) {
+                const start = constellationPoints[i];
+                const end = constellationPoints[i + 1];
+
+                const line = document.createElement('div');
+                line.className = 'constellation-line';
+
+                // Calculate line position and dimensions
+                const length = Math.sqrt(
+                    Math.pow(end.x - start.x, 2) +
+                    Math.pow(end.y - start.y, 2)
+                );
+
+                const angle = Math.atan2(end.y - start.y, end.x - start.x);
+
+                line.style.width = length + '%';
+                line.style.height = '1px';
+                line.style.top = start.y + '%';
+                line.style.left = start.x + '%';
+                line.style.transform = `rotate(${angle}rad)`;
+
+                container.appendChild(line);
+            }
+
+            // Reveal hidden content after delay
+            setTimeout(() => {
+                document.getElementById('moonlight-secret').style.opacity = 1;
+
+                // Discover the URL parameter secret
+                fetch('/api/discover_secret', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        secret_id: 'url_parameter'
+                    })
+                });
+            }, 5000);
+
+            // Mouse movement effect on stars
+            document.addEventListener('mousemove', function(e) {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+
+                const stars = document.querySelectorAll('.constellation');
+                stars.forEach(star => {
+                    const rect = star.getBoundingClientRect();
+                    const starX = (rect.left + rect.width / 2) / window.innerWidth;
+                    const starY = (rect.top + rect.height / 2) / window.innerHeight;
+
+                    const distance = Math.sqrt(
+                        Math.pow(mouseX - starX, 2) +
+                        Math.pow(mouseY - starY, 2)
+                    );
+
+                    if (distance < 0.1) {
+                        star.style.boxShadow = `0 0 ${10 - distance * 80}px ${5 - distance * 40}px rgba(255,255,255,0.8)`;
+                    } else {
+                        star.style.boxShadow = '0 0 2px 1px rgba(255,255,255,0.5)';
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
