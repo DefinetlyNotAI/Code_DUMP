@@ -1,0 +1,35 @@
+[*] Bytecode of Top-Level Functions:
+--- is_empty_tuple_truthy ---
+  1           RESUME                   0
+
+  2           RETURN_CONST             1 (True)
+--- weird_addition ---
+  4           RESUME                   0
+
+  5           LOAD_GLOBAL              1 (sum + NULL)
+              LOAD_GLOBAL              3 (range + NULL)
+              LOAD_GLOBAL              5 (ord + NULL)
+              LOAD_GLOBAL              7 (min + NULL)
+              LOAD_GLOBAL              9 (str + NULL)
+              LOAD_CONST               1 (True)
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              STORE_FAST               0 (x)
+
+  6           LOAD_GLOBAL             11 (chr + NULL)
+              LOAD_FAST                0 (x)
+              CALL                     1
+              RETURN_VALUE
+--- greet ---
+  8           RESUME                   0
+
+  9           LOAD_GLOBAL              1 (print + NULL)
+              LOAD_CONST               1 ('ඞ')
+              LOAD_GLOBAL              3 (weird_addition + NULL)
+              CALL                     0
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
