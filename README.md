@@ -13,7 +13,8 @@
 </div>
 
 > [!NOTE]
-> ## This is just a random messy and at all not a serious repo, all its worth is to dump old, unfinished code that I want to look back into or maybe continue working on
+>
+> ## Most code here consists of tiny projects I’ve worked on. Some are abandoned or no longer work, while others include more effort and are somewhat more complete.
 
 > [!IMPORTANT]
 > Don't trust commit history time, as most these projects were done back in 2020 covid era, but were rather archived in a USB before I discovered GitHub and created this repo, so don't judge any of the code based on commit dates!!
@@ -25,7 +26,7 @@
 
 ---
 
-### Available github webpages to test can be found here
+### Available GitHub webpages to test can be found here
 - [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old_BulletHell_Engine/)
 - [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
 - [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)

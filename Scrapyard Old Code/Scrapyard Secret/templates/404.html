@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin: 0;
+            position: relative;
+            color: #ff0044;
+            text-shadow: 0 0 10px rgba(255,0,68,0.5);
+        }
+
+        .error-code:before {
+            content: "404";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #00ffff;
+            opacity: 0.5;
+            animation: glitch-error 3s infinite;
+        }
+
+        .error-code:after {
+            content: "404";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #ff00ff;
+            opacity: 0.5;
+            animation: glitch-error 2s infinite reverse;
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            margin: 1rem 0 2rem;
+        }
+
+        .error-details {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .hidden-clue {
+            position: absolute;
+            opacity: 0.05;
+            font-size: 0.7rem;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        .hidden-clue:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            transform: rotate(-5deg);
+        }
+
+        .hidden-clue:nth-child(2) {
+            bottom: 15%;
+            right: 10%;
+            transform: rotate(3deg);
+        }
+
+        .hidden-clue:nth-child(3) {
+            top: 40%;
+            right: 20%;
+            transform: rotate(-10deg);
+        }
+
+        .hidden-clue:nth-child(4) {
+            bottom: 30%;
+            left: 15%;
+            transform: rotate(7deg);
+        }
+
+        @keyframes glitch-error {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-5px, 5px);
+            }
+            40% {
+                transform: translate(-5px, -5px);
+            }
+            60% {
+                transform: translate(5px, 5px);
+            }
+            80% {
+                transform: translate(5px, -5px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">PAGE NOT FOUND</p>
+
+        <div class="error-details">
+            <p>The page you are looking for has been corrupted or does not exist.</p>
+            <p>Return to <a href="{{ url_for('index') }}" class="highlight-text">home</a> or continue exploring the corruption.</p>
+        </div>
+
+        <div class="hidden-clue">Sometimes errors are gateways</div>
+        <div class="hidden-clue">Look deeper into the void</div>
+        <div class="hidden-clue">{{ hidden_message }}</div>
+        <div class="hidden-clue">Try adding ?parameter=true to URLs</div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add URL parameter detection
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('parameter') && urlParams.get('parameter') === 'true') {
+                fetch('/api/discover_secret', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        secret_id: 'url_parameter'
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            alert('Secret discovered: ' + data.message);
+                            console.log('Reward:', data.reward);
+
+                            // Verify the solution
+                            fetch('/api/verify_solution', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    puzzle: 'parameter',
+                                    solution: 'gateway'
+                                })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if(data.success) {
+                                        alert('Puzzle solved: ' + data.message);
+                                        console.log('Next clue:', data.next_clue);
+                                    }
+                                });
+                        }
+                    });
+            }
+
+            // Make hidden clues slightly visible on hover
+            const errorContainer = document.querySelector('.error-container');
+            errorContainer.addEventListener('mousemove', function(e) {
+                const hiddenClues = document.querySelectorAll('.hidden-clue');
+                hiddenClues.forEach(clue => {
+                    const rect = clue.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    const distance = Math.sqrt(
+                        Math.pow(e.clientX - centerX, 2) +
+                        Math.pow(e.clientY - centerY, 2)
+                    );
+
+                    // Make clue more visible when mouse is closer
+                    if (distance < 100) {
+                        clue.style.opacity = 0.3 - (distance / 100 * 0.25);
+                    } else {
+                        clue.style.opacity = 0.05;
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

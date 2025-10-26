@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRAPYARD HACKATHON</title>
+    <meta name="description" content="Join the Scrapyard Hackathon. Discover the truth beneath the corruption.">
+    <!-- Hidden metadata clue -->
+    <meta name="keywords" content="hackathon, scrapyard, corruption, secrets, puzzles">
+    <meta name="author" content="SYSTEM://COMPROMISED">
+    <!-- Hidden message in the source -->
+    <!--
+        ATTENTION: If you're reading this, you've taken the first step.
+        The corruption runs deeper than you think.
+        Look for patterns in the static.
+        The key is: HIDDEN
+    -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="{% if night_mode %}night-mode{% endif %} corruption-level-{{ range(1, 6) | random }}">
+<div class="noise-overlay"></div>
+<div class="glitch-container">
+    <header>
+        <div class="logo glitch-text" data-text="SCRAPYARD">SCRAPYARD</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}" class="nav-link">HOME</a></li>
+                <li><a href="{{ url_for('archives') }}" class="nav-link">ARCHIVES</a></li>
+                <li><a href="{{ url_for('transmission') }}" class="nav-link">TRANSMISSION</a></li>
+                <!-- What is this - Dont access this until announced -->
+                <!-- <li><a href="{{ url_for('computer') }}" class="nav-link">COMPUTER</a></li> -->
+                <li class="hidden-nav"><a href="{{ url_for('terminal') }}" class="nav-link terminal-link">TERMINAL</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>VISITOR ID: <span class="visitor-id">{{ visitor_id }}</span></p>
+        <p class="corruption-text">The system was compromised on 03/15/2025</p>
+        <!-- Hidden clickable area -->
+        <div class="secret-trigger" data-secret="footer_secret"></div>
+    </footer>
+</div>
+
+<!-- Core JavaScript -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<!-- Secret console message -->
+<script>
+    console.log("%cYou're looking in the right place.", "color: red; font-size: 20px; font-weight: bold;");
+    <!-- CONSOLE_COMMAND = running: scrapyard.revealSecret() -->
+
+    // Global scrapyard object with hidden functions
+    window.scrapyard = {
+        revealSecret: function() {
+            console.log("%cSECRET REVEALED: The console holds the key.", "color: red; background: black; padding: 10px;");
+            console.log("Look for: CONSOLE_COMMAND");
+            fetch('/api/discover_secret', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    secret_id: 'console_command'
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        console.log("%cREWARD: " + data.reward, "color: green; background: black; padding: 10px;");
+                    }
+                });
+        },
+        _hiddenFunction: function() {
+            document.body.classList.add('corrupted');
+            setTimeout(() => {
+                document.body.classList.remove('corrupted');
+            }, 3000);
+        }
+    };
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,4 +1,0 @@
-yfinance~=0.2.40
-requests~=2.32.3
-transformers~=4.42.3
-beautifulsoup4~=4.12.3
