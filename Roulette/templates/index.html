@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spin The Wheel</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Main Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4a4a4a;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Wheel Styles */
+        #wheelCanvas {
+            max-width: 100%;
+            height: auto;
+            margin: 2rem auto;
+            display: block;
+            border-radius: 50%;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .wheel-container {
+            position: relative;
+            margin: 3rem auto;
+            max-width: 400px;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #e74c3c;
+            z-index: 10;
+        }
+
+        /* Button Styles */
+        button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+            margin-top: 1.5rem;
+            outline: none;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(107, 70, 193, 0.4);
+            background: linear-gradient(135deg, #5a5fec 0%, #7c4ef3 100%);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(107, 70, 193, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Winner Display */
+        .winner-display {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #8b5cf6;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            button {
+                padding: 0.7rem 1.8rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+                color: #e5e7eb;
+            }
+
+            .container {
+                background-color: #1e293b;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+
+            h1 {
+                color: #f3f4f6;
+            }
+
+            .winner-display {
+                background-color: #2d3748;
+                border-left: 5px solid #8b5cf6;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(107, 70, 193, 0.2);
+            border-radius: 50%;
+            border-top-color: #8b5cf6;
+            animation: spin 1s ease-in-out infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* SweetAlert2 Customization */
+        .swal2-popup {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: 16px;
+        }
+
+        .swal2-title {
+            color: #4a4a4a;
+            font-weight: 700;
+        }
+
+        .swal2-confirm {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            border-radius: 50px !important;
+            padding: 0.8rem 2rem !important;
+            font-weight: 600 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Spin The Wheel</h1>
+
+    <div class="wheel-container">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheelCanvas"></canvas>
+    </div>
+
+    <button id="spinButton" onclick="spin()">Spin!</button>
+
+    <div class="winner-display" id="winnerDisplay" style="display: none;">
+        <h2>Winner!</h2>
+        <p class="winner-name" id="winnerName"></p>
+    </div>
+</div>
+
+<script>
+    let names = [];
+    let weights = [];
+    let chart;
+    let isSpinning = false;
+
+    function fetchData() {
+        fetch('/get_data')
+            .then(response => response.json())
+            .then(data => {
+                names = data.names;
+                weights = data.weights;
+                drawWheel();
+            });
+    }
+
+    function drawWheel() {
+        if (chart) chart.destroy();
+
+        const ctx = document.getElementById('wheelCanvas').getContext('2d');
+
+        // Generate vibrant colors for each segment
+        const colors = names.map(() => {
+            const hue = Math.floor(Math.random() * 360);
+            return `hsl(${hue}, 70%, 60%)`;
+        });
+
+        chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: names,
+                datasets: [{
+                    data: weights,
+                    backgroundColor: colors,
+                    borderColor: colors.map(color => color.replace('60%', '50%')),
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                return `${label}: ${value} scraps`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function spin() {
+        if (isSpinning) return;
+
+        const spinButton = document.getElementById('spinButton');
+        spinButton.disabled = true;
+        spinButton.textContent = 'Spinning...';
+        isSpinning = true;
+
+        // Hide previous winner if shown
+        document.getElementById('winnerDisplay').style.display = 'none';
+
+        fetch('/spin')
+            .then(response => response.json())
+            .then(data => {
+                let winnerIndex = names.indexOf(data.winner);
+
+                // Reset rotation
+                chart.options.rotation = 0;
+
+                // Calculate spin angle (10 full rotations + position to land on winner)
+                let spinAngle = 3600 + (360 - (360 / names.length) * winnerIndex);
+
+                let startTime = Date.now();
+                let duration = 3000; // 3 seconds
+
+                function animate() {
+                    let elapsed = Date.now() - startTime;
+                    let progress = Math.min(elapsed / duration, 1);
+
+                    // Easing function for natural deceleration
+                    let easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+                    let angle = easeOutCubic(progress) * spinAngle;
+
+                    chart.options.rotation = angle;
+                    chart.update();
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        // Show winner
+                        document.getElementById('winnerName').textContent = `🎉 ${data.winner} 🎉`;
+                        document.getElementById('winnerDisplay').style.display = 'block';
+
+                        // Reset button
+                        spinButton.disabled = false;
+                        spinButton.textContent = 'Spin!';
+                        isSpinning = false;
+
+                        // Show sweet alert
+                        Swal.fire({
+                            title: "Winner!",
+                            text: `🎉 ${data.winner} won!`,
+                            icon: "success",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            });
+    }
+
+    // Initialize the wheel on page load
+    fetchData();
+</script>
+</body>
+</html>
