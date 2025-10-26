@@ -1,0 +1,113 @@
+[*] Bytecode Disassembly:
+  0           RESUME                   0
+
+  1           LOAD_CONST               0 (<code object is_empty_tuple_truthy at 0x0000020585E545E0, file "example.py", line 1>)
+              MAKE_FUNCTION
+              STORE_NAME               0 (is_empty_tuple_truthy)
+
+  4           LOAD_CONST               1 (<code object weird_addition at 0x0000020585DBCB70, file "example.py", line 4>)
+              MAKE_FUNCTION
+              STORE_NAME               1 (weird_addition)
+
+  8           LOAD_CONST               2 (<code object greet at 0x0000020585DC9D30, file "example.py", line 8>)
+              MAKE_FUNCTION
+              STORE_NAME               2 (greet)
+
+ 11           LOAD_BUILD_CLASS
+              PUSH_NULL
+              LOAD_CONST               3 (<code object Impostor at 0x00000205859CC030, file "example.py", line 11>)
+              MAKE_FUNCTION
+              LOAD_CONST               4 ('Impostor')
+              CALL                     2
+              STORE_NAME               3 (Impostor)
+
+ 21           LOAD_NAME                2 (greet)
+              PUSH_NULL
+              CALL                     0
+              POP_TOP
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object is_empty_tuple_truthy at 0x0000020585E545E0, file "example.py", line 1>:
+  1           RESUME                   0
+
+  2           RETURN_CONST             1 (True)
+
+Disassembly of <code object weird_addition at 0x0000020585DBCB70, file "example.py", line 4>:
+  4           RESUME                   0
+
+  5           LOAD_GLOBAL              1 (sum + NULL)
+              LOAD_GLOBAL              3 (range + NULL)
+              LOAD_GLOBAL              5 (ord + NULL)
+              LOAD_GLOBAL              7 (min + NULL)
+              LOAD_GLOBAL              9 (str + NULL)
+              LOAD_CONST               1 (True)
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              CALL                     1
+              STORE_FAST               0 (x)
+
+  6           LOAD_GLOBAL             11 (chr + NULL)
+              LOAD_FAST                0 (x)
+              CALL                     1
+              RETURN_VALUE
+
+Disassembly of <code object greet at 0x0000020585DC9D30, file "example.py", line 8>:
+  8           RESUME                   0
+
+  9           LOAD_GLOBAL              1 (print + NULL)
+              LOAD_CONST               1 ('ඞ')
+              LOAD_GLOBAL              3 (weird_addition + NULL)
+              CALL                     0
+              CALL                     2
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object Impostor at 0x00000205859CC030, file "example.py", line 11>:
+ 11           RESUME                   0
+              LOAD_NAME                0 (__name__)
+              STORE_NAME               1 (__module__)
+              LOAD_CONST               0 ('Impostor')
+              STORE_NAME               2 (__qualname__)
+              LOAD_CONST               1 (11)
+              STORE_NAME               3 (__firstlineno__)
+
+ 12           LOAD_CONST               2 (<code object __init__ at 0x0000020585D8BAD0, file "example.py", line 12>)
+              MAKE_FUNCTION
+              STORE_NAME               4 (__init__)
+
+ 15           LOAD_CONST               3 (<code object act_normal at 0x0000020585E31B30, file "example.py", line 15>)
+              MAKE_FUNCTION
+              STORE_NAME               5 (act_normal)
+              LOAD_CONST               4 (('suspicious',))
+              STORE_NAME               6 (__static_attributes__)
+              RETURN_CONST             5 (None)
+
+Disassembly of <code object __init__ at 0x0000020585D8BAD0, file "example.py", line 12>:
+ 12           RESUME                   0
+
+ 13           LOAD_CONST               1 (True)
+              LOAD_FAST                0 (self)
+              STORE_ATTR               0 (suspicious)
+              RETURN_CONST             0 (None)
+
+Disassembly of <code object act_normal at 0x0000020585E31B30, file "example.py", line 15>:
+ 15           RESUME                   0
+
+ 16           LOAD_FAST                0 (self)
+              LOAD_ATTR                0 (suspicious)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       12 (to L1)
+
+ 17           LOAD_GLOBAL              3 (print + NULL)
+              LOAD_CONST               1 ('Nothing to see here...')
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
+
+ 19   L1:     LOAD_GLOBAL              3 (print + NULL)
+              LOAD_CONST               2 ("I'm just doing tasks.")
+              CALL                     1
+              POP_TOP
+              RETURN_CONST             0 (None)
