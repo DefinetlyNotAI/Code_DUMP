@@ -23,10 +23,10 @@
   <a href="https://scrapbook.hackclub.com/ShahmNajeeb" target="_blank" rel="noopener noreferrer">Check out the Hack Club Scrapbook of mine here!</a>
 </div>
 
-
 ---
 
 ### Available github webpages to test can be found here
 - [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old_BulletHell_Engine/)
-
+- [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
+- [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
 ---
