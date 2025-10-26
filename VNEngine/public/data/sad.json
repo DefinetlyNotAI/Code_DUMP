@@ -1,0 +1,25 @@
+[
+  {
+    "type": "dialogue",
+    "text": "You've chosen the sad path...",
+    "speaker": "Guide",
+    "background": "glitch.jpg",
+    "music": "ambient1.mp3",
+    "effect": "glitch"
+  },
+  {
+    "type": "dialogue",
+    "text": "This demonstrates how different choices can lead to different outcomes.",
+    "speaker": "Guide",
+    "sfx": "boom_jumpscare.mp3"
+  },
+  {
+    "type": "dialogue",
+    "text": "The engine supports various effects and transitions, even on the sad path.",
+    "background": "static_void.jpg",
+    "speaker": "Guide",
+    "effect": {
+      "sadPathSeen": true
+    }
+  }
+]

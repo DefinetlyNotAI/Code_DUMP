@@ -1,0 +1,26 @@
+[
+  {
+    "type": "dialogue",
+    "text": "You've chosen the happy path!",
+    "speaker": "Guide",
+    "background": "poem_verse1.jpg",
+    "music": "ambient2.mp3",
+    "effect": "fade"
+  },
+  {
+    "type": "dialogue",
+    "text": "This is an example of how you can create different branches based on player choices.",
+    "speaker": "Guide",
+    "background": "poem_verse2.jpg",
+    "sfx": "light_flicker.mp3"
+  },
+  {
+    "type": "dialogue",
+    "text": "The engine supports various effects and transitions.",
+    "speaker": "Guide",
+    "background": "poem_verse3.jpg",
+    "effect": {
+      "happyPathSeen": true
+    }
+  }
+]

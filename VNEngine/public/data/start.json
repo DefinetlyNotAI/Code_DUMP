@@ -1,0 +1,37 @@
+[
+  {
+    "type": "dialogue",
+    "text": "Welcome to the Visual Novel Engine demo!",
+    "speaker": null,
+    "background": "classroom.jpg",
+    "music": "start_mus.mp3"
+  },
+  {
+    "type": "dialogue",
+    "text": "This is a demonstration of the engine's capabilities.",
+    "speaker": "Guide",
+    "background": "classroom_dark.jpg",
+    "sfx": "light_flicker.mp3"
+  },
+  {
+    "type": "dialogue",
+    "text": "You can create branching narratives with choices, effects, and conditional progression.",
+    "speaker": "Guide"
+  },
+  {
+    "type": "choice",
+    "text": "Would you like to see the happy path?",
+    "background": "desk.jpg",
+    "speaker": "Guide",
+    "choices": [
+      {
+        "text": "Yes, show me the happy path",
+        "value": "Yes"
+      },
+      {
+        "text": "No, show me the sad path",
+        "value": "No"
+      }
+    ]
+  }
+]
