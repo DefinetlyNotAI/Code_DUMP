@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">WESMUN NFC</string>
+    <string name="title_activity_main">WESMUN NFC</string>
+    <string name="package_name">com.wesmun.nfc</string>
+    <string name="custom_url_scheme">com.wesmun.nfc</string>
+</resources>
