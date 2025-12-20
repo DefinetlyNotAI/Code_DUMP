@@ -5,41 +5,128 @@
  * Displays full email content with sanitized HTML
  */
 
-import {useEffect, useState} from "react"
+import {useEffect, useMemo, useState} from "react"
 import {format} from "date-fns"
 import {Card} from "@/components/ui/card"
-import {Badge} from "@/components/ui/badge"
+import {Button} from "@/components/ui/button"
 import {Separator} from "@/components/ui/separator"
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
-import {Paperclip} from "lucide-react"
-import {EmailAddress, EmailDetail, EmailViewerProps} from "@/types";
+import {Download, Paperclip} from "lucide-react"
+import {EmailAddress, EmailAttachment, EmailDetail, EmailViewerProps} from "@/types";
+import {Cache} from "@/lib/cache"
 
 export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
     const [email, setEmail] = useState<EmailDetail | null>(null)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         async function loadEmail() {
             setLoading(true)
-            const response = await fetch(`/api/accounts/${accountId}/emails/${uid}?folder=${encodeURIComponent(folder)}`)
+            setError(null)
+
+            try {
+                // Try to get from cache first
+                const cacheKey = `email:${accountId}:${folder}:${uid}`
+                const cached = Cache.get<EmailDetail>(cacheKey)
+
+                if (cached) {
+                    console.log(`[EmailViewer] Using cached email`)
+                    setEmail(cached)
+                    setLoading(false)
+                    return
+                }
+
+                const response = await fetch(`/api/accounts/${accountId}/emails/${uid}?folder=${encodeURIComponent(folder)}`)
+
+                if (!response.ok) {
+                    const errorText = await response.text()
+                    console.error("Failed to load email:", response.status, errorText)
+                    setError(`Failed to load email (${response.status})`)
+                    setLoading(false)
+                    return
+                }
+
+                const data = await response.json()
+
+                if (!data.email) {
+                    setError("Email data is missing")
+                    setLoading(false)
+                    return
+                }
+
+                // Cache for 10 minutes (emails don't change often)
+                Cache.set(cacheKey, data.email, 10 * 60 * 1000)
+
+                setEmail(data.email)
+                setLoading(false)
+            } catch (err) {
+                console.error("Failed to load email", err)
+                setError(err instanceof Error ? err.message : "An error occurred")
+                setLoading(false)
+            }
+        }
+
+        loadEmail().catch(console.error)
+    }, [accountId, folder, uid])
+
+    // Auto-detect best view mode
+    const defaultTab = useMemo(() => {
+        if (!email) return "text"
+
+        // If only text exists, use text
+        if (email.text && !email.html) return "text"
+
+        // If only HTML exists, use html
+        if (email.html && !email.text) return "html"
+
+        // If both exist, check if HTML is significantly different from plain text
+        if (email.html && email.text) {
+            const htmlLength = email.html.length
+            const textLength = email.text.length
+
+            // If HTML is much longer (has formatting), prefer HTML
+            // If they're similar length, the HTML might just be wrapped text, prefer plain
+            if (htmlLength > textLength * 1.5) {
+                return "html"
+            }
+
+            // Check if HTML contains significant formatting
+            const hasFormatting = email.html.includes('<table') ||
+                email.html.includes('<img') ||
+                email.html.includes('<div') ||
+                email.html.includes('<style')
+
+            return hasFormatting ? "html" : "text"
+        }
+
+        return "text"
+    }, [email])
+
+    async function downloadAttachment(att: EmailAttachment) {
+        try {
+            const response = await fetch(
+                `/api/accounts/${accountId}/emails/${uid}/attachments/${att.partId}?folder=${encodeURIComponent(folder)}&filename=${encodeURIComponent(att.filename || 'attachment')}`
+            )
 
             if (!response.ok) {
-                const error = new Error("Failed to load email")
-                console.error("Failed to load email", error)
-                setLoading(false)
+                console.error("Failed to download attachment")
                 return
             }
 
-            const data = await response.json()
-            setEmail(data.email)
-            setLoading(false)
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = att.filename || 'attachment'
+            document.body.appendChild(a)
+            a.click()
+            window.URL.revokeObjectURL(url)
+            document.body.removeChild(a)
+        } catch (error) {
+            console.error("Error downloading attachment:", error)
         }
-
-        loadEmail().catch((err) => {
-            console.error("Failed to load email", err)
-            setLoading(false)
-        })
-    }, [accountId, folder, uid])
+    }
 
     if (loading) {
         return (
@@ -59,12 +146,17 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
         )
     }
 
-    if (!email) {
+    if (!email && !loading) {
         return (
-            <div className="p-8 text-center text-muted-foreground">
-                <p>Failed to load email</p>
+            <div className="p-8 text-center">
+                <div className="text-destructive mb-2">Failed to load email</div>
+                {error && <div className="text-sm text-muted-foreground">{error}</div>}
             </div>
         )
+    }
+
+    if (!email) {
+        return null
     }
 
     function formatAddress(addr?: EmailAddress[]): string {
@@ -101,11 +193,18 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                 {email.hasAttachments && (email.attachments ?? []).length > 0 && (
                     <div className="mt-4 flex gap-2 flex-wrap">
                         {(email.attachments ?? []).map((att, i) => (
-                            <Badge key={i} variant="secondary" className="gap-1">
+                            <Button
+                                key={i}
+                                variant="secondary"
+                                size="sm"
+                                className="gap-2"
+                                onClick={() => downloadAttachment(att)}
+                            >
                                 <Paperclip className="h-3 w-3"/>
-                                {att.filename || "Attachment"}
+                                <span>{att.filename || "Attachment"}</span>
                                 {att.size && <span className="text-xs">({(att.size / 1024).toFixed(1)} KB)</span>}
-                            </Badge>
+                                <Download className="h-3 w-3 ml-1"/>
+                            </Button>
                         ))}
                     </div>
                 )}
@@ -113,7 +212,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
             <Separator className="my-6"/>
 
-            <Tabs defaultValue={email.html ? "html" : "text"}>
+            <Tabs defaultValue={defaultTab}>
                 {email.html && email.text && (
                     <TabsList className="mb-4">
                         <TabsTrigger value="html">HTML</TabsTrigger>
@@ -124,7 +223,36 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                 {email.html && (
                     <TabsContent value="html">
                         <Card className="p-6">
-                            <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{__html: email.html}}/>
+                            <div
+                                className="prose prose-sm max-w-none email-content"
+                                dangerouslySetInnerHTML={{__html: email.html}}
+                                style={{
+                                    whiteSpace: 'pre-wrap',
+                                    wordBreak: 'break-word'
+                                }}
+                            />
+                            <style jsx>{`
+                                .email-content :global(*) {
+                                    color: inherit !important;
+                                }
+
+                                .email-content :global(a) {
+                                    color: #3b82f6 !important;
+                                    text-decoration: underline;
+                                }
+
+                                .email-content :global([style*="background"]) {
+                                    background: transparent !important;
+                                }
+
+                                .email-content :global([style*="color: white"]),
+                                .email-content :global([style*="color:#fff"]),
+                                .email-content :global([style*="color: #fff"]),
+                                .email-content :global([style*="color:#ffffff"]),
+                                .email-content :global([style*="color: #ffffff"]) {
+                                    color: inherit !important;
+                                }
+                            `}</style>
                         </Card>
                     </TabsContent>
                 )}
@@ -140,3 +268,4 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
         </div>
     )
 }
+

@@ -1,51 +1,82 @@
 "use client"
-
 /**
  * Email list component
  * Displays paginated list of emails
  */
-
 import {useEffect, useState} from "react"
 import {Button} from "@/components/ui/button"
 import {formatDistanceToNow} from "date-fns"
 import {cn} from "@/lib/ui"
 import {ChevronLeft, ChevronRight, Paperclip} from "lucide-react"
 import {EmailDetail, EmailListProps} from "@/types";
+import {Cache} from "@/lib/cache"
 
 export function EmailList({accountId, folder, selectedUid, onEmailSelect}: EmailListProps) {
     const [emails, setEmails] = useState<EmailDetail[]>([])
     const [total, setTotal] = useState(0)
     const [offset, setOffset] = useState(0)
     const [loading, setLoading] = useState(true)
-
     const limit = 50
-
     useEffect(() => {
-        async function loadEmails() {
-            setLoading(true)
-            const response = await fetch(
-                `/api/accounts/${accountId}/emails?folder=${encodeURIComponent(folder)}&limit=${limit}&offset=${offset}`,
-            )
+        let isInitialLoad = true
 
-            if (!response.ok) {
-                const error = new Error("Failed to load emails")
-                console.error("Failed to load emails", error)
+        async function loadEmails(showLoading = true) {
+            // Only show loading spinner on initial load
+            if (showLoading && isInitialLoad) {
+                setLoading(true)
+            }
+            // Try to get from cache first
+            const cacheKey = `emails:${accountId}:${folder}:${offset}:${limit}`
+            const cached = Cache.get<{ emails: EmailDetail[], total: number }>(cacheKey)
+            if (cached && isInitialLoad) {
+                console.log(`[EmailList] Using cached emails`)
+                setEmails(cached.emails)
+                setTotal(cached.total)
                 setLoading(false)
+                isInitialLoad = false
                 return
             }
-
-            const data = await response.json()
-            setEmails(data.emails)
-            setTotal(data.total)
-            setLoading(false)
+            try {
+                const response = await fetch(
+                    `/api/accounts/${accountId}/emails?folder=${encodeURIComponent(folder)}&limit=${limit}&offset=${offset}`,
+                )
+                if (!response.ok) {
+                    console.error("Failed to load emails")
+                    // Only set loading false on initial load
+                    if (isInitialLoad) {
+                        setLoading(false)
+                    }
+                    return
+                }
+                const data = await response.json()
+                // Cache for 3 minutes (increased from 2 for better performance)
+                Cache.set(cacheKey, data, 3 * 60 * 1000)
+                setEmails(data.emails)
+                setTotal(data.total)
+                if (isInitialLoad) {
+                    setLoading(false)
+                    isInitialLoad = false
+                }
+            } catch (err) {
+                console.error("Failed to load emails", err)
+                if (isInitialLoad) {
+                    setLoading(false)
+                }
+            }
         }
 
+        // Initial load
         loadEmails().catch((err) => {
             console.error("Failed to load emails", err)
             setLoading(false)
         })
+        // Background refresh every 120 seconds (reduced frequency for better performance)
+        const refreshInterval = setInterval(() => {
+            console.log('[EmailList] Background refresh...')
+            loadEmails(false).catch(console.error)
+        }, 120000) // 120 seconds
+        return () => clearInterval(refreshInterval)
     }, [accountId, folder, offset])
-
     if (loading) {
         return (
             <div className="p-4">
@@ -57,7 +88,6 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
             </div>
         )
     }
-
     if (emails.length === 0) {
         return (
             <div className="p-8 text-center text-muted-foreground">
@@ -65,10 +95,8 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
             </div>
         )
     }
-
     const hasNext = offset + limit < total
     const hasPrev = offset > 0
-
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-2 border-b">
@@ -84,12 +112,10 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
                     </Button>
                 </div>
             </div>
-
             <div className="flex-1 overflow-y-auto">
                 {emails.map((email) => {
                     const from = email.from?.[0]
                     const fromName = from?.name || from?.address || "Unknown"
-
                     return (
                         <button
                             key={email.uid}
