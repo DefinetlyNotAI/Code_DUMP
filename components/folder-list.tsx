@@ -7,9 +7,11 @@
 
 import {useEffect, useState} from "react"
 import {Button} from "@/components/ui/button"
+import {Badge} from "@/components/ui/badge"
 import {Archive, Folder, Inbox, Send, Trash2} from "lucide-react"
 import {cn} from "@/lib/ui"
 import {EmailFolder, FolderListProps} from "@/types";
+import {Cache} from "@/lib/cache"
 
 export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderListProps) {
     const [folders, setFolders] = useState<EmailFolder[]>([])
@@ -17,9 +19,39 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        async function loadFolders() {
-            setLoading(true)
+        let isInitialLoad = true
+
+        async function loadFolders(showLoading = true) {
+            // Only show loading spinner on initial load
+            if (showLoading && isInitialLoad) {
+                setLoading(true)
+            }
+
             console.log(`[FolderList] Loading folders for account: ${accountId}`)
+
+            // Try to get from cache first
+            const cacheKey = `folders:${accountId}`
+            const cached = Cache.get<EmailFolder[]>(cacheKey)
+
+            if (cached && isInitialLoad) {
+                console.log(`[FolderList] Using cached folders`)
+                const sortedFolders = sortFolders(cached)
+                setFolders(sortedFolders)
+                setLoading(false)
+
+                // Auto-select Inbox
+                const inbox = sortedFolders.find((f: EmailFolder) =>
+                    f.name.toUpperCase() === "INBOX" || f.specialUse === "\\Inbox"
+                )
+                if (inbox) {
+                    console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
+                    onFolderSelect(inbox.path)
+                }
+
+                isInitialLoad = false
+            }
+
+            // Fetch fresh data
             const response = await fetch(`/api/accounts/${accountId}/folders`)
             console.log(`[FolderList] Response status: ${response.status}`)
 
@@ -28,39 +60,102 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
                 console.error(`[FolderList] Error response:`, errorData)
                 const errorMessage = errorData.error || "Failed to load folders"
                 console.error("[FolderList] Failed to load folders:", errorMessage)
-                setError(errorMessage)
-                setLoading(false)
+
+                // Only set error on initial load
+                if (isInitialLoad) {
+                    setError(errorMessage)
+                    setLoading(false)
+                }
                 return
             }
 
             const data = await response.json()
             console.log(`[FolderList] Loaded ${data.folders?.length || 0} folders`)
-            setFolders(data.folders)
 
-            // Auto-select INBOX
-            const inbox = data.folders.find((f: EmailFolder) => f.name === "INBOX" || f.specialUse === "\\Inbox")
-            if (inbox) {
-                console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
-                onFolderSelect(inbox.path)
+            // Cache the folders for 10 minutes (increased for better performance)
+            Cache.set(cacheKey, data.folders, 10 * 60 * 1000)
+
+            // Sort folders: Inbox -> Archive -> Spam -> Drafts -> Sent -> Trash -> Others
+            const sortedFolders = sortFolders(data.folders)
+            setFolders(sortedFolders)
+
+            // Auto-select Inbox only on initial load
+            if (isInitialLoad) {
+                const inbox = sortedFolders.find((f: EmailFolder) =>
+                    f.name.toUpperCase() === "INBOX" || f.specialUse === "\\Inbox"
+                )
+                if (inbox) {
+                    console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
+                    onFolderSelect(inbox.path)
+                }
             }
 
-            setLoading(false)
+            if (isInitialLoad) {
+                setLoading(false)
+                isInitialLoad = false
+            }
         }
 
+        // Initial load
         loadFolders().catch((err) => {
             const errorMessage = err instanceof Error ? err.message : "Failed to load folders"
             console.error("[FolderList] Failed to load folders:", errorMessage)
             setError(errorMessage)
             setLoading(false)
         })
+
+        // Background refresh every 180 seconds (reduced frequency for better performance)
+        const refreshInterval = setInterval(() => {
+            console.log('[FolderList] Background refresh...')
+            loadFolders(false).catch(console.error)
+        }, 180000) // 180 seconds
+
+        return () => clearInterval(refreshInterval)
     }, [accountId])
 
+    function sortFolders(folders: EmailFolder[]): EmailFolder[] {
+        return [...folders].sort((a, b) => {
+            // Check if folder is Inbox
+            const aIsInbox = a.name.toUpperCase() === "INBOX" || a.specialUse === "\\Inbox"
+            const bIsInbox = b.name.toUpperCase() === "INBOX" || b.specialUse === "\\Inbox"
+
+            // Inbox always comes first
+            if (aIsInbox && !bIsInbox) return -1
+            if (!aIsInbox && bIsInbox) return 1
+
+            // After Inbox, order by special use
+            const order = ['\\Archive', '\\Junk', '\\Drafts', '\\Sent', '\\Trash']
+            const aIndex = order.indexOf(a.specialUse || '')
+            const bIndex = order.indexOf(b.specialUse || '')
+
+            // If both have special use, sort by order
+            if (aIndex !== -1 && bIndex !== -1) {
+                return aIndex - bIndex
+            }
+
+            // Special use folders come before regular folders
+            if (aIndex !== -1) return -1
+            if (bIndex !== -1) return 1
+
+            // Otherwise sort alphabetically
+            return a.name.localeCompare(b.name)
+        })
+    }
+
     function getFolderIcon(folder: EmailFolder) {
-        if (folder.name === "INBOX" || folder.specialUse === "\\Inbox") return Inbox
+        if (folder.name.toUpperCase() === "INBOX" || folder.specialUse === "\\Inbox") return Inbox
         if (folder.specialUse === "\\Sent") return Send
         if (folder.specialUse === "\\Trash") return Trash2
         if (folder.specialUse === "\\Archive") return Archive
         return Folder
+    }
+
+    function getFolderDisplayName(folder: EmailFolder): string {
+        // Rename INBOX to Inbox
+        if (folder.name.toUpperCase() === "INBOX") {
+            return "Inbox"
+        }
+        return folder.name
     }
 
     if (loading) {
@@ -89,6 +184,8 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
             <div className="space-y-1">
                 {folders.map((folder) => {
                     const Icon = getFolderIcon(folder)
+                    const hasUnread = folder.unreadCount && folder.unreadCount > 0
+
                     return (
                         <Button
                             key={folder.path}
@@ -98,7 +195,15 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
                             onClick={() => onFolderSelect(folder.path)}
                         >
                             <Icon className="h-4 w-4 mr-2"/>
-                            <span className="truncate">{folder.name}</span>
+                            <span className="truncate flex-1 text-left">{getFolderDisplayName(folder)}</span>
+                            {hasUnread && (
+                                <Badge
+                                    variant="default"
+                                    className="ml-auto h-5 min-w-5 px-1.5 text-xs font-semibold"
+                                >
+                                    {folder.unreadCount! > 99 ? '99+' : folder.unreadCount}
+                                </Badge>
+                            )}
                         </Button>
                     )
                 })}

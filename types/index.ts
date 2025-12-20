@@ -24,10 +24,12 @@ export interface ImapConfig {
 }
 
 // Email Related Types (Folders, Emails, etc.)
-interface EmailAttachment {
+export interface EmailAttachment {
     filename?: string
     contentType?: string
     size?: number
+    contentId?: string
+    partId?: string
 }
 
 export interface EmailFolder {
@@ -35,6 +37,7 @@ export interface EmailFolder {
     path: string
     specialUse?: string
     delimiter: string
+    unreadCount?: number
 }
 
 export interface EmailAddress {

@@ -13,6 +13,7 @@ import {DashboardHeader} from "./dashboard-header"
 import {Alert, AlertDescription} from "@/components/ui/alert"
 import {AlertCircle} from "lucide-react"
 import {Account} from "@/types";
+import {Cache} from "@/lib/cache"
 
 export function DashboardClient() {
     const [accounts, setAccounts] = useState<Account[]>([])
@@ -25,6 +26,32 @@ export function DashboardClient() {
     // Load accounts on mount
     useEffect(() => {
         async function loadAccounts() {
+            // Try to get from cache first
+            const cacheKey = 'accounts'
+            const cached = Cache.get<Account[]>(cacheKey)
+
+            if (cached) {
+                console.log('[Dashboard] Using cached accounts')
+                setAccounts(cached)
+                setLoading(false)
+
+                // Auto-select first account
+                if (cached.length > 0) {
+                    setSelectedAccount(cached[0].id)
+                }
+
+                // Fetch fresh data in background
+                fetch("/api/accounts").then(async (response) => {
+                    if (response.ok) {
+                        const data = await response.json()
+                        Cache.set(cacheKey, data.accounts, 30 * 60 * 1000)
+                        setAccounts(data.accounts)
+                    }
+                }).catch(console.error)
+
+                return
+            }
+
             const response = await fetch("/api/accounts")
 
             if (!response.ok) {
@@ -36,6 +63,10 @@ export function DashboardClient() {
             }
 
             const data = await response.json()
+
+            // Cache accounts for 30 minutes
+            Cache.set(cacheKey, data.accounts, 30 * 60 * 1000)
+
             setAccounts(data.accounts)
 
             // Auto-select first account
