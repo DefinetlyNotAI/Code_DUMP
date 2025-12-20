@@ -10,6 +10,7 @@ A secure, read-only email supervision dashboard built with Next.js for monitorin
 - **IMAP only** - Server-side IMAP connections, no SMTP
 - **Content sanitization** - HTML emails sanitized to prevent XSS
 - **Security hardened** - CSP, HSTS, CSRF protection, and more
+- **High performance** - Aggressive caching, client-side processing, smart preloading
 
 ## Security
 

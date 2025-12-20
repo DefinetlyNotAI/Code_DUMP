@@ -81,6 +81,8 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
             {
                 headers: {
                     'Content-Type': 'application/json',
+                    // Cache for 2 minutes with 5 minute stale-while-revalidate
+                    'Cache-Control': 'public, max-age=120, stale-while-revalidate=300',
                 },
             },
         )

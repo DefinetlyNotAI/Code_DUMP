@@ -39,16 +39,21 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
                 setFolders(sortedFolders)
                 setLoading(false)
 
-                // Auto-select Inbox
-                const inbox = sortedFolders.find((f: EmailFolder) =>
-                    f.name.toUpperCase() === "INBOX" || f.specialUse === "\\Inbox"
-                )
-                if (inbox) {
-                    console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
-                    onFolderSelect(inbox.path)
+                // Auto-select Inbox (only once)
+                if (!selectedFolder) {
+                    const inbox = sortedFolders.find((f: EmailFolder) =>
+                        f.name.toUpperCase() === "INBOX" || f.specialUse === "\\Inbox"
+                    )
+                    if (inbox) {
+                        console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
+                        onFolderSelect(inbox.path)
+                    }
                 }
 
                 isInitialLoad = false
+
+                // Fetch fresh counts in background without blocking UI
+                return
             }
 
             // Fetch fresh data
