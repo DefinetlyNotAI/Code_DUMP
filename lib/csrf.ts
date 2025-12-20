@@ -15,14 +15,11 @@
 import {cookies} from "next/headers"
 import {randomBytes, timingSafeEqual} from "crypto"
 import {type NextRequest, NextResponse} from "next/server"
+import {CsrfTokenData} from "@/types";
 
 const CSRF_TOKEN_LENGTH = 32
 const CSRF_TOKEN_EXPIRY = 60 * 60 * 1000 // 1 hour
 
-interface CsrfTokenData {
-    token: string
-    expiresAt: number
-}
 
 /**
  * Generate a new CSRF token

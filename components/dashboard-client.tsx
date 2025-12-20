@@ -12,11 +12,7 @@ import {EmailViewer} from "./email-viewer"
 import {DashboardHeader} from "./dashboard-header"
 import {Alert, AlertDescription} from "@/components/ui/alert"
 import {AlertCircle} from "lucide-react"
-
-interface Account {
-    id: string
-    label: string
-}
+import {Account} from "@/types";
 
 export function DashboardClient() {
     const [accounts, setAccounts] = useState<Account[]>([])

@@ -13,36 +13,8 @@ import Imap from "imap"
 import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
 import DOMPurify from "isomorphic-dompurify"
+import {EmailDetail, EmailFolder} from "@/types";
 
-export interface EmailFolder {
-    name: string
-    path: string
-    specialUse?: string
-    delimiter: string
-}
-
-export interface EmailSummary {
-    uid: number
-    messageId?: string
-    subject?: string
-    from?: Array<{ name?: string; address?: string }>
-    to?: Array<{ name?: string; address?: string }>
-    date?: Date
-    flags: string[]
-    hasAttachments: boolean
-}
-
-export interface EmailDetail extends EmailSummary {
-    html?: string
-    text?: string
-    cc?: Array<{ name?: string; address?: string }>
-    bcc?: Array<{ name?: string; address?: string }>
-    attachments: Array<{
-        filename?: string
-        contentType?: string
-        size?: number
-    }>
-}
 
 /**
  * Create IMAP connection
@@ -173,7 +145,7 @@ export async function listEmails(
     accountId: string,
     folderPath: string,
     options: { limit?: number; offset?: number } = {},
-): Promise<{ emails: EmailSummary[]; total: number }> {
+): Promise<{ emails: EmailDetail[]; total: number }> {
     return new Promise(async (resolve, reject) => {
         let imap: Imap | null = null
 
@@ -206,7 +178,7 @@ export async function listEmails(
                     struct: true,
                 })
 
-                const emails: EmailSummary[] = []
+                const emails: EmailDetail[] = []
 
                 fetch.on("message", (msg) => {
                     let uid = 0
