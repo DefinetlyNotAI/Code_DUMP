@@ -29,38 +29,41 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
 
     useEffect(() => {
         async function loadFolders() {
-            try {
-                setLoading(true)
-                console.log(`[FolderList] Loading folders for account: ${accountId}`)
-                const response = await fetch(`/api/accounts/${accountId}/folders`)
-                console.log(`[FolderList] Response status: ${response.status}`)
+            setLoading(true)
+            console.log(`[FolderList] Loading folders for account: ${accountId}`)
+            const response = await fetch(`/api/accounts/${accountId}/folders`)
+            console.log(`[FolderList] Response status: ${response.status}`)
 
-                if (!response.ok) {
-                    const errorData = await response.json()
-                    console.error(`[FolderList] Error response:`, errorData)
-                    throw new Error(errorData.error || "Failed to load folders")
-                }
-
-                const data = await response.json()
-                console.log(`[FolderList] Loaded ${data.folders?.length || 0} folders`)
-                setFolders(data.folders)
-
-                // Auto-select INBOX
-                const inbox = data.folders.find((f: EmailFolder) => f.name === "INBOX" || f.specialUse === "\\Inbox")
-                if (inbox) {
-                    console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
-                    onFolderSelect(inbox.path)
-                }
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : "Failed to load folders"
+            if (!response.ok) {
+                const errorData = await response.json()
+                console.error(`[FolderList] Error response:`, errorData)
+                const errorMessage = errorData.error || "Failed to load folders"
                 console.error("[FolderList] Failed to load folders:", errorMessage)
                 setError(errorMessage)
-            } finally {
                 setLoading(false)
+                return
             }
+
+            const data = await response.json()
+            console.log(`[FolderList] Loaded ${data.folders?.length || 0} folders`)
+            setFolders(data.folders)
+
+            // Auto-select INBOX
+            const inbox = data.folders.find((f: EmailFolder) => f.name === "INBOX" || f.specialUse === "\\Inbox")
+            if (inbox) {
+                console.log(`[FolderList] Auto-selecting inbox: ${inbox.path}`)
+                onFolderSelect(inbox.path)
+            }
+
+            setLoading(false)
         }
 
-        loadFolders().catch(console.error)
+        loadFolders().catch((err) => {
+            const errorMessage = err instanceof Error ? err.message : "Failed to load folders"
+            console.error("[FolderList] Failed to load folders:", errorMessage)
+            setError(errorMessage)
+            setLoading(false)
+        })
     }, [accountId])
 
     function getFolderIcon(folder: EmailFolder) {

@@ -39,86 +39,141 @@ export function getImapConfig(): ImapConfig {
         return cachedConfig
     }
 
-    try {
-        console.log("[IMAP CONFIG] Reading config from IMAP_CONFIG environment variable")
+    console.log("[IMAP CONFIG] Reading config from IMAP_CONFIG environment variable")
 
-        const configString = process.env.IMAP_CONFIG
+    const configString = process.env.IMAP_CONFIG
 
-        if (!configString) {
-            throw new Error("IMAP_CONFIG environment variable is not set")
-        }
-
-        console.log("[IMAP CONFIG] Config environment variable read successfully")
-        const config = JSON.parse(configString) as ImapConfig
-
-        // Validate structure
-        if (!config.accounts || !Array.isArray(config.accounts)) {
-            throw new Error("Invalid config: 'accounts' must be an array")
-        }
-
-        console.log("[IMAP CONFIG] Found", config.accounts.length, "account(s) in config")
-
-        for (const account of config.accounts) {
-            console.log("[IMAP CONFIG] Validating account:", account.id)
-
-            if (!account.id) {
-                throw new Error(`Invalid account: missing or invalid 'id'`)
-            }
-            if (!account.label) {
-                throw new Error(`Invalid account ${account.id}: missing or invalid 'label'`)
-            }
-            if (!account.imap || typeof account.imap !== "object") {
-                throw new Error(`Invalid account ${account.id}: missing 'imap' configuration`)
-            }
-
-            const {host, port, user, password} = account.imap
-
-            if (!host) {
-                throw new Error(`Invalid account ${account.id}: missing or invalid 'imap.host'`)
-            }
-            if (port < 1 || port > 65535) {
-                throw new Error(`Invalid account ${account.id}: invalid 'imap.port'`)
-            }
-
-            if (!user) {
-                throw new Error(`Invalid account ${account.id}: missing or invalid 'imap.user'`)
-            }
-            if (!password) {
-                throw new Error(`Invalid account ${account.id}: missing or invalid 'imap.password'`)
-            }
-
-            if (password === "your-app-password" || password.includes("your-")) {
-                console.warn(
-                    `[IMAP CONFIG] WARNING: Account ${account.id} appears to have placeholder credentials. Please update IMAP_CONFIG environment variable with real credentials.`,
-                )
-            }
-
-            console.log(
-                "[IMAP CONFIG] Account validated:",
-                account.id,
-                "| Host:",
-                host,
-                "| Port:",
-                port,
-                "| User:",
-                user,
-            )
-        }
-
-        console.log(`[IMAP CONFIG] Successfully loaded ${config.accounts.length} account(s)`)
-
-        // Cache the validated config
-        cachedConfig = config
-
-        return config
-    } catch (error) {
+    if (!configString) {
+        const error = new Error("IMAP_CONFIG environment variable is not set")
         console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
-            error: error instanceof Error ? error.message : "Unknown error",
-            stack: error instanceof Error ? error.stack : undefined,
+            error: error.message,
+            stack: error.stack,
         })
         console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
         throw error
     }
+
+    let config: ImapConfig
+    try {
+        console.log("[IMAP CONFIG] Config environment variable read successfully")
+        config = JSON.parse(configString) as ImapConfig
+    } catch (parseError) {
+        console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+            error: parseError instanceof Error ? parseError.message : "Unknown error",
+            stack: parseError instanceof Error ? parseError.stack : undefined,
+        })
+        console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+        throw parseError
+    }
+
+    // Validate structure
+    if (!config.accounts || !Array.isArray(config.accounts)) {
+        const error = new Error("Invalid config: 'accounts' must be an array")
+        console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+            error: error.message,
+            stack: error.stack,
+        })
+        console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+        throw error
+    }
+
+    console.log("[IMAP CONFIG] Found", config.accounts.length, "account(s) in config")
+
+    for (const account of config.accounts) {
+        console.log("[IMAP CONFIG] Validating account:", account.id)
+
+        if (!account.id) {
+            const error = new Error(`Invalid account: missing or invalid 'id'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+        if (!account.label) {
+            const error = new Error(`Invalid account ${account.id}: missing or invalid 'label'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+        if (!account.imap || typeof account.imap !== "object") {
+            const error = new Error(`Invalid account ${account.id}: missing 'imap' configuration`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+
+        const {host, port, user, password} = account.imap
+
+        if (!host) {
+            const error = new Error(`Invalid account ${account.id}: missing or invalid 'imap.host'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+        if (port < 1 || port > 65535) {
+            const error = new Error(`Invalid account ${account.id}: invalid 'imap.port'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+
+        if (!user) {
+            const error = new Error(`Invalid account ${account.id}: missing or invalid 'imap.user'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+        if (!password) {
+            const error = new Error(`Invalid account ${account.id}: missing or invalid 'imap.password'`)
+            console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
+                error: error.message,
+                stack: error.stack,
+            })
+            console.error("[IMAP CONFIG] PLEASE UPDATE IMAP_CONFIG environment variable with your real IMAP credentials")
+            throw error
+        }
+
+        if (password === "your-app-password" || password.includes("your-")) {
+            console.warn(
+                `[IMAP CONFIG] WARNING: Account ${account.id} appears to have placeholder credentials. Please update IMAP_CONFIG environment variable with real credentials.`,
+            )
+        }
+
+        console.log(
+            "[IMAP CONFIG] Account validated:",
+            account.id,
+            "| Host:",
+            host,
+            "| Port:",
+            port,
+            "| User:",
+            user,
+        )
+    }
+
+    console.log(`[IMAP CONFIG] Successfully loaded ${config.accounts.length} account(s)`)
+
+    // Cache the validated config
+    cachedConfig = config
+
+    return config
 }
 
 /**
