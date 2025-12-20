@@ -1,3 +1,5 @@
+// noinspection ExceptionCaughtLocallyJS,JSCheckFunctionSignatures
+
 /**
  * Interactive Password Setup Script
  *
@@ -109,17 +111,14 @@ async function main() {
         // Read current .env file
         let envContent = fs.readFileSync(envPath, 'utf8');
 
-        // Escape $ characters to prevent variable interpolation in .env files
-        const escapedHash = hash.replace(/\$/g, '\\$');
-
         // Replace the hash line
         const hashRegex = /^MASTER_PASSWORD_BCRYPT_HASH=.*/m;
         if (hashRegex.test(envContent)) {
-            envContent = envContent.replace(hashRegex, `MASTER_PASSWORD_BCRYPT_HASH=${escapedHash}`);
+            envContent = envContent.replace(hashRegex, `MASTER_PASSWORD_BCRYPT_HASH=${hash}`);
             log('✓ Found and updated existing MASTER_PASSWORD_BCRYPT_HASH', 'green');
         } else {
             // Add it if it doesn't exist
-            envContent = `MASTER_PASSWORD_BCRYPT_HASH=${escapedHash}\n` + envContent;
+            envContent = `MASTER_PASSWORD_BCRYPT_HASH=${hash}\n` + envContent;
             log('✓ Added MASTER_PASSWORD_BCRYPT_HASH to .env', 'green');
         }
 
@@ -144,11 +143,11 @@ async function main() {
         log('  Test 2: Re-reading .env file and verifying...', 'blue');
         const updatedEnvContent = fs.readFileSync(envPath, 'utf8');
         const hashMatch = updatedEnvContent.match(/^MASTER_PASSWORD_BCRYPT_HASH=(.*)$/m);
-        if (hashMatch && hashMatch[1] === escapedHash) {
+        if (hashMatch && hashMatch[1] === hash) {
             log('  ✓ .env file contains correct hash!', 'green');
         } else {
             log('  ✗ .env file hash mismatch!', 'red');
-            log(`  Expected: ${escapedHash}`, 'red');
+            log(`  Expected: ${hash}`, 'red');
             log(`  Found: ${hashMatch ? hashMatch[1] : 'nothing'}`, 'red');
             throw new Error('.env file verification failed');
         }

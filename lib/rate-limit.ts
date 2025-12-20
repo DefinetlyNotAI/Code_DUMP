@@ -37,7 +37,7 @@ setInterval(
  */
 export function checkRateLimit(
     identifier: string,
-    maxAttempts = 5,
+    maxAttempts: number = 10,
     windowMs: number = 15 * 60 * 1000, // 15 minutes
     blockDurationMs: number = 30 * 60 * 1000, // 30 minutes
 ): RateLimitResult {

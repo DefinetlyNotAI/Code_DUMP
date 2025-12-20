@@ -123,6 +123,7 @@ function formatUrls(text: string): string {
 
         // Add protocol if missing
         if (url.startsWith('www.')) {
+            // noinspection HttpUrlsUsage
             href = 'http://' + url
         }
 
@@ -201,79 +202,3 @@ function formatCode(text: string): string {
 
     return text
 }
-
-/**
- * Remove all formatting (get plain text)
- * @public - Utility function for future use
- */
-// @ts-ignore - Utility function for future use
-export function stripFormatting(html: string): string {
-    const div = document.createElement('div')
-    div.innerHTML = html
-    return div.textContent || div.innerText || ''
-}
-
-/**
- * Preview formatted text (for testing)
- * @public - Utility function for future use
- */
-// @ts-ignore - Utility function for future use
-export function previewFormatting(text: string, maxLength: number = 100): string {
-    const formatted = formatPlainText(text)
-    const plain = stripFormatting(formatted)
-
-    if (plain.length > maxLength) {
-        return plain.substring(0, maxLength) + '...'
-    }
-
-    return plain
-}
-
-/**
- * Count formatting elements in text
- * @public - Utility function for future use
- */
-// @ts-ignore - Utility function for future use
-export function countFormattingElements(text: string): {
-    urls: number
-    emails: number
-    bold: number
-    italic: number
-    code: number
-} {
-    return {
-        urls: (text.match(/(?:https?|ftp):\/\/[^\s<]+/gi) || []).length,
-        emails: (text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi) || []).length,
-        bold: (text.match(/\*\*?[^*]+\*\*?/g) || []).length,
-        italic: (text.match(/_[^_]+_/g) || []).length,
-        code: (text.match(/`[^`]+`/g) || []).length,
-    }
-}
-
-/**
- * Check if text contains any formatting
- * @public - Utility function for future use
- */
-// @ts-ignore - Utility function for future use
-export function hasFormatting(text: string): boolean {
-    const counts = countFormattingElements(text)
-    return Object.values(counts).some(count => count > 0)
-}
-
-/**
- * Format text for display in email viewer
- * @public - Utility function for future use
- */
-// @ts-ignore - Utility function for future use
-export function formatEmailText(text: string | undefined, isHtml: boolean = false): string {
-    if (!text) return ''
-
-    if (isHtml) {
-        // HTML is already formatted, just return it
-        return text
-    }
-
-    // Plain text - apply formatting
-    return formatPlainText(text)
-}
-
