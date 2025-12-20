@@ -2,12 +2,8 @@
  * Client-side cache utility
  * Uses localStorage to persist data across sessions
  */
+import {CacheItem} from "@/types";
 
-interface CacheItem<T> {
-    data: T
-    timestamp: number
-    ttl: number
-}
 
 export class Cache {
     /**
@@ -80,27 +76,6 @@ export class Cache {
         } catch (error) {
             console.warn('[Cache] Failed to clear cache:', error)
         }
-    }
-
-    /**
-     * Get or set cache item
-     * @param key Cache key
-     * @param fetcher Function to fetch data if not cached
-     * @param ttl Time to live in milliseconds
-     */
-    static async getOrSet<T>(
-        key: string,
-        fetcher: () => Promise<T>,
-        ttl: number = 5 * 60 * 1000
-    ): Promise<T> {
-        const cached = this.get<T>(key)
-        if (cached !== null) {
-            return cached
-        }
-
-        const data = await fetcher()
-        this.set(key, data, ttl)
-        return data
     }
 }
 

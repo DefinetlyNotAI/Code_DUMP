@@ -14,7 +14,7 @@ import Imap from "imap"
 import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
 import DOMPurify from "isomorphic-dompurify"
-import {EmailDetail, EmailFolder} from "@/types";
+import {EmailCount, EmailDetail, EmailFolder} from "@/types";
 import {FolderSettings} from "./settings"
 
 /**
@@ -193,7 +193,7 @@ export async function listEmails(
     accountId: string,
     folderPath: string,
     options: { limit?: number; offset?: number } = {},
-): Promise<{ emails: EmailDetail[]; total: number }> {
+): Promise<EmailCount> {
     let imap: Imap | null = null
 
     try {

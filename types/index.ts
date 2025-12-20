@@ -81,6 +81,11 @@ export interface EmailListProps {
     onEmailSelect: (uid: number) => void
 }
 
+export interface EmailCount {
+    emails: EmailDetail[];
+    total: number
+}
+
 // Other MISC Types
 export interface Account {
     id: string
@@ -92,4 +97,10 @@ export interface DashboardHeaderProps {
     selectedAccount: string | null
     onAccountChange: (accountId: string) => void
     disabled?: boolean
+}
+
+export interface CacheItem<T> {
+    data: T
+    timestamp: number
+    ttl: number
 }

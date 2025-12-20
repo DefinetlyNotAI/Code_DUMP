@@ -1,0 +1,5 @@
+Cache.remove is unused (also .clear)
+imap-service should have all input types for functions be a proper indexed @/type
+Many settings.ts are unused, please make them properly used
+Change the bcrypt to be base64(bcrypt), where the env file contains a base64 encoded string, and the runtime decodes the base64 to get the bcrypt hash
+Change setup-password to setup-env where it also runs 'openssl rand -base64 32' and also asks if you want to update/change imap config, which if yes allows a notepad to open with a temp.json file, which the user can edit, once it is complete it is then closed by user where the program transforms it into 1 line and puts in env var (the temp json must be the already existing env variable but formatted)

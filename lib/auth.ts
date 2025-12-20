@@ -16,7 +16,6 @@ import {SessionData} from "@/types/server";
 
 // Master password hash stored in environment variable
 // Generate with: bcrypt.hash('your-password', 10)
-// WORKAROUND: Due to .env parsing issues with $ characters on Windows, we're using a fallback
 const MASTER_PASSWORD_BCRYPT_HASH = process.env.MASTER_PASSWORD_BCRYPT_HASH
 
 // Validate environment variables at runtime, not at module load

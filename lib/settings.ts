@@ -349,43 +349,6 @@ export const ExperimentalSettings = {
 // ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
-
-/**
- * Get all settings as a single object
- */
-export function getAllSettings() {
-    return {
-        cache: CacheSettings,
-        refresh: RefreshSettings,
-        pagination: PaginationSettings,
-        preload: PreloadSettings,
-        emailDisplay: EmailDisplaySettings,
-        folder: FolderSettings,
-        rateLimit: RateLimitSettings,
-        security: SecuritySettings,
-        imap: ImapSettings,
-        ui: UISettings,
-        performance: PerformanceSettings,
-        attachment: AttachmentSettings,
-        textFormatting: TextFormattingSettings,
-        logging: LoggingSettings,
-        experimental: ExperimentalSettings,
-    }
-}
-
-/**
- * Get settings summary for display
- */
-export function getSettingsSummary() {
-    return {
-        cacheEnabled: true,
-        preloadEnabled: PreloadSettings.enabled,
-        emailsPerPage: PaginationSettings.defaultLimit,
-        refreshInterval: `${RefreshSettings.emailList / 1000}s`,
-        markdownEnabled: TextFormattingSettings.enableMarkdownFormatting,
-    }
-}
-
 /**
  * Validate settings
  */
@@ -422,4 +385,3 @@ const validation = validateSettings()
 if (!validation.valid) {
     console.error('[Settings] Invalid configuration:', validation.errors)
 }
-
