@@ -1,18 +1,14 @@
 /**
  * CSRF token endpoint
  * Provides CSRF tokens for state-changing operations
+ * Note: Accessible without authentication to support login flow
  */
 
 import { NextResponse } from "next/server"
-import { requireAuth } from "@/lib/auth"
 import { setCsrfToken } from "@/lib/csrf"
 
 export async function GET() {
   try {
-    const isAuthenticated = await requireAuth()
-    if (!isAuthenticated) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
 
     const token = await setCsrfToken()
 
