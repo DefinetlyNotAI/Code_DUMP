@@ -13,9 +13,11 @@ A secure, read-only email supervision dashboard built with Next.js for monitorin
 
 ## Security
 
-This application is designed with security as the top priority. See [SECURITY.md](./SECURITY.md) for complete security documentation.
+This application is designed with security as the top priority. See [SECURITY.md](./SECURITY.md) for complete security
+documentation.
 
 **Key security features:**
+
 - All IMAP operations server-side only
 - No credentials exposed to client
 - Rate limiting on all endpoints
@@ -123,29 +125,30 @@ The `IMAP_CONFIG` environment variable accepts a JSON object with the following 
 **Common IMAP Settings:**
 
 - **Gmail / Google Workspace (including custom domains)**:
-  - Host: `imap.gmail.com`
-  - Port: `993`
-  - Secure: `true`
-  - Note: You must enable "App Passwords" in Google Account settings
+    - Host: `imap.gmail.com`
+    - Port: `993`
+    - Secure: `true`
+    - Note: You must enable "App Passwords" in Google Account settings
 
 - **Outlook / Office 365 (including custom domains)**:
-  - Host: `outlook.office365.com`
-  - Port: `993`
-  - Secure: `true`
+    - Host: `outlook.office365.com`
+    - Port: `993`
+    - Secure: `true`
 
 - **Yahoo Mail**:
-  - Host: `imap.mail.yahoo.com`
-  - Port: `993`
-  - Secure: `true`
+    - Host: `imap.mail.yahoo.com`
+    - Port: `993`
+    - Secure: `true`
 
 - **Custom IMAP Server** (like your own domain's mail server):
-  - Host: Your mail server hostname (e.g., `imap.yourdomain.com` or `mail.yourdomain.com`)
-  - Port: Usually `993` (SSL/TLS) or `143` (STARTTLS)
-  - Secure: `true` for port 993, check your server docs for port 143
-  - User: Your full email address
-  - Password: Your email password or app-specific password
+    - Host: Your mail server hostname (e.g., `imap.yourdomain.com` or `mail.yourdomain.com`)
+    - Port: Usually `993` (SSL/TLS) or `143` (STARTTLS)
+    - Secure: `true` for port 993, check your server docs for port 143
+    - User: Your full email address
+    - Password: Your email password or app-specific password
 
-**Important**: The IMAP_CONFIG value must be a single-line JSON string with no line breaks when set as an environment variable.
+**Important**: The IMAP_CONFIG value must be a single-line JSON string with no line breaks when set as an environment
+variable.
 
 See [SECURITY.md](./SECURITY.md) for detailed configuration instructions.
 
@@ -156,9 +159,9 @@ See [SECURITY.md](./SECURITY.md) for detailed configuration instructions.
 1. Push code to GitHub
 2. Import project to Vercel
 3. Add environment variables in Vercel dashboard:
-   - `SHA256_HASH` - Your bcrypt password hash
-   - `SESSION_SECRET` - Random secret for sessions
-   - `IMAP_CONFIG` - Your IMAP configuration JSON (single line)
+    - `SHA256_HASH` - Your bcrypt password hash
+    - `SESSION_SECRET` - Random secret for sessions
+    - `IMAP_CONFIG` - Your IMAP configuration JSON (single line)
 4. Deploy
 
 ### Docker
@@ -216,7 +219,8 @@ This is an open-source project. Contributions are welcome, but please:
 
 ## Disclaimer
 
-This software is provided as-is with no warranty. Use at your own risk. Always review the code and security practices before deploying in production.
+This software is provided as-is with no warranty. Use at your own risk. Always review the code and security practices
+before deploying in production.
 
 ## Support
 

@@ -10,9 +10,9 @@
  * - MIME type sniffing prevention
  */
 
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { getSession } from "@/lib/auth"
+import type {NextRequest} from "next/server"
+import {NextResponse} from "next/server"
+import {getSession} from "@/lib/auth"
 
 /**
  * Add comprehensive security headers to all responses
@@ -59,28 +59,28 @@ function addSecurityHeaders(response: NextResponse): NextResponse {
 }
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+    const {pathname} = request.nextUrl
 
-  // Allow public routes
-  if (
-    pathname === "/login" ||
-    pathname.startsWith("/api/auth/login") ||
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/icon")
-  ) {
+    // Allow public routes
+    if (
+        pathname === "/login" ||
+        pathname.startsWith("/api/auth/login") ||
+        pathname.startsWith("/_next") ||
+        pathname.startsWith("/icon")
+    ) {
+        return addSecurityHeaders(NextResponse.next())
+    }
+
+    // Check authentication
+    const session = await getSession()
+    const isAuthenticated = session?.authenticated === true && session.expiresAt > Date.now()
+
+    if (!isAuthenticated) {
+        // Redirect to login
+        const loginUrl = new URL("/login", request.url)
+        loginUrl.searchParams.set("redirect", pathname)
+        return addSecurityHeaders(NextResponse.redirect(loginUrl))
+    }
+
     return addSecurityHeaders(NextResponse.next())
-  }
-
-  // Check authentication
-  const session = await getSession()
-  const isAuthenticated = session?.authenticated === true && session.expiresAt > Date.now()
-
-  if (!isAuthenticated) {
-    // Redirect to login
-    const loginUrl = new URL("/login", request.url)
-    loginUrl.searchParams.set("redirect", pathname)
-    return addSecurityHeaders(NextResponse.redirect(loginUrl))
-  }
-
-  return addSecurityHeaders(NextResponse.next())
 }

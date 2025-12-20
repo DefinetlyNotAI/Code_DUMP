@@ -8,9 +8,9 @@
  */
 
 interface RateLimitEntry {
-  count: number
-  resetAt: number
-  blockedUntil?: number
+    count: number
+    resetAt: number
+    blockedUntil?: number
 }
 
 // In-memory store (use Redis in production for multi-instance deployments)
@@ -18,22 +18,22 @@ const store = new Map<string, RateLimitEntry>()
 
 // Clean up old entries every 10 minutes
 setInterval(
-  () => {
-    const now = Date.now()
-    for (const [key, value] of store.entries()) {
-      if (value.resetAt < now && (!value.blockedUntil || value.blockedUntil < now)) {
-        store.delete(key)
-      }
-    }
-  },
-  10 * 60 * 1000,
+    () => {
+        const now = Date.now()
+        for (const [key, value] of store.entries()) {
+            if (value.resetAt < now && (!value.blockedUntil || value.blockedUntil < now)) {
+                store.delete(key)
+            }
+        }
+    },
+    10 * 60 * 1000,
 )
 
 export interface RateLimitResult {
-  allowed: boolean
-  remaining: number
-  resetAt: number
-  blockedUntil?: number
+    allowed: boolean
+    remaining: number
+    resetAt: number
+    blockedUntil?: number
 }
 
 /**
@@ -45,67 +45,67 @@ export interface RateLimitResult {
  * @param blockDurationMs - How long to block after exceeding limit
  */
 export function checkRateLimit(
-  identifier: string,
-  maxAttempts = 5,
-  windowMs: number = 15 * 60 * 1000, // 15 minutes
-  blockDurationMs: number = 30 * 60 * 1000, // 30 minutes
+    identifier: string,
+    maxAttempts = 5,
+    windowMs: number = 15 * 60 * 1000, // 15 minutes
+    blockDurationMs: number = 30 * 60 * 1000, // 30 minutes
 ): RateLimitResult {
-  const now = Date.now()
-  const entry = store.get(identifier)
+    const now = Date.now()
+    const entry = store.get(identifier)
 
-  // Check if currently blocked
-  if (entry?.blockedUntil && entry.blockedUntil > now) {
-    return {
-      allowed: false,
-      remaining: 0,
-      resetAt: entry.blockedUntil,
-      blockedUntil: entry.blockedUntil,
+    // Check if currently blocked
+    if (entry?.blockedUntil && entry.blockedUntil > now) {
+        return {
+            allowed: false,
+            remaining: 0,
+            resetAt: entry.blockedUntil,
+            blockedUntil: entry.blockedUntil,
+        }
     }
-  }
 
-  // Reset if window expired
-  if (!entry || entry.resetAt < now) {
-    store.set(identifier, {
-      count: 1,
-      resetAt: now + windowMs,
-    })
-    return {
-      allowed: true,
-      remaining: maxAttempts - 1,
-      resetAt: now + windowMs,
+    // Reset if window expired
+    if (!entry || entry.resetAt < now) {
+        store.set(identifier, {
+            count: 1,
+            resetAt: now + windowMs,
+        })
+        return {
+            allowed: true,
+            remaining: maxAttempts - 1,
+            resetAt: now + windowMs,
+        }
     }
-  }
 
-  // Increment count
-  entry.count += 1
+    // Increment count
+    entry.count += 1
 
-  // Block if exceeded
-  if (entry.count > maxAttempts) {
-    entry.blockedUntil = now + blockDurationMs
+    // Block if exceeded
+    if (entry.count > maxAttempts) {
+        entry.blockedUntil = now + blockDurationMs
+        store.set(identifier, entry)
+
+        console.warn("[SECURITY] Rate limit exceeded", {identifier, attempts: entry.count})
+
+        return {
+            allowed: false,
+            remaining: 0,
+            resetAt: entry.resetAt,
+            blockedUntil: entry.blockedUntil,
+        }
+    }
+
     store.set(identifier, entry)
 
-    console.warn("[SECURITY] Rate limit exceeded", { identifier, attempts: entry.count })
-
     return {
-      allowed: false,
-      remaining: 0,
-      resetAt: entry.resetAt,
-      blockedUntil: entry.blockedUntil,
+        allowed: true,
+        remaining: maxAttempts - entry.count,
+        resetAt: entry.resetAt,
     }
-  }
-
-  store.set(identifier, entry)
-
-  return {
-    allowed: true,
-    remaining: maxAttempts - entry.count,
-    resetAt: entry.resetAt,
-  }
 }
 
 /**
  * Reset rate limit for an identifier (e.g., on successful login)
  */
 export function resetRateLimit(identifier: string): void {
-  store.delete(identifier)
+    store.delete(identifier)
 }
