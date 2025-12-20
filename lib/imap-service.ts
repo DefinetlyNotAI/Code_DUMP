@@ -15,6 +15,7 @@ import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
 import DOMPurify from "isomorphic-dompurify"
 import {EmailDetail, EmailFolder} from "@/types";
+import {FolderSettings} from "./settings"
 
 /**
  * Create IMAP connection
@@ -145,9 +146,8 @@ export async function listFolders(accountId: string): Promise<EmailFolder[]> {
                 parseBoxes(boxes)
 
                 // Only get counts for important folders to improve speed
-                const importantFolderNames = ['INBOX', 'Sent', 'Drafts', 'Spam', 'Trash', 'Junk']
                 const foldersToCount = folders.filter(f =>
-                    importantFolderNames.some(name =>
+                    FolderSettings.importantFolders.some(name =>
                         f.path.toLowerCase().includes(name.toLowerCase())
                     )
                 )

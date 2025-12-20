@@ -11,6 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {listEmails} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
+import {CacheSettings} from "@/lib/settings"
 
 // Force Node.js runtime (required for cookies())
 export const runtime = 'nodejs'
@@ -81,8 +82,8 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    // Cache for 2 minutes with 5 minute stale-while-revalidate
-                    'Cache-Control': 'public, max-age=120, stale-while-revalidate=300',
+                    // Cache using centralized settings
+                    'Cache-Control': `public, max-age=${CacheSettings.server.emailsMaxAge}, stale-while-revalidate=${CacheSettings.server.emailsSWR}`,
                 },
             },
         )
