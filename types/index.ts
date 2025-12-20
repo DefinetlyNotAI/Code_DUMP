@@ -71,6 +71,7 @@ export interface FolderListProps {
     accountId: string
     selectedFolder: string | null
     onFolderSelect: (folder: string) => void
+    onLoadingComplete?: () => void
 }
 
 export interface EmailListProps {
@@ -90,4 +91,5 @@ export interface DashboardHeaderProps {
     accounts: Account[]
     selectedAccount: string | null
     onAccountChange: (accountId: string) => void
+    disabled?: boolean
 }

@@ -14,7 +14,7 @@ import {EmailFolder, FolderListProps} from "@/types";
 import {Cache} from "@/lib/cache"
 import {CacheSettings, FolderSettings, RefreshSettings} from "@/lib/settings"
 
-export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderListProps) {
+export function FolderList({accountId, selectedFolder, onFolderSelect, onLoadingComplete}: FolderListProps) {
     const [folders, setFolders] = useState<EmailFolder[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -52,6 +52,11 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
                 }
 
                 isInitialLoad = false
+
+                // Notify parent that loading is complete
+                if (onLoadingComplete) {
+                    onLoadingComplete()
+                }
 
                 // Fetch fresh counts in background without blocking UI
                 return
@@ -99,6 +104,11 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
             if (isInitialLoad) {
                 setLoading(false)
                 isInitialLoad = false
+
+                // Notify parent that loading is complete
+                if (onLoadingComplete) {
+                    onLoadingComplete()
+                }
             }
         }
 

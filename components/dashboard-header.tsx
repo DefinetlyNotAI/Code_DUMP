@@ -13,7 +13,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {fetchWithCsrf} from "@/lib/csrf-client"
 import {DashboardHeaderProps} from "@/types";
 
-export function DashboardHeader({accounts, selectedAccount, onAccountChange}: DashboardHeaderProps) {
+export function DashboardHeader({accounts, selectedAccount, onAccountChange, disabled = false}: DashboardHeaderProps) {
     const router = useRouter()
     const [open, setOpen] = useState(false)
 
@@ -43,11 +43,21 @@ export function DashboardHeader({accounts, selectedAccount, onAccountChange}: Da
                 </div>
 
                 {accounts.length > 0 && (
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover open={open} onOpenChange={(newOpen) => {
+                        if (!disabled) {
+                            setOpen(newOpen)
+                        }
+                    }}>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" className="w-70 justify-start bg-transparent">
+                            <Button
+                                variant="outline"
+                                className="w-70 justify-start bg-transparent"
+                                disabled={disabled}
+                            >
                                 <Search className="h-4 w-4 mr-2 text-muted-foreground"/>
-                                <span className="truncate">{selectedLabel}</span>
+                                <span className="truncate">
+                                    {disabled ? 'Loading...' : selectedLabel}
+                                </span>
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-70 p-0" align="start">

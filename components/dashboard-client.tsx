@@ -22,6 +22,31 @@ export function DashboardClient() {
     const [selectedEmail, setSelectedEmail] = useState<{ uid: number; folder: string } | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [switchingAccount, setSwitchingAccount] = useState(false)
+    const [foldersLoaded, setFoldersLoaded] = useState(false)
+
+    // Handle account change with loading state
+    const handleAccountChange = (accountId: string) => {
+        if (switchingAccount) {
+            console.log('[Dashboard] Account switch in progress, ignoring...')
+            return
+        }
+
+        console.log('[Dashboard] Switching to account:', accountId)
+        setSwitchingAccount(true)
+        setFoldersLoaded(false)
+        setSelectedAccount(accountId)
+        setSelectedFolder(null)
+        setSelectedEmail(null)
+    }
+
+    // Reset switching state when folders are loaded
+    useEffect(() => {
+        if (foldersLoaded && switchingAccount) {
+            console.log('[Dashboard] Folders loaded, account switch complete')
+            setSwitchingAccount(false)
+        }
+    }, [foldersLoaded, switchingAccount])
 
     // Load accounts on mount
     useEffect(() => {
@@ -109,8 +134,12 @@ export function DashboardClient() {
 
     return (
         <div className="min-h-screen bg-background">
-            <DashboardHeader accounts={accounts} selectedAccount={selectedAccount}
-                             onAccountChange={setSelectedAccount}/>
+            <DashboardHeader
+                accounts={accounts}
+                selectedAccount={selectedAccount}
+                onAccountChange={handleAccountChange}
+                disabled={switchingAccount}
+            />
 
             <div className="flex h-[calc(100vh-4rem)]">
                 {/* Folder sidebar */}
@@ -123,6 +152,7 @@ export function DashboardClient() {
                                 setSelectedFolder(folder)
                                 setSelectedEmail(null)
                             }}
+                            onLoadingComplete={() => setFoldersLoaded(true)}
                         />
                     )}
                 </div>
