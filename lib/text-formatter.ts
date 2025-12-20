@@ -22,7 +22,12 @@ export function formatPlainText(text: string): string {
 
     let formatted = text
 
-    // Escape HTML to prevent XSS
+    // FIRST: Preprocess special email formats BEFORE HTML escaping
+    if (TextFormattingSettings.autoLinkEmails) {
+        formatted = preprocessEmailAddresses(formatted)
+    }
+
+    // THEN: Escape HTML to prevent XSS
     formatted = escapeHtml(formatted)
 
     // Apply formatting if enabled
@@ -70,10 +75,30 @@ export function formatPlainText(text: string): string {
 
     // 9. Preserve multiple spaces
     if (TextFormattingSettings.preserveSpaces) {
-        formatted = formatted.replace(/  /g, ' &nbsp;')
+        formatted = formatted.replace(/ {2}/g, ' &nbsp;')
     }
 
     return formatted
+}
+
+/**
+ * Preprocess email addresses to remove <mailto:...> tags
+ * This must be done BEFORE HTML escaping
+ */
+function preprocessEmailAddresses(text: string): string {
+    // Handle format: email<mailto:email> - remove the <mailto:...> part
+    text = text.replace(
+        /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})<mailto:[^>]+>/gi,
+        '$1'
+    )
+
+    // Handle standalone <mailto:email> - remove the tags but keep email
+    text = text.replace(
+        /<mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>/gi,
+        '$1'
+    )
+
+    return text
 }
 
 /**
@@ -107,34 +132,13 @@ function formatUrls(text: string): string {
 
 /**
  * Format email addresses as mailto links
- * Handles formats:
- * - user@example.com
- * - user@example.com<mailto:user@example.com>
- * - <mailto:user@example.com>
+ * Note: Special formats like email<mailto:email> are already preprocessed
  */
 function formatEmailAddresses(text: string): string {
-    // First handle the format: email<mailto:email>
-    text = text.replace(
-        /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})<mailto:([^>]+)>/gi,
-        (match, email, mailtoEmail) => {
-            return `<a href="mailto:${email}" class="text-primary hover:underline">${email}</a>`
-        }
-    )
-
-    // Then handle standalone <mailto:email>
-    text = text.replace(
-        /<mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>/gi,
-        (match, email) => {
-            return `<a href="mailto:${email}" class="text-primary hover:underline">${email}</a>`
-        }
-    )
-
-    // Finally handle plain email addresses (not already in links)
+    // Match plain email addresses (not already in links)
     text = text.replace(
         /(?<!href="|>)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?![^<]*<\/a>)/gi,
-        (match, email) => {
-            return `<a href="mailto:${email}" class="text-primary hover:underline">${email}</a>`
-        }
+        '<a href="mailto:$1" class="text-primary hover:underline">$1</a>'
     )
 
     return text
@@ -200,7 +204,9 @@ function formatCode(text: string): string {
 
 /**
  * Remove all formatting (get plain text)
+ * @public - Utility function for future use
  */
+// @ts-ignore - Utility function for future use
 export function stripFormatting(html: string): string {
     const div = document.createElement('div')
     div.innerHTML = html
@@ -209,7 +215,9 @@ export function stripFormatting(html: string): string {
 
 /**
  * Preview formatted text (for testing)
+ * @public - Utility function for future use
  */
+// @ts-ignore - Utility function for future use
 export function previewFormatting(text: string, maxLength: number = 100): string {
     const formatted = formatPlainText(text)
     const plain = stripFormatting(formatted)
@@ -223,7 +231,9 @@ export function previewFormatting(text: string, maxLength: number = 100): string
 
 /**
  * Count formatting elements in text
+ * @public - Utility function for future use
  */
+// @ts-ignore - Utility function for future use
 export function countFormattingElements(text: string): {
     urls: number
     emails: number
@@ -242,7 +252,9 @@ export function countFormattingElements(text: string): {
 
 /**
  * Check if text contains any formatting
+ * @public - Utility function for future use
  */
+// @ts-ignore - Utility function for future use
 export function hasFormatting(text: string): boolean {
     const counts = countFormattingElements(text)
     return Object.values(counts).some(count => count > 0)
@@ -250,7 +262,9 @@ export function hasFormatting(text: string): boolean {
 
 /**
  * Format text for display in email viewer
+ * @public - Utility function for future use
  */
+// @ts-ignore - Utility function for future use
 export function formatEmailText(text: string | undefined, isHtml: boolean = false): string {
     if (!text) return ''
 
