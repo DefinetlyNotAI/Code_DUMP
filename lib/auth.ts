@@ -13,8 +13,6 @@ import { compare } from "bcryptjs"
 import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 
-const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET || "default-secret-change-in-production")
-
 // Master password hash stored in environment variable
 // Generate with: bcrypt.hash('your-password', 10)
 const SHA256_HASH = process.env.SHA256_HASH
@@ -25,8 +23,11 @@ if (!SHA256_HASH) {
 }
 
 if (!process.env.SESSION_SECRET) {
-  console.warn("[SECURITY] SESSION_SECRET not set, using default (NOT PRODUCTION SAFE)")
+  console.error("[SECURITY] SESSION_SECRET not set in environment variables")
+  throw new Error("SESSION_SECRET must be set")
 }
+
+const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET)
 
 export interface SessionData {
   authenticated: boolean

@@ -2,6 +2,7 @@
  * Login API endpoint
  *
  * Security features:
+ * - CSRF protection
  * - Rate limiting by IP
  * - No information disclosure (same error for all failures)
  * - Secure session creation
@@ -11,9 +12,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { verifyMasterPassword, createSessionToken, setSessionCookie } from "@/lib/auth"
 import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit"
+import { requireCsrfProtection } from "@/lib/csrf"
 
 export async function POST(request: NextRequest) {
   try {
+    // CSRF protection
+    const csrfCheck = await requireCsrfProtection(request)
+    if (csrfCheck.error) return csrfCheck.error
+
+    const { password } = csrfCheck.data
+
     // Extract IP for rate limiting
     const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
 
@@ -31,8 +39,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
-    const { password } = body
 
     if (!password || typeof password !== "string") {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 })

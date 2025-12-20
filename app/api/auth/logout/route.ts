@@ -5,18 +5,13 @@
 
 import { type NextRequest, NextResponse } from "next/server"
 import { clearSessionCookie } from "@/lib/auth"
-import { verifyCsrfToken } from "@/lib/csrf"
+import { requireCsrfProtection } from "@/lib/csrf"
 
 export async function POST(request: NextRequest) {
   try {
     // CSRF protection for logout
-    const body = await request.json()
-    const { csrfToken } = body
-
-    if (!csrfToken || !(await verifyCsrfToken(csrfToken))) {
-      console.warn("[AUTH] Logout blocked - invalid CSRF token")
-      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 })
-    }
+    const csrfCheck = await requireCsrfProtection(request)
+    if (csrfCheck.error) return csrfCheck.error
 
     await clearSessionCookie()
 

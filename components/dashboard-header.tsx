@@ -10,6 +10,7 @@ import { Shield, LogOut, Search } from "lucide-react"
 import { useState, useMemo } from "react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { fetchWithCsrf } from "@/lib/csrf-client"
 
 interface Account {
   id: string
@@ -32,13 +33,8 @@ export function DashboardHeader({ accounts, selectedAccount, onAccountChange }: 
 
   async function handleLogout() {
     try {
-      const csrfResponse = await fetch("/api/auth/csrf")
-      const { token } = await csrfResponse.json()
-
-      await fetch("/api/auth/logout", {
+      await fetchWithCsrf("/api/auth/logout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ csrfToken: token }),
       })
 
       router.push("/login")

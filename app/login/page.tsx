@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Shield } from "lucide-react"
+import { fetchWithCsrf } from "@/lib/csrf-client"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -34,9 +35,8 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetchWithCsrf("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       })
 
