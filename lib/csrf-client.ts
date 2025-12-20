@@ -28,8 +28,17 @@ export async function getCsrfToken(forceRefresh = false): Promise<string> {
     const response = await fetch("/api/auth/csrf")
 
     if (!response.ok) {
-        const error = new Error("Failed to get CSRF token")
+        const error = new Error(`Failed to get CSRF token: ${response.status} ${response.statusText}`)
         console.error("[CSRF] Failed to get token", error)
+        throw error
+    }
+
+    // Check if response is JSON
+    const contentType = response.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text()
+        const error = new Error(`Expected JSON response but got: ${contentType}. Response: ${text.substring(0, 200)}`)
+        console.error("[CSRF] Invalid response type", error)
         throw error
     }
 
@@ -121,7 +130,11 @@ export async function fetchWithCsrf(
         return response
     } catch (error) {
         console.error("[CSRF] Fetch with CSRF failed", {url, error})
-        throw error
+        // Re-throw with more context
+        if (error instanceof Error) {
+            throw error
+        }
+        throw new Error(`Request failed: ${error}`)
     }
 }
 

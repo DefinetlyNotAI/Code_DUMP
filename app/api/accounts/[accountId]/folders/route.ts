@@ -12,7 +12,7 @@ import {requireAuth} from "@/lib/auth"
 import {listFolders} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
 
-export async function GET(request: NextRequest, {params}: { params: { accountId: string } }) {
+export async function GET(request: NextRequest, {params}: { params: Promise<{ accountId: string }> }) {
     try {
         console.log("[API] /api/accounts/[accountId]/folders - Request received")
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, {params}: { params: { accountId:
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
 
-        const {accountId} = params
+        const {accountId} = await params
         console.log("[API] /api/accounts/[accountId]/folders - Account ID:", accountId)
 
         // Rate limiting
@@ -32,7 +32,15 @@ export async function GET(request: NextRequest, {params}: { params: { accountId:
 
         if (!rateLimit.allowed) {
             console.log("[API] /api/accounts/[accountId]/folders - Rate limit exceeded")
-            return NextResponse.json({error: "Too many requests"}, {status: 429})
+            return NextResponse.json(
+                {error: "Too many requests"},
+                {
+                    status: 429,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         console.log("[API] /api/accounts/[accountId]/folders - Listing folders for account:", accountId)
@@ -42,13 +50,28 @@ export async function GET(request: NextRequest, {params}: { params: { accountId:
 
         console.log("[API] /api/accounts/[accountId]/folders - Found", folders.length, "folder(s)")
 
-        return NextResponse.json({folders})
+        return NextResponse.json(
+            {folders},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Unknown error"
         console.error("[API] /api/accounts/[accountId]/folders - Failed to list folders", {
             error: errorMessage,
             stack: error instanceof Error ? error.stack : undefined,
         })
-        return NextResponse.json({error: errorMessage}, {status: 500})
+        return NextResponse.json(
+            {error: errorMessage},
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     }
 }

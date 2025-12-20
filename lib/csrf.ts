@@ -108,7 +108,17 @@ export async function requireCsrfProtection(
 ): Promise<{ error: NextResponse | null; data?: any }> {
     try {
         const body = await request.json()
+        console.log("[CSRF DEBUG] Request body parsed:", {
+            hasCsrfToken: !!body?.csrfToken,
+            bodyKeys: Object.keys(body || {}),
+        })
+
         const {csrfToken, ...data} = body
+        console.log("[CSRF DEBUG] Data after extracting CSRF token:", {
+            dataKeys: Object.keys(data || {}),
+            hasPassword: !!data?.password,
+            passwordType: typeof data?.password,
+        })
 
         if (!csrfToken) {
             console.warn("[CSRF] Request blocked - missing CSRF token", {
@@ -120,7 +130,9 @@ export async function requireCsrfProtection(
             }
         }
 
+        console.log("[CSRF DEBUG] Verifying CSRF token...")
         const isValid = await verifyCsrfToken(csrfToken)
+        console.log("[CSRF DEBUG] CSRF token verification result:", isValid)
 
         if (!isValid) {
             console.warn("[CSRF] Request blocked - invalid CSRF token", {
@@ -132,6 +144,7 @@ export async function requireCsrfProtection(
             }
         }
 
+        console.log("[CSRF DEBUG] CSRF check passed, returning data")
         // Return data without the CSRF token
         return {error: null, data}
     } catch (error) {

@@ -12,6 +12,15 @@ import {requireAuth} from "@/lib/auth"
 import {getAccountList} from "@/lib/imap-config"
 import {checkRateLimit} from "@/lib/rate-limit"
 
+// Force Node.js runtime (required for cookies())
+export const runtime = 'nodejs'
+
+// Disable static optimization for this route
+export const dynamic = 'force-dynamic'
+
+// Ensure this is treated as an API route
+export const revalidate = 0
+
 export async function GET(request: NextRequest) {
     try {
         console.log("[API] /api/accounts - Request received")
@@ -20,7 +29,15 @@ export async function GET(request: NextRequest) {
         const isAuthenticated = await requireAuth()
         if (!isAuthenticated) {
             console.log("[API] /api/accounts - Authentication failed")
-            return NextResponse.json({error: "Unauthorized"}, {status: 401})
+            return NextResponse.json(
+                {error: "Unauthorized"},
+                {
+                    status: 401,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         console.log("[API] /api/accounts - Authentication passed")
@@ -31,7 +48,15 @@ export async function GET(request: NextRequest) {
 
         if (!rateLimit.allowed) {
             console.log("[API] /api/accounts - Rate limit exceeded for IP:", ip)
-            return NextResponse.json({error: "Too many requests"}, {status: 429})
+            return NextResponse.json(
+                {error: "Too many requests"},
+                {
+                    status: 429,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         console.log("[API] /api/accounts - Getting account list...")
@@ -41,12 +66,27 @@ export async function GET(request: NextRequest) {
 
         console.log("[API] /api/accounts - Found", accounts.length, "account(s):", accounts)
 
-        return NextResponse.json({accounts})
+        return NextResponse.json(
+            {accounts},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     } catch (error) {
         console.error("[API] /api/accounts - Failed to list accounts", {
             error: error instanceof Error ? error.message : "Unknown error",
             stack: error instanceof Error ? error.stack : undefined,
         })
-        return NextResponse.json({error: "Failed to load accounts"}, {status: 500})
+        return NextResponse.json(
+            {error: "Failed to load accounts"},
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     }
 }

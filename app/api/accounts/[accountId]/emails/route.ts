@@ -12,12 +12,29 @@ import {requireAuth} from "@/lib/auth"
 import {listEmails} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
 
+// Force Node.js runtime (required for cookies())
+export const runtime = 'nodejs'
+
+// Disable static optimization for this route
+export const dynamic = 'force-dynamic'
+
+// Ensure this is treated as an API route
+export const revalidate = 0
+
 export async function GET(request: NextRequest, {params}: { params: Promise<{ accountId: string }> }) {
     try {
         // Check authentication
         const isAuthenticated = await requireAuth()
         if (!isAuthenticated) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401})
+            return NextResponse.json(
+                {error: "Unauthorized"},
+                {
+                    status: 401,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         const {accountId} = await params
@@ -27,7 +44,15 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         const rateLimit = checkRateLimit(`emails:${ip}`, 20, 60 * 1000) // 20 per minute
 
         if (!rateLimit.allowed) {
-            return NextResponse.json({error: "Too many requests"}, {status: 429})
+            return NextResponse.json(
+                {error: "Too many requests"},
+                {
+                    status: 429,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         // Parse query params
@@ -37,17 +62,40 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         const offset = Number.parseInt(searchParams.get("offset") || "0", 10)
 
         if (!folder) {
-            return NextResponse.json({error: "Folder parameter required"}, {status: 400})
+            return NextResponse.json(
+                {error: "Folder parameter required"},
+                {
+                    status: 400,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         // Get emails
         const result = await listEmails(accountId, folder, {limit, offset})
 
-        return NextResponse.json(result)
+        return NextResponse.json(
+            result,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     } catch (error) {
         console.error("[API] Failed to list emails", {
             error: error instanceof Error ? error.message : "Unknown error",
         })
-        return NextResponse.json({error: "Failed to load emails"}, {status: 500})
+        return NextResponse.json(
+            {error: "Failed to load emails"},
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     }
 }

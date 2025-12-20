@@ -12,12 +12,29 @@ import {requireAuth} from "@/lib/auth"
 import {getEmail} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
 
+// Force Node.js runtime (required for cookies())
+export const runtime = 'nodejs'
+
+// Disable static optimization for this route
+export const dynamic = 'force-dynamic'
+
+// Ensure this is treated as an API route
+export const revalidate = 0
+
 export async function GET(request: NextRequest, {params}: { params: Promise<{ accountId: string; uid: string }> }) {
     try {
         // Check authentication
         const isAuthenticated = await requireAuth()
         if (!isAuthenticated) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401})
+            return NextResponse.json(
+                {error: "Unauthorized"},
+                {
+                    status: 401,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         const {accountId, uid} = await params
@@ -27,7 +44,15 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         const rateLimit = checkRateLimit(`email:${ip}`, 30, 60 * 1000) // 30 per minute
 
         if (!rateLimit.allowed) {
-            return NextResponse.json({error: "Too many requests"}, {status: 429})
+            return NextResponse.json(
+                {error: "Too many requests"},
+                {
+                    status: 429,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         // Parse query params
@@ -35,26 +60,65 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         const folder = searchParams.get("folder")
 
         if (!folder) {
-            return NextResponse.json({error: "Folder parameter required"}, {status: 400})
+            return NextResponse.json(
+                {error: "Folder parameter required"},
+                {
+                    status: 400,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         const uidNum = Number.parseInt(uid, 10)
         if (isNaN(uidNum)) {
-            return NextResponse.json({error: "Invalid UID"}, {status: 400})
+            return NextResponse.json(
+                {error: "Invalid UID"},
+                {
+                    status: 400,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
         // Get email
         const email = await getEmail(accountId, folder, uidNum)
 
         if (!email) {
-            return NextResponse.json({error: "Email not found"}, {status: 404})
+            return NextResponse.json(
+                {error: "Email not found"},
+                {
+                    status: 404,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            )
         }
 
-        return NextResponse.json({email})
+        return NextResponse.json(
+            {email},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     } catch (error) {
         console.error("[API] Failed to get email", {
             error: error instanceof Error ? error.message : "Unknown error",
         })
-        return NextResponse.json({error: "Failed to load email"}, {status: 500})
+        return NextResponse.json(
+            {error: "Failed to load email"},
+            {
+                status: 500,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        )
     }
 }
