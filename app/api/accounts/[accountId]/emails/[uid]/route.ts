@@ -104,6 +104,8 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
             {
                 headers: {
                     'Content-Type': 'application/json',
+                    // Cache emails for 30 minutes (emails rarely change once loaded)
+                    'Cache-Control': 'public, max-age=1800, stale-while-revalidate=3600',
                 },
             },
         )

@@ -1,15 +1,16 @@
 "use client"
 /**
  * Email list component
- * Displays paginated list of emails
+ * Displays paginated list of emails with client-side optimization
  */
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import {Button} from "@/components/ui/button"
 import {formatDistanceToNow} from "date-fns"
 import {cn} from "@/lib/ui"
 import {ChevronLeft, ChevronRight, Paperclip} from "lucide-react"
-import {EmailDetail, EmailListProps} from "@/types";
+import {EmailDetail, EmailListProps} from "@/types"
 import {Cache} from "@/lib/cache"
+import {formatEmailAddressShort, preloadEmails} from "@/lib/client-utils"
 
 export function EmailList({accountId, folder, selectedUid, onEmailSelect}: EmailListProps) {
     const [emails, setEmails] = useState<EmailDetail[]>([])
@@ -17,6 +18,54 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
     const [offset, setOffset] = useState(0)
     const [loading, setLoading] = useState(true)
     const limit = 50
+
+    // Preload adjacent emails for faster navigation (client-side optimization)
+    useEffect(() => {
+        if (emails.length > 0 && selectedUid) {
+            const currentIndex = emails.findIndex(e => e.uid === selectedUid)
+            if (currentIndex !== -1) {
+                const preloadUids: number[] = []
+
+                // Preload next 2 emails
+                if (currentIndex < emails.length - 1) {
+                    preloadUids.push(emails[currentIndex + 1].uid)
+                }
+                if (currentIndex < emails.length - 2) {
+                    preloadUids.push(emails[currentIndex + 2].uid)
+                }
+
+                // Preload previous email
+                if (currentIndex > 0) {
+                    preloadUids.push(emails[currentIndex - 1].uid)
+                }
+
+                if (preloadUids.length > 0) {
+                    preloadEmails(accountId, folder, preloadUids)
+                }
+            }
+        }
+    }, [selectedUid, emails, accountId, folder])
+
+    // Memoize pagination values (client-side optimization)
+    const paginationInfo = useMemo(() => ({
+        hasNext: offset + limit < total,
+        hasPrev: offset > 0,
+        start: offset + 1,
+        end: Math.min(offset + limit, total)
+    }), [offset, limit, total])
+
+    // Optimized page change handlers
+    const handleNextPage = useCallback(() => {
+        if (paginationInfo.hasNext) {
+            setOffset(offset + limit)
+        }
+    }, [offset, limit, paginationInfo.hasNext])
+
+    const handlePrevPage = useCallback(() => {
+        if (paginationInfo.hasPrev) {
+            setOffset(offset - limit)
+        }
+    }, [offset, limit, paginationInfo.hasPrev])
     useEffect(() => {
         let isInitialLoad = true
 
@@ -95,27 +144,30 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
             </div>
         )
     }
-    const hasNext = offset + limit < total
-    const hasPrev = offset > 0
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-2 border-b">
         <span className="text-sm text-muted-foreground">
-          {offset + 1}-{Math.min(offset + limit, total)} of {total}
+          {paginationInfo.start}-{paginationInfo.end} of {total}
         </span>
                 <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" onClick={() => setOffset(offset - limit)} disabled={!hasPrev}>
+                    <Button variant="ghost" size="sm" onClick={handlePrevPage} disabled={!paginationInfo.hasPrev}>
                         <ChevronLeft className="h-4 w-4"/>
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => setOffset(offset + limit)} disabled={!hasNext}>
+                    <Button variant="ghost" size="sm" onClick={handleNextPage} disabled={!paginationInfo.hasNext}>
                         <ChevronRight className="h-4 w-4"/>
                     </Button>
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
                 {emails.map((email) => {
-                    const from = email.from?.[0]
-                    const fromName = from?.name || from?.address || "Unknown"
+                    // Client-side formatting for better performance
+                    const fromDisplay = formatEmailAddressShort(email.from)
+                    const dateDisplay = email.date
+                        ? formatDistanceToNow(new Date(email.date), {addSuffix: true})
+                        : ""
+
                     return (
                         <button
                             key={email.uid}
@@ -126,11 +178,11 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
                             onClick={() => onEmailSelect(email.uid)}
                         >
                             <div className="flex items-start justify-between gap-2 mb-1">
-                                <span className="font-medium text-sm truncate">{fromName}</span>
-                                {email.date && (
+                                <span className="font-medium text-sm truncate">{fromDisplay}</span>
+                                {dateDisplay && (
                                     <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {formatDistanceToNow(new Date(email.date), {addSuffix: true})}
-                  </span>
+                                        {dateDisplay}
+                                    </span>
                                 )}
                             </div>
                             <div className="flex items-center gap-2">
