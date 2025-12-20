@@ -65,8 +65,11 @@ export async function proxy(request: NextRequest) {
     if (
         pathname === "/login" ||
         pathname.startsWith("/api/auth/login") ||
+        pathname.startsWith("/api/auth/csrf") ||
         pathname.startsWith("/_next") ||
-        pathname.startsWith("/icon")
+        pathname.startsWith("/icon") ||
+        pathname === "/wesmun.svg" ||
+        pathname === "/wesmun.webp"
     ) {
         return addSecurityHeaders(NextResponse.next())
     }

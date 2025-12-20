@@ -30,6 +30,15 @@ export default function LoginForm() {
                 body: JSON.stringify({password}),
             })
 
+            // Check if response is JSON
+            const contentType = response.headers.get("content-type")
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text()
+                console.error("[LOGIN] Expected JSON but got:", contentType, text.substring(0, 200))
+                setError("Server configuration error. Please check the logs.")
+                return
+            }
+
             const data = await response.json()
 
             if (response.ok && data.success) {
@@ -46,7 +55,11 @@ export default function LoginForm() {
             }
         } catch (err) {
             console.error("[LOGIN] Request failed", err)
-            setError("Unable to connect to server")
+            if (err instanceof Error) {
+                setError(err.message)
+            } else {
+                setError("Unable to connect to server")
+            }
         } finally {
             setLoading(false)
         }
@@ -65,6 +78,17 @@ export default function LoginForm() {
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Hidden username field for accessibility and password managers */}
+                    <input
+                        type="text"
+                        name="username"
+                        autoComplete="username"
+                        value="admin"
+                        readOnly
+                        style={{display: 'none'}}
+                        aria-hidden="true"
+                        tabIndex={-1}
+                    />
                     <div className="space-y-2">
                         <Label htmlFor="password">Master Password</Label>
                         <Input
@@ -76,6 +100,7 @@ export default function LoginForm() {
                             required
                             disabled={loading}
                             autoFocus
+                            autoComplete="current-password"
                         />
                     </div>
 

@@ -37,17 +37,17 @@ documentation.
 1. Clone the repository
 2. Install dependencies:
 
-```bash
-npm install
-```
+   ```bash
+    npm install
+   ```
 
 3. Set up configuration (see Configuration below)
 
 4. Run development server:
 
-```bash
-npm run dev
-```
+   ```bash
+    npm run dev
+   ```
 
 5. Open [http://localhost:3000](http://localhost:3000)
 
@@ -59,7 +59,7 @@ Set up environment variables (`.env.local` for development, or in Vercel dashboa
 
 ```bash
 # Generate with: node -e "const bcrypt = require('bcryptjs'); bcrypt.hash('your-password', 10).then(console.log)"
-SHA256_HASH=your-bcrypt-hash-here
+MASTER_PASSWORD_BCRYPT_HASH=your-bcrypt-hash-here
 
 # Generate with: openssl rand -base64 32
 SESSION_SECRET=your-random-secret-here
@@ -70,6 +70,8 @@ IMAP_CONFIG={"accounts":[{"id":"account1","label":"Account 1","imap":{"host":"im
 ```
 
 ### 2. IMAP Configuration Details
+
+> VERY IMPORTANT: Please escape all $ signs in passwords with a backslash (`\$`) when setting environment variables
 
 The `IMAP_CONFIG` environment variable accepts a JSON object with the following structure:
 
@@ -159,7 +161,7 @@ See [SECURITY.md](./SECURITY.md) for detailed configuration instructions.
 1. Push code to GitHub
 2. Import project to Vercel
 3. Add environment variables in Vercel dashboard:
-    - `SHA256_HASH` - Your bcrypt password hash
+  - `MASTER_PASSWORD_BCRYPT_HASH` - Your bcrypt password hash
     - `SESSION_SECRET` - Random secret for sessions
     - `IMAP_CONFIG` - Your IMAP configuration JSON (single line)
 4. Deploy

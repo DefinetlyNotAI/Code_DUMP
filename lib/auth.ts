@@ -9,40 +9,63 @@
  * - No credentials ever logged or exposed to client
  */
 
-import {compare} from "bcryptjs"
+import bcrypt from "bcryptjs"
 import {jwtVerify, SignJWT} from "jose"
 import {cookies} from "next/headers"
 import {SessionData} from "@/types/server";
 
 // Master password hash stored in environment variable
 // Generate with: bcrypt.hash('your-password', 10)
-const SHA256_HASH = process.env.SHA256_HASH
+// WORKAROUND: Due to .env parsing issues with $ characters on Windows, we're using a fallback
+const MASTER_PASSWORD_BCRYPT_HASH = process.env.MASTER_PASSWORD_BCRYPT_HASH
 
-if (!SHA256_HASH) {
-    console.error("[SECURITY] SHA256_HASH not set in environment variables")
-    throw new Error("SHA256_HASH must be set")
+// Validate environment variables at runtime, not at module load
+function validateEnvironment() {
+    if (!MASTER_PASSWORD_BCRYPT_HASH) {
+        console.error("[SECURITY] MASTER_PASSWORD_BCRYPT_HASH not set in environment variables")
+        return false
+    }
+    if (!process.env.SESSION_SECRET) {
+        console.error("[SECURITY] SESSION_SECRET not set in environment variables")
+        return false
+    }
+    return true
 }
 
-if (!process.env.SESSION_SECRET) {
-    console.error("[SECURITY] SESSION_SECRET not set in environment variables")
-    throw new Error("SESSION_SECRET must be set")
-}
-
-const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET)
+const SESSION_SECRET = process.env.SESSION_SECRET
+    ? new TextEncoder().encode(process.env.SESSION_SECRET)
+    : null
 
 /**
  * Verify the provided password against the master password hash
  * Never logs the password or hash
  */
 export async function verifyMasterPassword(password: string): Promise<boolean> {
-    try {
-        return await compare(password, SHA256_HASH!)
-    } catch (error) {
-        console.error("[AUTH] Password verification failed", {
-            error: error instanceof Error ? error.message : "Unknown error",
-        })
-        return false
+    /*
+    console.log("[AUTH DEBUG] verifyMasterPassword called")
+    console.log("[AUTH DEBUG] Password received:", {
+        type: typeof password,
+        length: password?.length,
+        trimmedLength: password?.trim().length,
+    })
+    */
+
+    if (!validateEnvironment() || !MASTER_PASSWORD_BCRYPT_HASH) {
+        console.error("[AUTH] Environment validation failed")
+        throw new Error("Environment not properly configured")
     }
+
+    /*
+    console.log("[AUTH DEBUG] Environment hash exists:", !!MASTER_PASSWORD_BCRYPT_HASH)
+    console.log("[AUTH DEBUG] Hash starts with $2:", MASTER_PASSWORD_BCRYPT_HASH?.startsWith('$2'))
+    console.log("[AUTH DEBUG] Hash length:", MASTER_PASSWORD_BCRYPT_HASH?.length)
+    console.log("[AUTH DEBUG] Hash first 10 chars:", MASTER_PASSWORD_BCRYPT_HASH?.substring(0, 10))
+    console.log("[AUTH DEBUG] Hash last 10 chars:", MASTER_PASSWORD_BCRYPT_HASH?.substring(MASTER_PASSWORD_BCRYPT_HASH.length - 10))
+    */
+    const result = await bcrypt.compare(password, MASTER_PASSWORD_BCRYPT_HASH)
+    console.log("[AUTH] bcrypt.compare result:", result)
+
+    return result
 }
 
 /**
@@ -50,6 +73,10 @@ export async function verifyMasterPassword(password: string): Promise<boolean> {
  * Tokens expire after 8 hours
  */
 export async function createSessionToken(): Promise<string> {
+    if (!validateEnvironment() || !SESSION_SECRET) {
+        throw new Error("Environment not properly configured")
+    }
+
     const issuedAt = Date.now()
     const expiresAt = issuedAt + 8 * 60 * 60 * 1000 // 8 hours
 
@@ -67,11 +94,15 @@ export async function createSessionToken(): Promise<string> {
  * Verify and decode a session token
  */
 export async function verifySessionToken(token: string): Promise<SessionData | null> {
+    if (!validateEnvironment() || !SESSION_SECRET) {
+        throw new Error("Environment not properly configured")
+    }
+
     try {
-        const verified = await jwtVerify(token, SESSION_SECRET)
+        const verified = await jwtVerify(token, SESSION_SECRET!)
         return verified.payload as unknown as SessionData
     } catch (error) {
-        // Token invalid or expired
+        // Token invalid or expired - this is an expected case
         return null
     }
 }

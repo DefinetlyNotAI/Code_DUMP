@@ -57,9 +57,8 @@ It provides **read-only** access to IMAP mailboxes through a secure web interfac
 ### Required Variables
 
 ```bash
-# SHA256 Hash for clarity
 # Master password hash (generate with bcryptjs)
-SHA256_HASH=
+MASTER_PASSWORD_BCRYPT_HASH=
 
 # Session secret (generate a random string)
 SESSION_SECRET=
