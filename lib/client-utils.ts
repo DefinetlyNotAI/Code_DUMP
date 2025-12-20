@@ -4,6 +4,7 @@
  */
 
 import {EmailAddress, EmailDetail} from "@/types"
+import { decode as decodeHtmlEntities } from "he"
 
 /**
  * Format email addresses for display (client-side)
@@ -41,13 +42,8 @@ export function extractTextPreview(html: string | undefined, maxLength: number =
     // Remove HTML tags
     const text = html.replace(/<[^>]*>/g, " ")
 
-    // Decode HTML entities
-    const decoded = text
-        .replace(/&nbsp;/g, " ")
-        .replace(/&quot;/g, '"')
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
+    // Decode HTML entities using a robust decoder to avoid double-unescaping
+    const decoded = decodeHtmlEntities(text)
 
     // Clean up whitespace
     const cleaned = decoded.replace(/\s+/g, " ").trim()
