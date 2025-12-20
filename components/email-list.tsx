@@ -11,32 +11,30 @@ import {ChevronLeft, ChevronRight, Paperclip} from "lucide-react"
 import {EmailDetail, EmailListProps} from "@/types"
 import {Cache} from "@/lib/cache"
 import {formatEmailAddressShort, preloadEmails} from "@/lib/client-utils"
+import {CacheSettings, PaginationSettings, PreloadSettings, RefreshSettings} from "@/lib/settings"
 
 export function EmailList({accountId, folder, selectedUid, onEmailSelect}: EmailListProps) {
     const [emails, setEmails] = useState<EmailDetail[]>([])
     const [total, setTotal] = useState(0)
     const [offset, setOffset] = useState(0)
     const [loading, setLoading] = useState(true)
-    const limit = 50
+    const limit = PaginationSettings.defaultLimit
 
     // Preload adjacent emails for faster navigation (client-side optimization)
     useEffect(() => {
-        if (emails.length > 0 && selectedUid) {
+        if (PreloadSettings.enabled && emails.length > 0 && selectedUid) {
             const currentIndex = emails.findIndex(e => e.uid === selectedUid)
             if (currentIndex !== -1) {
                 const preloadUids: number[] = []
 
-                // Preload next 2 emails
-                if (currentIndex < emails.length - 1) {
-                    preloadUids.push(emails[currentIndex + 1].uid)
-                }
-                if (currentIndex < emails.length - 2) {
-                    preloadUids.push(emails[currentIndex + 2].uid)
+                // Preload next emails
+                for (let i = 1; i <= PreloadSettings.nextEmailsCount && currentIndex + i < emails.length; i++) {
+                    preloadUids.push(emails[currentIndex + i].uid)
                 }
 
-                // Preload previous email
-                if (currentIndex > 0) {
-                    preloadUids.push(emails[currentIndex - 1].uid)
+                // Preload previous emails
+                for (let i = 1; i <= PreloadSettings.prevEmailsCount && currentIndex - i >= 0; i++) {
+                    preloadUids.push(emails[currentIndex - i].uid)
                 }
 
                 if (preloadUids.length > 0) {
@@ -98,8 +96,8 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
                     return
                 }
                 const data = await response.json()
-                // Cache for 3 minutes (increased from 2 for better performance)
-                Cache.set(cacheKey, data, 3 * 60 * 1000)
+                // Cache using centralized settings
+                Cache.set(cacheKey, data, CacheSettings.client.emails)
                 setEmails(data.emails)
                 setTotal(data.total)
                 if (isInitialLoad) {
@@ -119,11 +117,11 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
             console.error("Failed to load emails", err)
             setLoading(false)
         })
-        // Background refresh every 120 seconds (reduced frequency for better performance)
+        // Background refresh using centralized settings
         const refreshInterval = setInterval(() => {
             console.log('[EmailList] Background refresh...')
             loadEmails(false).catch(console.error)
-        }, 120000) // 120 seconds
+        }, RefreshSettings.emailList)
         return () => clearInterval(refreshInterval)
     }, [accountId, folder, offset])
     if (loading) {

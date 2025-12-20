@@ -11,6 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {listFolders} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
+import {CacheSettings} from "@/lib/settings"
 
 export async function GET(request: NextRequest, {params}: { params: Promise<{ accountId: string }> }) {
     try {
@@ -55,8 +56,8 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    // Cache folders for 10 minutes with 20 minute stale-while-revalidate
-                    'Cache-Control': 'public, max-age=600, stale-while-revalidate=1200',
+                    // Cache using centralized settings
+                    'Cache-Control': `public, max-age=${CacheSettings.server.foldersMaxAge}, stale-while-revalidate=${CacheSettings.server.foldersSWR}`,
                 },
             },
         )

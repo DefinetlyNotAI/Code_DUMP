@@ -14,6 +14,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {Download, Paperclip} from "lucide-react"
 import {EmailAddress, EmailAttachment, EmailDetail, EmailViewerProps} from "@/types";
 import {Cache} from "@/lib/cache"
+import {formatPlainText} from "@/lib/text-formatter"
 
 export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
     const [email, setEmail] = useState<EmailDetail | null>(null)
@@ -260,7 +261,10 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                 {email.text && (
                     <TabsContent value="text">
                         <Card className="p-6">
-                            <pre className="whitespace-pre-wrap font-sans text-sm">{email.text}</pre>
+                            <div
+                                className="whitespace-pre-wrap font-sans text-sm prose prose-sm max-w-none"
+                                dangerouslySetInnerHTML={{__html: formatPlainText(email.text)}}
+                            />
                         </Card>
                     </TabsContent>
                 )}

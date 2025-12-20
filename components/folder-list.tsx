@@ -12,6 +12,7 @@ import {Archive, Folder, Inbox, Send, Trash2} from "lucide-react"
 import {cn} from "@/lib/ui"
 import {EmailFolder, FolderListProps} from "@/types";
 import {Cache} from "@/lib/cache"
+import {CacheSettings, FolderSettings, RefreshSettings} from "@/lib/settings"
 
 export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderListProps) {
     const [folders, setFolders] = useState<EmailFolder[]>([])
@@ -39,8 +40,8 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
                 setFolders(sortedFolders)
                 setLoading(false)
 
-                // Auto-select Inbox (only once)
-                if (!selectedFolder) {
+                // Auto-select Inbox (only once) if enabled in settings
+                if (FolderSettings.autoSelectInbox && !selectedFolder) {
                     const inbox = sortedFolders.find((f: EmailFolder) =>
                         f.name.toUpperCase() === "INBOX" || f.specialUse === "\\Inbox"
                     )
@@ -77,8 +78,8 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
             const data = await response.json()
             console.log(`[FolderList] Loaded ${data.folders?.length || 0} folders`)
 
-            // Cache the folders for 10 minutes (increased for better performance)
-            Cache.set(cacheKey, data.folders, 10 * 60 * 1000)
+            // Cache using centralized settings
+            Cache.set(cacheKey, data.folders, CacheSettings.client.folders)
 
             // Sort folders: Inbox -> Archive -> Spam -> Drafts -> Sent -> Trash -> Others
             const sortedFolders = sortFolders(data.folders)
@@ -109,11 +110,11 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
             setLoading(false)
         })
 
-        // Background refresh every 180 seconds (reduced frequency for better performance)
+        // Background refresh using centralized settings
         const refreshInterval = setInterval(() => {
             console.log('[FolderList] Background refresh...')
             loadFolders(false).catch(console.error)
-        }, 180000) // 180 seconds
+        }, RefreshSettings.folderList)
 
         return () => clearInterval(refreshInterval)
     }, [accountId])
