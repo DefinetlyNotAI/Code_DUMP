@@ -2,7 +2,7 @@
 
 ## Overview
 
-This email supervision dashboard is designed with security as the highest priority. 
+This email supervision dashboard is designed with security as the highest priority.
 It provides **read-only** access to IMAP mailboxes through a secure web interface.
 
 ## Security Features
@@ -72,6 +72,7 @@ IMAP_CONFIG=
 
 ```javascript
 import bcrypt from 'bcryptjs'
+
 const hash = await bcrypt.hash('your-secure-password', 10)
 console.log(hash)
 ```
@@ -106,9 +107,11 @@ openssl rand -base64 32
 
 ### Open Source
 
-This codebase is designed to be open source. **No secrets are in the code** - all sensitive data must be provided via environment variables.
+This codebase is designed to be open source. **No secrets are in the code** - all sensitive data must be provided via
+environment variables.
 
-> Note that the only reason a Database was not used is to minimize complexity and attack surface. All sensitive data is kept in memory only during runtime.
+> Note that the only reason a Database was not used is to minimize complexity and attack surface. All sensitive data is
+> kept in memory only during runtime.
 > If you require persistent storage, consider adding a secure database layer with encryption.
 
 ### Read-Only by Design
@@ -166,7 +169,8 @@ Adjust in `lib/rate-limit.ts` as needed.
 
 ## Reporting Security Issues
 
-If you discover a security vulnerability, please email the maintainer directly. Do not open public issues for security concerns.
+If you discover a security vulnerability, please email the maintainer directly. Do not open public issues for security
+concerns.
 
 ## License
 
