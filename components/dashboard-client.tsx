@@ -47,7 +47,7 @@ export function DashboardClient() {
             }
         }
 
-        loadAccounts()
+        loadAccounts().catch(console.error)
     }, [])
 
     if (loading) {

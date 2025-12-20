@@ -60,7 +60,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
             }
         }
 
-        loadEmail()
+        loadEmail().catch(console.error)
     }, [accountId, folder, uid])
 
     if (loading) {

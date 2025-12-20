@@ -71,7 +71,7 @@ export function getImapConfig(): ImapConfig {
                 throw new Error(`Invalid account ${account.id}: missing 'imap' configuration`)
             }
 
-            const {host, port, secure, user, password} = account.imap
+            const {host, port, user, password} = account.imap
 
             if (!host) {
                 throw new Error(`Invalid account ${account.id}: missing or invalid 'imap.host'`)
