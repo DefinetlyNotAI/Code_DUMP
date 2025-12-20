@@ -7,25 +7,8 @@
  * - Crashes on invalid configuration (fail-fast principle)
  * - All IMAP operations server-side only
  */
+import {ImapAccount, ImapConfig} from "@/types";
 
-
-export interface ImapCredentials {
-    host: string
-    port: number
-    secure: boolean
-    user: string
-    password: string
-}
-
-export interface ImapAccount {
-    id: string
-    label: string
-    imap: ImapCredentials
-}
-
-export interface ImapConfig {
-    accounts: ImapAccount[]
-}
 
 let cachedConfig: ImapConfig | null = null
 

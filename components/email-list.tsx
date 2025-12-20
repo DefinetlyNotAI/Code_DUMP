@@ -8,26 +8,12 @@
 import {useEffect, useState} from "react"
 import {Button} from "@/components/ui/button"
 import {formatDistanceToNow} from "date-fns"
-import {cn} from "@/lib/utils"
+import {cn} from "@/lib/ui"
 import {ChevronLeft, ChevronRight, Paperclip} from "lucide-react"
-
-interface EmailSummary {
-    uid: number
-    subject?: string
-    from?: Array<{ name?: string; address?: string }>
-    date?: string
-    hasAttachments: boolean
-}
-
-interface EmailListProps {
-    accountId: string
-    folder: string
-    selectedUid?: number
-    onEmailSelect: (uid: number) => void
-}
+import {EmailDetail, EmailListProps} from "@/types";
 
 export function EmailList({accountId, folder, selectedUid, onEmailSelect}: EmailListProps) {
-    const [emails, setEmails] = useState<EmailSummary[]>([])
+    const [emails, setEmails] = useState<EmailDetail[]>([])
     const [total, setTotal] = useState(0)
     const [offset, setOffset] = useState(0)
     const [loading, setLoading] = useState(true)

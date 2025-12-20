@@ -6,14 +6,11 @@
  * - Tracks attempts by IP address
  * - Exponential backoff on repeated failures
  */
+import {RateLimitEntry, RateLimitResult} from "@/types/server";
 
-interface RateLimitEntry {
-    count: number
-    resetAt: number
-    blockedUntil?: number
-}
 
 // In-memory store (use Redis in production for multi-instance deployments)
+// I know it's not ideal, but sufficient for current usage/scope
 const store = new Map<string, RateLimitEntry>()
 
 // Clean up old entries every 10 minutes
@@ -29,12 +26,6 @@ setInterval(
     10 * 60 * 1000,
 )
 
-export interface RateLimitResult {
-    allowed: boolean
-    remaining: number
-    resetAt: number
-    blockedUntil?: number
-}
 
 /**
  * Check rate limit for a given identifier (typically IP address)

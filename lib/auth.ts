@@ -12,6 +12,7 @@
 import {compare} from "bcryptjs"
 import {jwtVerify, SignJWT} from "jose"
 import {cookies} from "next/headers"
+import {SessionData} from "@/types/server";
 
 // Master password hash stored in environment variable
 // Generate with: bcrypt.hash('your-password', 10)
@@ -28,12 +29,6 @@ if (!process.env.SESSION_SECRET) {
 }
 
 const SESSION_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET)
-
-export interface SessionData {
-    authenticated: boolean
-    issuedAt: number
-    expiresAt: number
-}
 
 /**
  * Verify the provided password against the master password hash

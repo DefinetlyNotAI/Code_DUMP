@@ -8,19 +8,8 @@
 import {useEffect, useState} from "react"
 import {Button} from "@/components/ui/button"
 import {Archive, Folder, Inbox, Send, Trash2} from "lucide-react"
-import {cn} from "@/lib/utils"
-
-interface EmailFolder {
-    name: string
-    path: string
-    specialUse?: string
-}
-
-interface FolderListProps {
-    accountId: string
-    selectedFolder: string | null
-    onFolderSelect: (folder: string) => void
-}
+import {cn} from "@/lib/ui"
+import {EmailFolder, FolderListProps} from "@/types";
 
 export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderListProps) {
     const [folders, setFolders] = useState<EmailFolder[]>([])

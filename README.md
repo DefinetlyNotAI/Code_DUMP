@@ -200,7 +200,7 @@ npm start
 │   ├── auth.ts         # Authentication
 │   ├── csrf.ts         # CSRF protection
 │   ├── rate-limit.ts   # Rate limiting
-│   ├── utils.ts        # Utility functions
+│   ├── ui.ts           # UI CN Function
 │   ├── imap-config.ts  # IMAP configuration parsing
 │   └── imap-service.ts # IMAP service
 │

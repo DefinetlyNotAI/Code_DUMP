@@ -12,33 +12,7 @@ import {Badge} from "@/components/ui/badge"
 import {Separator} from "@/components/ui/separator"
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {Paperclip} from "lucide-react"
-
-interface EmailAddress {
-    name?: string
-    address?: string
-}
-
-interface EmailDetail {
-    uid: number
-    subject?: string
-    from?: EmailAddress[]
-    to?: EmailAddress[]
-    cc?: EmailAddress[]
-    date?: string
-    html?: string
-    text?: string
-    attachments: Array<{
-        filename?: string
-        contentType?: string
-        size?: number
-    }>
-}
-
-interface EmailViewerProps {
-    accountId: string
-    folder: string
-    uid: number
-}
+import {EmailAddress, EmailDetail, EmailViewerProps} from "@/types";
 
 export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
     const [email, setEmail] = useState<EmailDetail | null>(null)
@@ -124,9 +98,9 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                     </div>
                 </div>
 
-                {email.attachments.length > 0 && (
+                {email.hasAttachments && (email.attachments ?? []).length > 0 && (
                     <div className="mt-4 flex gap-2 flex-wrap">
-                        {email.attachments.map((att, i) => (
+                        {(email.attachments ?? []).map((att, i) => (
                             <Badge key={i} variant="secondary" className="gap-1">
                                 <Paperclip className="h-3 w-3"/>
                                 {att.filename || "Attachment"}

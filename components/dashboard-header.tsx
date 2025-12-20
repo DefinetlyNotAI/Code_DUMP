@@ -11,17 +11,7 @@ import {useMemo, useState} from "react"
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {fetchWithCsrf} from "@/lib/csrf-client"
-
-interface Account {
-    id: string
-    label: string
-}
-
-interface DashboardHeaderProps {
-    accounts: Account[]
-    selectedAccount: string | null
-    onAccountChange: (accountId: string) => void
-}
+import {DashboardHeaderProps} from "@/types";
 
 export function DashboardHeader({accounts, selectedAccount, onAccountChange}: DashboardHeaderProps) {
     const router = useRouter()
