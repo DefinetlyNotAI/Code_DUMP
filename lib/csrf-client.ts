@@ -25,28 +25,27 @@ export async function getCsrfToken(forceRefresh = false): Promise<string> {
         return cachedToken
     }
 
-    try {
-        const response = await fetch("/api/auth/csrf")
+    const response = await fetch("/api/auth/csrf")
 
-        if (!response.ok) {
-            throw new Error("Failed to get CSRF token")
-        }
-
-        const data = await response.json()
-
-        if (!data.token) {
-            throw new Error("No token in response")
-        }
-
-        // Cache token for 50 minutes (token expires in 60 minutes)
-        cachedToken = data.token
-        tokenExpiry = Date.now() + 50 * 60 * 1000
-
-        return data.token
-    } catch (error) {
+    if (!response.ok) {
+        const error = new Error("Failed to get CSRF token")
         console.error("[CSRF] Failed to get token", error)
         throw error
     }
+
+    const data = await response.json()
+
+    if (!data.token) {
+        const error = new Error("No token in response")
+        console.error("[CSRF] Failed to get token", error)
+        throw error
+    }
+
+    // Cache token for 50 minutes (token expires in 60 minutes)
+    cachedToken = data.token
+    tokenExpiry = Date.now() + 50 * 60 * 1000
+
+    return data.token
 }
 
 /**

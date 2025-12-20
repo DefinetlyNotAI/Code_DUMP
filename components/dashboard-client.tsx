@@ -29,25 +29,32 @@ export function DashboardClient() {
     // Load accounts on mount
     useEffect(() => {
         async function loadAccounts() {
-            try {
-                const response = await fetch("/api/accounts")
-                if (!response.ok) throw new Error("Failed to load accounts")
+            const response = await fetch("/api/accounts")
 
-                const data = await response.json()
-                setAccounts(data.accounts)
-
-                // Auto-select first account
-                if (data.accounts.length > 0) {
-                    setSelectedAccount(data.accounts[0].id)
-                }
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Failed to load accounts")
-            } finally {
+            if (!response.ok) {
+                const error = new Error("Failed to load accounts")
+                setError(error.message)
                 setLoading(false)
+                console.error(error)
+                return
             }
+
+            const data = await response.json()
+            setAccounts(data.accounts)
+
+            // Auto-select first account
+            if (data.accounts.length > 0) {
+                setSelectedAccount(data.accounts[0].id)
+            }
+
+            setLoading(false)
         }
 
-        loadAccounts().catch(console.error)
+        loadAccounts().catch((err) => {
+            setError(err instanceof Error ? err.message : "Failed to load accounts")
+            setLoading(false)
+            console.error(err)
+        })
     }, [])
 
     if (loading) {

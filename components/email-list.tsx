@@ -36,24 +36,28 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
 
     useEffect(() => {
         async function loadEmails() {
-            try {
-                setLoading(true)
-                const response = await fetch(
-                    `/api/accounts/${accountId}/emails?folder=${encodeURIComponent(folder)}&limit=${limit}&offset=${offset}`,
-                )
-                if (!response.ok) throw new Error("Failed to load emails")
+            setLoading(true)
+            const response = await fetch(
+                `/api/accounts/${accountId}/emails?folder=${encodeURIComponent(folder)}&limit=${limit}&offset=${offset}`,
+            )
 
-                const data = await response.json()
-                setEmails(data.emails)
-                setTotal(data.total)
-            } catch (err) {
-                console.error("Failed to load emails", err)
-            } finally {
+            if (!response.ok) {
+                const error = new Error("Failed to load emails")
+                console.error("Failed to load emails", error)
                 setLoading(false)
+                return
             }
+
+            const data = await response.json()
+            setEmails(data.emails)
+            setTotal(data.total)
+            setLoading(false)
         }
 
-        loadEmails().catch(console.error)
+        loadEmails().catch((err) => {
+            console.error("Failed to load emails", err)
+            setLoading(false)
+        })
     }, [accountId, folder, offset])
 
     if (loading) {
@@ -120,7 +124,7 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
                             <div className="flex items-center gap-2">
                                 <span className="text-sm truncate flex-1">{email.subject || "(No subject)"}</span>
                                 {email.hasAttachments &&
-                                    <Paperclip className="h-3 w-3 text-muted-foreground flex-shrink-0"/>}
+                                    <Paperclip className="h-3 w-3 text-muted-foreground shrink-0"/>}
                             </div>
                         </button>
                     )

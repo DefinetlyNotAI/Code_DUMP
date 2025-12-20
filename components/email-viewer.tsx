@@ -46,21 +46,25 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
     useEffect(() => {
         async function loadEmail() {
-            try {
-                setLoading(true)
-                const response = await fetch(`/api/accounts/${accountId}/emails/${uid}?folder=${encodeURIComponent(folder)}`)
-                if (!response.ok) throw new Error("Failed to load email")
+            setLoading(true)
+            const response = await fetch(`/api/accounts/${accountId}/emails/${uid}?folder=${encodeURIComponent(folder)}`)
 
-                const data = await response.json()
-                setEmail(data.email)
-            } catch (err) {
-                console.error("Failed to load email", err)
-            } finally {
+            if (!response.ok) {
+                const error = new Error("Failed to load email")
+                console.error("Failed to load email", error)
                 setLoading(false)
+                return
             }
+
+            const data = await response.json()
+            setEmail(data.email)
+            setLoading(false)
         }
 
-        loadEmail().catch(console.error)
+        loadEmail().catch((err) => {
+            console.error("Failed to load email", err)
+            setLoading(false)
+        })
     }, [accountId, folder, uid])
 
     if (loading) {
