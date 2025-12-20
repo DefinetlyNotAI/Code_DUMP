@@ -53,7 +53,7 @@ export function EmailList({accountId, folder, selectedUid, onEmailSelect}: Email
             }
         }
 
-        loadEmails()
+        loadEmails().catch(console.error)
     }, [accountId, folder, offset])
 
     if (loading) {

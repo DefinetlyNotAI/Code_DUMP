@@ -60,7 +60,7 @@ export function FolderList({accountId, selectedFolder, onFolderSelect}: FolderLi
             }
         }
 
-        loadFolders()
+        loadFolders().catch(console.error)
     }, [accountId])
 
     function getFolderIcon(folder: EmailFolder) {
