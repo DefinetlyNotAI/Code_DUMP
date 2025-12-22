@@ -135,3 +135,48 @@ export async function POST(request: NextRequest) {
         )
     }
 }
+
+export async function GET(request: NextRequest) {
+    try {
+        console.log("[AUTH DEBUG] GET /api/auth/login - Health check started");
+
+        // Extract IP for rate limiting
+        const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+        console.log("[AUTH DEBUG] Client IP:", ip);
+
+        // Check rate limit (simulate same as login)
+        const rateLimit = checkRateLimit(ip, 5, 15 * 60 * 1000, 30 * 60 * 1000);
+        console.log("[AUTH DEBUG] Rate limit check:", {allowed: rateLimit.allowed});
+
+        // CSRF protection simulation (generate dummy request body)
+        const csrfCheck = await requireCsrfProtection(request);
+        if (csrfCheck.error) {
+            console.log("[AUTH DEBUG] Health check CSRF check failed");
+            return NextResponse.json(
+                {status: "error", message: "CSRF protection failed"},
+                {status: 400, headers: {"Content-Type": "application/json"}}
+            );
+        }
+        console.log("[AUTH DEBUG] Health check CSRF passed");
+
+        // Simulate session token creation and cookie setting
+        const token = await createSessionToken();
+        await setSessionCookie(token);
+
+        // Reset rate limit for health check
+        resetRateLimit(ip);
+
+        console.log("[AUTH DEBUG] Health check successful");
+        return NextResponse.json(
+            {status: "ok", message: "Login API is healthy", tokenTest: !!token},
+            {headers: {"Content-Type": "application/json"}}
+        );
+
+    } catch (error) {
+        console.error("[AUTH] Health check error", {error: error instanceof Error ? error.message : "Unknown error"});
+        return NextResponse.json(
+            {status: "error", message: "Health check failed"},
+            {status: 500, headers: {"Content-Type": "application/json"}}
+        );
+    }
+}
