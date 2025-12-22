@@ -148,17 +148,6 @@ export async function GET(request: NextRequest) {
         const rateLimit = checkRateLimit(ip, 5, 15 * 60 * 1000, 30 * 60 * 1000);
         console.log("[AUTH DEBUG] Rate limit check:", {allowed: rateLimit.allowed});
 
-        // CSRF protection simulation (generate dummy request body)
-        const csrfCheck = await requireCsrfProtection(request);
-        if (csrfCheck.error) {
-            console.log("[AUTH DEBUG] Health check CSRF check failed");
-            return NextResponse.json(
-                {status: "error", message: "CSRF protection failed"},
-                {status: 400, headers: {"Content-Type": "application/json"}}
-            );
-        }
-        console.log("[AUTH DEBUG] Health check CSRF passed");
-
         // Simulate session token creation and cookie setting
         const token = await createSessionToken();
         await setSessionCookie(token);
