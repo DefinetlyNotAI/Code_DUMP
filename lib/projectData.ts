@@ -280,38 +280,37 @@ export const projects: Project[] = [
             { path: "/logs", title: "Public Logs", description: "Publicly accessible system logs." },
 
             // User Routes
-            { path: "/user/logs", title: "User Logs", description: "User's private wallet logs (login required)." },
-            { path: "/user/requests", title: "User Requests", description: "View the user's request history (login required)." },
+            // { path: "/user/logs", title: "User Logs", description: "User's private wallet logs (login required)." },
+            // { path: "/user/requests", title: "User Requests", description: "View the user's request history (login required)." },
 
             // API Routes
             // Setup API
-            { path: "/api/setup", title: "Setup API", description: "Initialize bank system (POST)." },
-            { path: "/api/setup/wallet", title: "Create Wallet API", description: "Create a new wallet (POST, admin required)." },
-            { path: "/api/setup/rules", title: "Update Rules API", description: "Update bank rules (POST, admin required)." },
+            // { path: "/api/setup", title: "Setup API", description: "Initialize bank system (POST)." },
+            // { path: "/api/setup/wallet", title: "Create Wallet API", description: "Create a new wallet (POST, admin required)." },
+            // { path: "/api/setup/rules", title: "Update Rules API", description: "Update bank rules (POST, admin required)." },
 
             // Get API
-            { path: "/api/server-health", title: "Server Health API", description: "Get server health metrics (GET)." },
-            { path: "/api/get/wallet", title: "Get Wallet API", description: "Retrieve wallet information (GET)." },
-            { path: "/api/get/leaderboard", title: "Leaderboard API", description: "Retrieve the leaderboard (GET)." },
-            { path: "/api/get/logs", title: "Public Logs API", description: "Retrieve public logs (GET)." },
-            { path: "/api/get/wallet/logs", title: "Wallet Logs API", description: "Get user's wallet logs (GET, login required)." },
-            { path: "/api/get/user/requests", title: "User Requests API", description: "Get user requests (GET, login required)." },
-            { path: "/api/get/walletList", title: "All Wallets API", description: "Get all wallets (GET, admin required)." },
-            { path: "/api/get/requests", title: "All Requests API", description: "Get all pending requests (GET, admin required)." },
+            // { path: "/api/get/health", title: "Server Health API", description: "Get server health metrics (GET)." },
+            // { path: "/api/get/leaderboard", title: "Leaderboard API", description: "Retrieve the leaderboard (GET)." },
+            // { path: "/api/get/logs", title: "Public Logs API", description: "Retrieve public logs (GET)." },
+            // { path: "/api/get/wallet/logs", title: "Wallet Logs API", description: "Get user's wallet logs (GET, login required)." },
+            // { path: "/api/get/user/requests", title: "User Requests API", description: "Get user requests (GET, login required)." },
+            // { path: "/api/get/walletList", title: "All Wallets API", description: "Get all wallets (GET, admin required)." },
+            // { path: "/api/get/requests", title: "All Requests API", description: "Get all pending requests (GET, admin required)." },
             { path: "/api/check-database", title: "Database Check API", description: "Check database connection status (GET)." },
 
             // Request API
-            { path: "/api/request/wallet", title: "Request Wallet API", description: "Request creation of a new wallet (POST)." },
-            { path: "/api/request/refund", title: "Refund Request API", description: "Request a refund (POST, login required)." },
-            { path: "/api/request/resetPassword", title: "Password Reset API", description: "Request password reset (POST, login required)." },
+            // { path: "/api/request/wallet", title: "Request Wallet API", description: "Request creation of a new wallet (POST)." },
+            // { path: "/api/request/refund", title: "Refund Request API", description: "Request a refund (POST, login required)." },
+            // { path: "/api/request/resetPassword", title: "Password Reset API", description: "Request password reset (POST, login required)." },
 
             // Transfer API
-            { path: "/api/transfer/bank", title: "Bank Transfer API", description: "Execute a bank transfer (POST, admin required)." },
+            // { path: "/api/transfer/bank", title: "Bank Transfer API", description: "Execute a bank transfer (POST, admin required)." },
 
             // Admin API
-            { path: "/api/admin/burnWallet", title: "Burn Wallet API", description: "Delete a wallet permanently (POST, admin required)." },
-            { path: "/api/admin/freezeWallet", title: "Freeze Wallet API", description: "Freeze a wallet to prevent transactions (POST, admin required)." },
-            { path: "/api/admin/unfreezeWallet", title: "Unfreeze Wallet API", description: "Unfreeze a wallet (POST, admin required)." }
+            // { path: "/api/admin/burnWallet", title: "Burn Wallet API", description: "Delete a wallet permanently (POST, admin required)." },
+            // { path: "/api/admin/freezeWallet", title: "Freeze Wallet API", description: "Freeze a wallet to prevent transactions (POST, admin required)." },
+            // { path: "/api/admin/unfreezeWallet", title: "Unfreeze Wallet API", description: "Unfreeze a wallet (POST, admin required)." }
         ]
     }
 ]
