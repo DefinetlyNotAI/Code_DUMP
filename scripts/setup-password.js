@@ -111,6 +111,9 @@ async function main() {
         // Read current .env file
         let envContent = fs.readFileSync(envPath, 'utf8');
 
+        // Escape backslashes and $ characters to prevent unintended interpolation in .env files
+        const escapedHash = hash.replace(/\\/g, '\\\\').replace(/\$/g, '\\$');
+
         // Replace the hash line
         const hashRegex = /^MASTER_PASSWORD_BCRYPT_HASH=.*/m;
         if (hashRegex.test(envContent)) {
