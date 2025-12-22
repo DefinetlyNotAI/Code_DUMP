@@ -39,11 +39,14 @@ export function DashboardHeader({accounts, selectedAccount, onAccountChange, dis
     }
 
     return (
-        <header className="h-16 border-b bg-background flex items-center justify-between px-6">
-            <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-primary"/>
-                    <h1 className="text-lg font-semibold">Email Supervision Dashboard</h1>
+        <header className="h-16 border-b bg-background flex items-center justify-between px-4 md:px-6">
+            <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                <div className="flex items-center gap-2 min-w-0">
+                    <Shield className="h-5 w-5 text-primary shrink-0"/>
+                    <h1 className="text-sm md:text-lg font-semibold truncate">
+                        <span className="hidden sm:inline">Email Supervision Dashboard</span>
+                        <span className="sm:hidden">Email Dashboard</span>
+                    </h1>
                 </div>
 
                 {accounts.length > 0 && (
@@ -55,10 +58,10 @@ export function DashboardHeader({accounts, selectedAccount, onAccountChange, dis
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
-                                className="w-70 justify-start bg-transparent"
+                                className="w-auto md:w-70 justify-start bg-transparent min-w-0 hidden sm:flex"
                                 disabled={disabled}
                             >
-                                <Search className="h-4 w-4 mr-2 text-muted-foreground"/>
+                                <Search className="h-4 w-4 mr-2 text-muted-foreground shrink-0"/>
                                 <span className="truncate">
                                     {disabled ? 'Loading...' : selectedLabel}
                                 </span>
@@ -93,9 +96,9 @@ export function DashboardHeader({accounts, selectedAccount, onAccountChange, dis
                 )}
             </div>
 
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="h-4 w-4 mr-2"/>
-                Logout
+            <Button variant="outline" size="sm" onClick={handleLogout} className="shrink-0">
+                <LogOut className="h-4 w-4 md:mr-2"/>
+                <span className="hidden md:inline">Logout</span>
             </Button>
         </header>
     )

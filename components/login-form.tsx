@@ -66,17 +66,17 @@ export default function LoginForm() {
     }
 
     return (
-        <Card className="w-full max-w-md">
-            <CardHeader className="space-y-1 text-center">
+        <Card className="w-full max-w-md mx-4">
+            <CardHeader className="space-y-1 text-center px-4 md:px-6">
                 <div className="flex justify-center mb-4">
                     <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
                         <Shield className="h-6 w-6 text-primary-foreground"/>
                     </div>
                 </div>
-                <CardTitle className="text-2xl font-bold">Email Supervision Dashboard</CardTitle>
-                <CardDescription>Enter the master password to access the system</CardDescription>
+                <CardTitle className="text-xl md:text-2xl font-bold">Email Supervision Dashboard</CardTitle>
+                <CardDescription className="text-sm">Enter the master password to access the system</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 md:px-6">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Hidden username field for accessibility and password managers */}
                     <input
@@ -106,7 +106,7 @@ export default function LoginForm() {
 
                     {error && (
                         <Alert variant="destructive">
-                            <AlertDescription>{error}</AlertDescription>
+                            <AlertDescription className="text-sm">{error}</AlertDescription>
                         </Alert>
                     )}
 
@@ -115,7 +115,7 @@ export default function LoginForm() {
                     </Button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-muted-foreground">
+                <div className="mt-6 text-center text-xs md:text-sm text-muted-foreground">
                     <p>This is a secure internal system.</p>
                     <p>All access attempts are logged.</p>
                 </div>

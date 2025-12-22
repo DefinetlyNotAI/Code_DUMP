@@ -11,10 +11,11 @@ import {EmailList} from "./email-list"
 import {EmailViewer} from "./email-viewer"
 import {DashboardHeader} from "./dashboard-header"
 import {Alert, AlertDescription} from "@/components/ui/alert"
-import {AlertCircle} from "lucide-react"
+import {AlertCircle, ArrowLeft, FileText, Folder, Mail} from "lucide-react"
 import {Account} from "@/types";
 import {Cache} from "@/lib/cache"
 import {UISettings} from "@/lib/settings"
+import {Button} from "@/components/ui/button"
 
 export function DashboardClient() {
     const [accounts, setAccounts] = useState<Account[]>([])
@@ -25,6 +26,8 @@ export function DashboardClient() {
     const [error, setError] = useState<string | null>(null)
     const [switchingAccount, setSwitchingAccount] = useState(false)
     const [foldersLoaded, setFoldersLoaded] = useState(false)
+    // Mobile view state: 'folders' | 'emails' | 'viewer'
+    const [mobileView, setMobileView] = useState<'folders' | 'emails' | 'viewer'>('folders')
 
     // Handle account change with loading state
     const handleAccountChange = (accountId: string) => {
@@ -152,9 +155,47 @@ export function DashboardClient() {
                 disabled={switchingAccount}
             />
 
-            <div className="flex h-[calc(100vh-4rem)]">
+            {/* Mobile Navigation */}
+            <div className="md:hidden border-b bg-background">
+                <div className="flex items-center">
+                    <button
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 border-r transition-colors ${
+                            mobileView === 'folders' ? 'bg-muted text-foreground' : 'text-muted-foreground'
+                        }`}
+                        onClick={() => setMobileView('folders')}
+                    >
+                        <Folder className="h-4 w-4"/>
+                        <span className="text-sm font-medium">Folders</span>
+                    </button>
+                    <button
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 border-r transition-colors ${
+                            mobileView === 'emails' ? 'bg-muted text-foreground' : 'text-muted-foreground'
+                        }`}
+                        onClick={() => setMobileView('emails')}
+                        disabled={!selectedFolder}
+                    >
+                        <Mail className="h-4 w-4"/>
+                        <span className="text-sm font-medium">Emails</span>
+                    </button>
+                    <button
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 transition-colors ${
+                            mobileView === 'viewer' ? 'bg-muted text-foreground' : 'text-muted-foreground'
+                        }`}
+                        onClick={() => setMobileView('viewer')}
+                        disabled={!selectedEmail}
+                    >
+                        <FileText className="h-4 w-4"/>
+                        <span className="text-sm font-medium">View</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* Desktop: 3-column layout, Mobile: single column based on mobileView */}
+            <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-4rem)]">
                 {/* Folder sidebar */}
-                <div className="border-r bg-muted/30 overflow-y-auto" style={{width: `${UISettings.sidebarWidth}px`}}>
+                <div className={`border-r bg-muted/30 overflow-y-auto ${
+                    mobileView === 'folders' ? 'w-full md:w-auto' : 'hidden md:block'
+                }`} style={{width: mobileView === 'folders' ? '100%' : `${UISettings.sidebarWidth}px`}}>
                     {selectedAccount && (
                         <FolderList
                             accountId={selectedAccount}
@@ -166,6 +207,7 @@ export function DashboardClient() {
                                 }
                                 setSelectedFolder(folder)
                                 setSelectedEmail(null)
+                                setMobileView('emails') // Switch to emails view on mobile
                             }}
                             onLoadingComplete={() => setFoldersLoaded(true)}
                         />
@@ -173,23 +215,48 @@ export function DashboardClient() {
                 </div>
 
                 {/* Email list */}
-                <div className="border-r bg-background overflow-y-auto"
-                     style={{width: `${UISettings.emailListWidth}px`}}>
+                <div className={`border-r bg-background overflow-y-auto ${
+                    mobileView === 'emails' ? 'w-full md:w-auto' : 'hidden md:block'
+                }`} style={{width: mobileView === 'emails' ? '100%' : `${UISettings.emailListWidth}px`}}>
                     {selectedAccount && selectedFolder && (
-                        <EmailList
-                            accountId={selectedAccount}
-                            folder={selectedFolder}
-                            selectedUid={selectedEmail?.uid}
-                            onEmailSelect={(uid) => setSelectedEmail({uid, folder: selectedFolder})}
-                        />
+                        <>
+                            {/* Mobile back button */}
+                            <div className="md:hidden border-b p-2 flex items-center gap-2">
+                                <Button variant="ghost" size="sm" onClick={() => setMobileView('folders')}>
+                                    <ArrowLeft className="h-4 w-4 mr-2"/>
+                                    Back to Folders
+                                </Button>
+                            </div>
+                            <EmailList
+                                accountId={selectedAccount}
+                                folder={selectedFolder}
+                                selectedUid={selectedEmail?.uid}
+                                onEmailSelect={(uid) => {
+                                    setSelectedEmail({uid, folder: selectedFolder})
+                                    setMobileView('viewer') // Switch to viewer on mobile
+                                }}
+                            />
+                        </>
                     )}
                 </div>
 
                 {/* Email viewer */}
-                <div className="flex-1 overflow-y-auto bg-background">
+                <div className={`flex-1 overflow-y-auto bg-background ${
+                    mobileView === 'viewer' ? 'w-full' : 'hidden md:block'
+                }`}>
                     {selectedEmail ? (
-                        <EmailViewer accountId={selectedAccount!} folder={selectedEmail.folder}
-                                     uid={selectedEmail.uid}/>
+                        <>
+                            {/* Mobile back button */}
+                            <div
+                                className="md:hidden border-b p-2 flex items-center gap-2 sticky top-0 bg-background z-10">
+                                <Button variant="ghost" size="sm" onClick={() => setMobileView('emails')}>
+                                    <ArrowLeft className="h-4 w-4 mr-2"/>
+                                    Back to Emails
+                                </Button>
+                            </div>
+                            <EmailViewer accountId={selectedAccount!} folder={selectedEmail.folder}
+                                         uid={selectedEmail.uid}/>
+                        </>
                     ) : (
                         <div className="h-full flex items-center justify-center text-muted-foreground">
                             <p>Select an email to view</p>

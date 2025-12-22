@@ -172,28 +172,29 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold mb-4">{email.subject || "(No subject)"}</h1>
+        <div className="p-4 md:p-6 max-w-4xl mx-auto">
+            <div className="mb-4 md:mb-6">
+                <h1 className="text-lg md:text-2xl font-bold mb-3 md:mb-4 wrap-break-word">{email.subject || "(No subject)"}</h1>
 
                 <div className="space-y-2 text-sm">
                     <div className="flex gap-2">
-                        <span className="text-muted-foreground w-16">From:</span>
-                        <span className="font-medium">{formatAddress(email.from)}</span>
+                        <span className="text-muted-foreground w-14 md:w-16 shrink-0">From:</span>
+                        <span className="font-medium wrap-break-word">{formatAddress(email.from)}</span>
                     </div>
                     <div className="flex gap-2">
-                        <span className="text-muted-foreground w-16">To:</span>
-                        <span>{formatAddress(email.to)}</span>
+                        <span className="text-muted-foreground w-14 md:w-16 shrink-0">To:</span>
+                        <span className="wrap-break-word">{formatAddress(email.to)}</span>
                     </div>
                     {email.cc && email.cc.length > 0 && (
                         <div className="flex gap-2">
-                            <span className="text-muted-foreground w-16">CC:</span>
-                            <span>{formatAddress(email.cc)}</span>
+                            <span className="text-muted-foreground w-14 md:w-16 shrink-0">CC:</span>
+                            <span className="wrap-break-word">{formatAddress(email.cc)}</span>
                         </div>
                     )}
                     <div className="flex gap-2">
-                        <span className="text-muted-foreground w-16">Date:</span>
-                        <span>{email.date ? format(new Date(email.date), EmailDisplaySettings.dateFormat) : "Unknown"}</span>
+                        <span className="text-muted-foreground w-14 md:w-16 shrink-0">Date:</span>
+                        <span
+                            className="wrap-break-word">{email.date ? format(new Date(email.date), EmailDisplaySettings.dateFormat) : "Unknown"}</span>
                     </div>
                 </div>
 
@@ -204,11 +205,11 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                                 key={i}
                                 variant="secondary"
                                 size="sm"
-                                className="gap-2"
+                                className="gap-2 text-xs md:text-sm"
                                 onClick={() => downloadAttachment(att)}
                             >
                                 <Paperclip className="h-3 w-3"/>
-                                <span>{att.filename || "Attachment"}</span>
+                                <span className="truncate max-w-30 md:max-w-none">{att.filename || "Attachment"}</span>
                                 {att.size && <span className="text-xs">({(att.size / 1024).toFixed(1)} KB)</span>}
                                 <Download className="h-3 w-3 ml-1"/>
                             </Button>
@@ -217,21 +218,21 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                 )}
             </div>
 
-            <Separator className="my-6"/>
+            <Separator className="my-4 md:my-6"/>
 
             <Tabs defaultValue={defaultTab}>
                 {email.html && email.text && (
-                    <TabsList className="mb-4">
-                        <TabsTrigger value="html">HTML</TabsTrigger>
-                        <TabsTrigger value="text">Plain Text</TabsTrigger>
+                    <TabsList className="mb-4 w-full md:w-auto">
+                        <TabsTrigger value="html" className="flex-1 md:flex-none">HTML</TabsTrigger>
+                        <TabsTrigger value="text" className="flex-1 md:flex-none">Plain Text</TabsTrigger>
                     </TabsList>
                 )}
 
                 {email.html && (
                     <TabsContent value="html">
-                        <Card className="p-6">
+                        <Card className="p-4 md:p-6">
                             <div
-                                className="prose prose-sm max-w-none email-content"
+                                className="prose prose-sm max-w-none email-content overflow-x-auto"
                                 dangerouslySetInnerHTML={{__html: email.html}}
                                 style={{
                                     whiteSpace: 'pre-wrap',
@@ -241,6 +242,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                             <style jsx>{`
                                 .email-content :global(*) {
                                     color: inherit !important;
+                                    max-width: 100% !important;
                                 }
 
                                 .email-content :global(a) {
@@ -259,6 +261,17 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                                 .email-content :global([style*="color: #ffffff"]) {
                                     color: inherit !important;
                                 }
+
+                                .email-content :global(img) {
+                                    max-width: 100% !important;
+                                    height: auto !important;
+                                }
+
+                                .email-content :global(table) {
+                                    max-width: 100% !important;
+                                    overflow-x: auto !important;
+                                    display: block !important;
+                                }
                             `}</style>
                         </Card>
                     </TabsContent>
@@ -266,9 +279,9 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
                 {email.text && (
                     <TabsContent value="text">
-                        <Card className="p-6">
+                        <Card className="p-4 md:p-6">
                             <div
-                                className="whitespace-pre-wrap font-sans text-sm prose prose-sm max-w-none"
+                                className="whitespace-pre-wrap font-sans text-sm prose prose-sm max-w-none overflow-x-auto"
                                 dangerouslySetInnerHTML={{__html: formatPlainText(email.text)}}
                             />
                         </Card>
