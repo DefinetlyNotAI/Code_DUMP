@@ -41,14 +41,14 @@ export async function POST(request: NextRequest) {
             const willLog = ![401, 403, 405].includes(response.status)
             if (willLog) {
                 try {
-                    console.log(`[API] report: inserting log for ${projectSlug}${routePath} status=${response.status} responseTime=${responseTime}`)
+                    console.log('[API] report: inserting log for', projectSlug + routePath, 'status=', response.status, 'responseTime=', responseTime)
                     await insertStatusLog(projectSlug, routePath, response.status, responseTime)
-                    console.log(`[API] report: insert successful for ${projectSlug}${routePath}`)
+                    console.log('[API] report: insert successful for', projectSlug + routePath)
                 } catch (e) {
-                    console.error(`[API] report: insert failed for ${projectSlug}${routePath}:`, e)
+                    console.error('[API] report: insert failed for', projectSlug + routePath, ':', e)
                 }
             } else {
-                console.log(`[API] report: skipping insert for ${projectSlug}${routePath} status=${response.status}`)
+                console.log('[API] report: skipping insert for', projectSlug + routePath, 'status=', response.status)
             }
 
             const result: any = {
@@ -92,9 +92,9 @@ export async function POST(request: NextRequest) {
 
             try {
                 await insertStatusLog(projectSlug, routePath, 0, responseTime)
-                console.log(`[API] report: insert error-log successful for ${projectSlug}${routePath} responseTime=${responseTime}`)
+                console.log('[API] report: insert error-log successful for', projectSlug + routePath, 'responseTime=', responseTime)
             } catch (e) {
-                console.error(`[API] report: failed to insert error-log for ${projectSlug}${routePath}:`, e)
+                console.error('[API] report: failed to insert error-log for', projectSlug + routePath, ':', e)
             }
 
             return NextResponse.json({
