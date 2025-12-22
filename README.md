@@ -23,7 +23,7 @@ documentation.
 - No credentials exposed to client
 - Rate limiting on all endpoints
 - Comprehensive security headers
-- HTML sanitization with DOMPurify
+- HTML sanitization with sanitize-html
 - CSRF protection for state changes
 
 ## Quick Start
@@ -196,7 +196,7 @@ npm start
 - **Framework**: Next.js 16 (App Router)
 - **Authentication**: bcryptjs + JWT
 - **IMAP**: node-imap + mailparser
-- **Sanitization**: isomorphic-dompurify
+- **Sanitization**: sanitize-html
 - **UI**: React + Tailwind CSS + shadcn/ui
 - **TypeScript**: Full type safety
 

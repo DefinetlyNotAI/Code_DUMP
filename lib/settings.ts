@@ -291,7 +291,7 @@ export const EmailDisplaySettings = {
      * - Users can manually toggle between views if both exist
      *
      * Considerations:
-     * - HTML: Better visual experience, potential XSS risks (mitigated by DOMPurify)
+     * - HTML: Better visual experience, potential XSS risks (mitigated by sanitize-html)
      * - Text: Faster rendering, better for accessibility, more private
      */
     defaultView: 'html' as 'html' | 'text',

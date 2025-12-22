@@ -13,7 +13,7 @@
 import Imap from "imap"
 import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
-import DOMPurify from "isomorphic-dompurify"
+import sanitizeHtml from "sanitize-html"
 import {EmailCount, EmailDetail, EmailFolder, GetAttachmentParams, GetEmailParams, ListEmailsParams} from "@/types";
 import {FolderSettings, ImapSettings} from "./settings"
 
@@ -336,8 +336,8 @@ export async function getEmail(params: GetEmailParams): Promise<EmailDetail | nu
                         if (attributes && parsed) {
                             // Sanitize HTML to prevent XSS
                             const sanitizedHtml = parsed.html
-                                ? DOMPurify.sanitize(parsed.html, {
-                                    ALLOWED_TAGS: [
+                                ? sanitizeHtml(parsed.html, {
+                                    allowedTags: [
                                         "p",
                                         "br",
                                         "strong",
@@ -357,7 +357,17 @@ export async function getEmail(params: GetEmailParams): Promise<EmailDetail | nu
                                         "tr",
                                         "td",
                                         "th",
+                                        "tbody",
+                                        "thead",
+                                        "span",
+                                        "div",
+                                        "img",
                                     ],
+                                    allowedAttributes: {
+                                        'a': ['href', 'name', 'target'],
+                                        'img': ['src', 'alt', 'title', 'width', 'height'],
+                                    },
+                                    allowedSchemes: ['http', 'https', 'mailto'],
                                 })
                                 : undefined
 
