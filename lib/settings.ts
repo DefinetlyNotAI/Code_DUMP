@@ -198,11 +198,11 @@ export const ImapSettings = {
     /** IMAP connection timeout (in milliseconds) */
     connectionTimeout: 30 * 1000, // 30 seconds
 
+    /** IMAP authentication timeout (in milliseconds) */
+    authTimeout: 10 * 1000, // 10 seconds,
+
     /** Keep IMAP connection alive */
     keepAlive: false, // Serverless-compatible
-
-    /** Enable IMAP debug logging */
-    debug: false,
 
     /** Auto-close IMAP connections after use */
     autoClose: true,
@@ -230,45 +230,6 @@ export const UISettings = {
 
     /** Compact mode (smaller UI elements) */
     compactMode: false,
-}
-
-// ============================================================================
-// PERFORMANCE SETTINGS
-// ============================================================================
-
-export const PerformanceSettings = {
-    /** Enable virtual scrolling for large lists */
-    virtualScrolling: false,
-
-    /** Debounce delay for search (in milliseconds) */
-    searchDebounce: 300,
-
-    /** Throttle delay for scroll events (in milliseconds) */
-    scrollThrottle: 100,
-
-    /** Enable request batching */
-    requestBatching: false,
-
-    /** Maximum concurrent IMAP connections */
-    maxConcurrentConnections: 3,
-}
-
-// ============================================================================
-// ATTACHMENT SETTINGS
-// ============================================================================
-
-export const AttachmentSettings = {
-    /** Maximum attachment size to display inline (in bytes) */
-    maxInlineSize: 10 * 1024 * 1024, // 10 MB
-
-    /** Supported image types for inline display */
-    inlineImageTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-
-    /** Enable attachment preview */
-    enablePreview: true,
-
-    /** Download attachments in chunks */
-    chunkedDownload: true,
 }
 
 // ============================================================================
@@ -328,23 +289,6 @@ export const LoggingSettings = {
     logCache: true,
 }
 
-// ============================================================================
-// EXPERIMENTAL FEATURES
-// ============================================================================
-
-export const ExperimentalSettings = {
-    /** Enable service worker for offline support */
-    serviceWorker: false,
-
-    /** Enable WebSocket for real-time updates */
-    webSocket: false,
-
-    /** Enable push notifications */
-    pushNotifications: false,
-
-    /** Enable PWA installation */
-    pwa: false,
-}
 
 // ============================================================================
 // HELPER FUNCTIONS

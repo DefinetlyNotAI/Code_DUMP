@@ -13,6 +13,7 @@ import bcrypt from "bcryptjs"
 import {jwtVerify, SignJWT} from "jose"
 import {cookies} from "next/headers"
 import {SessionData} from "@/types/server";
+import {SecuritySettings} from "@/lib/settings";
 
 // Master password hash stored in environment variable
 // Generate with: bcrypt.hash('your-password', 10)
@@ -40,27 +41,25 @@ const SESSION_SECRET = process.env.SESSION_SECRET
  * Never logs the password or hash
  */
 export async function verifyMasterPassword(password: string): Promise<boolean> {
-    /*
     console.log("[AUTH DEBUG] verifyMasterPassword called")
     console.log("[AUTH DEBUG] Password received:", {
         type: typeof password,
         length: password?.length,
         trimmedLength: password?.trim().length,
     })
-    */
+
 
     if (!validateEnvironment() || !MASTER_PASSWORD_BCRYPT_HASH) {
         console.error("[AUTH] Environment validation failed")
         throw new Error("Environment not properly configured")
     }
 
-    /*
     console.log("[AUTH DEBUG] Environment hash exists:", !!MASTER_PASSWORD_BCRYPT_HASH)
     console.log("[AUTH DEBUG] Hash starts with $2:", MASTER_PASSWORD_BCRYPT_HASH?.startsWith('$2'))
     console.log("[AUTH DEBUG] Hash length:", MASTER_PASSWORD_BCRYPT_HASH?.length)
     console.log("[AUTH DEBUG] Hash first 10 chars:", MASTER_PASSWORD_BCRYPT_HASH?.substring(0, 10))
     console.log("[AUTH DEBUG] Hash last 10 chars:", MASTER_PASSWORD_BCRYPT_HASH?.substring(MASTER_PASSWORD_BCRYPT_HASH.length - 10))
-    */
+
     const result = await bcrypt.compare(password, MASTER_PASSWORD_BCRYPT_HASH)
     console.log("[AUTH] bcrypt.compare result:", result)
 
@@ -69,7 +68,7 @@ export async function verifyMasterPassword(password: string): Promise<boolean> {
 
 /**
  * Create a new session token with JWT
- * Tokens expire after 8 hours
+ * Tokens expire after set timeout
  */
 export async function createSessionToken(): Promise<string> {
     if (!validateEnvironment() || !SESSION_SECRET) {
@@ -77,7 +76,7 @@ export async function createSessionToken(): Promise<string> {
     }
 
     const issuedAt = Date.now()
-    const expiresAt = issuedAt + 8 * 60 * 60 * 1000 // 8 hours
+    const expiresAt = issuedAt + SecuritySettings.sessionTimeout
 
     return await new SignJWT({
         authenticated: true,
@@ -119,7 +118,7 @@ export async function setSessionCookie(token: string): Promise<void> {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 8 * 60 * 60, // 8 hours
+        maxAge: SecuritySettings.sessionTimeout, // 8 hours
         path: "/",
     })
 }

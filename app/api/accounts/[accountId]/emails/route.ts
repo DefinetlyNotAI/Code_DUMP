@@ -11,7 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {listEmails} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
-import {CacheSettings} from "@/lib/settings"
+import {CacheSettings, PaginationSettings, RateLimitSettings} from "@/lib/settings"
 
 // Force Node.js runtime (required for cookies())
 export const runtime = 'nodejs'
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
 
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
-        const rateLimit = checkRateLimit(`emails:${ip}`, 20, 60 * 1000) // 20 per minute
+        const rateLimit = checkRateLimit(`emails:${ip}`, RateLimitSettings.emailsLimit, RateLimitSettings.windowMs)
 
         if (!rateLimit.allowed) {
             return NextResponse.json(
@@ -59,7 +59,10 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         // Parse query params
         const searchParams = request.nextUrl.searchParams
         const folder = searchParams.get("folder")
-        const limit = Math.min(Number.parseInt(searchParams.get("limit") || "50", 10), 100) // Max 100
+        const limit = Math.min(
+            Number.parseInt(searchParams.get("limit") || String(PaginationSettings.defaultLimit), 10),
+            PaginationSettings.maxLimit
+        )
         const offset = Number.parseInt(searchParams.get("offset") || "0", 10)
 
         if (!folder) {

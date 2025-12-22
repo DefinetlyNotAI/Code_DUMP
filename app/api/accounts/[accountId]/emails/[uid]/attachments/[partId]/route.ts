@@ -10,6 +10,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {getAttachment} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
+import {RateLimitSettings} from "@/lib/settings"
 
 // Force Node.js runtime
 export const runtime = 'nodejs'
@@ -34,7 +35,7 @@ export async function GET(
 
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
-        const rateLimit = checkRateLimit(`attachment:${ip}`, 10, 60 * 1000) // 10 per minute
+        const rateLimit = checkRateLimit(`attachment:${ip}`, RateLimitSettings.attachmentsLimit, RateLimitSettings.windowMs)
 
         if (!rateLimit.allowed) {
             return NextResponse.json(
