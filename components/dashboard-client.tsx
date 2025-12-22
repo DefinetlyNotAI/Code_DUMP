@@ -33,6 +33,16 @@ export function DashboardClient() {
         }
 
         console.log('[Dashboard] Switching to account:', accountId)
+
+        // Clear cache for the previous account's folders and emails
+        if (selectedAccount) {
+            // Remove folders cache for previous account
+            Cache.remove(`folders:${selectedAccount}`)
+
+            // Remove all email-related cache for previous account
+            Cache.removeByPrefix(`emails:${selectedAccount}:`)
+        }
+
         setSwitchingAccount(true)
         setFoldersLoaded(false)
         setSelectedAccount(accountId)
@@ -149,6 +159,10 @@ export function DashboardClient() {
                             accountId={selectedAccount}
                             selectedFolder={selectedFolder}
                             onFolderSelect={(folder) => {
+                                // Clear cache for the previous folder's emails when switching
+                                if (selectedFolder && selectedAccount) {
+                                    Cache.removeByPrefix(`emails:${selectedAccount}:${selectedFolder}:`)
+                                }
                                 setSelectedFolder(folder)
                                 setSelectedEmail(null)
                             }}

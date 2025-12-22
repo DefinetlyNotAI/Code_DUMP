@@ -12,6 +12,7 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandL
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {fetchWithCsrf} from "@/lib/csrf-client"
 import {DashboardHeaderProps} from "@/types";
+import {Cache} from "@/lib/cache"
 
 export function DashboardHeader({accounts, selectedAccount, onAccountChange, disabled = false}: DashboardHeaderProps) {
     const router = useRouter()
@@ -26,6 +27,9 @@ export function DashboardHeader({accounts, selectedAccount, onAccountChange, dis
             await fetchWithCsrf("/api/auth/logout", {
                 method: "POST",
             })
+
+            // Clear all cached data on logout
+            Cache.clear()
 
             router.push("/login")
             router.refresh()
