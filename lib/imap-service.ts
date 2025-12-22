@@ -14,7 +14,7 @@ import Imap from "imap"
 import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
 import DOMPurify from "isomorphic-dompurify"
-import {EmailCount, EmailDetail, EmailFolder} from "@/types";
+import {EmailCount, EmailDetail, EmailFolder, GetAttachmentParams, GetEmailParams, ListEmailsParams} from "@/types";
 import {FolderSettings} from "./settings"
 
 /**
@@ -189,11 +189,8 @@ export async function listFolders(accountId: string): Promise<EmailFolder[]> {
  * List emails in a folder with pagination
  * Returns emails in reverse chronological order (newest first)
  */
-export async function listEmails(
-    accountId: string,
-    folderPath: string,
-    options: { limit?: number; offset?: number } = {},
-): Promise<EmailCount> {
+export async function listEmails(params: ListEmailsParams): Promise<EmailCount> {
+    const {accountId, folderPath, options = {}} = params
     let imap: Imap | null = null
 
     try {
@@ -307,7 +304,8 @@ export async function listEmails(
 /**
  * Get full email details including body
  */
-export async function getEmail(accountId: string, folderPath: string, uid: number): Promise<EmailDetail | null> {
+export async function getEmail(params: GetEmailParams): Promise<EmailDetail | null> {
+    const {accountId, folderPath, uid} = params
     let imap: Imap | null = null
 
     try {
@@ -436,12 +434,11 @@ export async function getEmail(accountId: string, folderPath: string, uid: numbe
  * Get email attachment
  * Returns the decoded attachment content from the parsed email
  */
-export async function getAttachment(
-    accountId: string,
-    folderPath: string,
-    uid: number,
-    partId: string
-): Promise<{ content: Buffer; contentType: string } | null> {
+export async function getAttachment(params: GetAttachmentParams): Promise<{
+    content: Buffer;
+    contentType: string
+} | null> {
+    const {accountId, folderPath, uid, partId} = params
     let imap: Imap | null = null
 
     try {

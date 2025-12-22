@@ -64,7 +64,12 @@ export async function GET(
         }
 
         // Get attachment
-        const attachment = await getAttachment(accountId, folder, uidNum, partId)
+        const attachment = await getAttachment({
+            accountId,
+            folderPath: folder,
+            uid: uidNum,
+            partId
+        })
 
         if (!attachment) {
             return NextResponse.json(
