@@ -1,9 +1,11 @@
 import {notFound} from "next/navigation"
 import Link from "next/link"
-import {projects} from "@/lib/projects-data"
+import {projects} from "@/lib/projectData"
 import {getRouteStatus} from "@/lib/utils"
 import {Button} from "@/components/ui/button"
 import {CollapsibleRoute} from "@/components/collapsible-route"
+import AutoChecker from "@/components/auto-checker"
+import DevControls from "@/components/dev-controls"
 import {ArrowLeft, ExternalLink} from "lucide-react"
 
 interface ProjectPageProps {
@@ -43,10 +45,16 @@ export default async function ProjectPage({params}: ProjectPageProps) {
                             </a>
                         </Button>
                     </div>
+
+                    {/* Dev-only controls (Delete all / Check All) */}
+                    <DevControls projectSlug={projectSlug} routes={project.routes.map((r) => r.path)} />
                 </div>
             </header>
 
             <main className="container mx-auto px-4 py-8">
+                {/* Auto-checker runs client-side when lastChecked >= 45 minutes */}
+                <AutoChecker routes={routeStatuses.map((r) => ({projectSlug, path: r.path, lastChecked: r.lastChecked ? new Date(r.lastChecked).toISOString() : null}))} />
+
                 <div className="space-y-4">
                     {routeStatuses.map((route) => (
                         <CollapsibleRoute key={route.path} route={route} projectSlug={projectSlug}/>

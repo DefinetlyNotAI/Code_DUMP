@@ -13,6 +13,9 @@ interface ManualCheckButtonProps {
 }
 
 export function ManualCheckButton({projectSlug, routePath, onClick}: ManualCheckButtonProps) {
+    // Remove manual check buttons in production builds
+    if (process.env.NODE_ENV === "production") return null
+
     const [loading, setLoading] = useState(false)
     const {toast} = useToast()
 
@@ -31,17 +34,39 @@ export function ManualCheckButton({projectSlug, routePath, onClick}: ManualCheck
 
             const data = await response.json()
 
-            if (data.result?.success) {
+            // If server returned a helpful message (e.g., auth/method guidance), show it
+            if (data.message && data.help) {
+                toast({
+                    title: data.message,
+                    description: data.help,
+                    variant: "destructive",
+                })
+            } else if (data.result?.success) {
                 toast({
                     title: "Check Completed",
                     description: `Response time: ${data.result.responseTime}ms (Status: ${data.result.statusCode})`,
                 })
             } else {
-                toast({
-                    title: "Check Failed",
-                    description: data.result?.error || "Unable to reach the endpoint",
-                    variant: "destructive",
-                })
+                // Non-2xx site status (404/500/405 etc.)
+                if (data.result?.redirected) {
+                    toast({
+                        title: "Check Redirected",
+                        description: `The endpoint redirected (HTTP ${data.result.statusCode}).`,
+                    })
+                } else if (data.result && typeof data.result.statusCode === "number") {
+                    // site returned an explicit HTTP code that is not 2xx
+                    toast({
+                        title: `Endpoint returned ${data.result.statusCode}`,
+                        description: data.result.error || `Status ${data.result.statusCode}`,
+                    })
+                } else {
+                    // application-level failure
+                    toast({
+                        title: "Check Failed",
+                        description: data.result?.error || "Unable to reach the endpoint",
+                        variant: "destructive",
+                    })
+                }
             }
 
             setTimeout(() => {

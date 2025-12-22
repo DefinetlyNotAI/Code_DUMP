@@ -1,10 +1,10 @@
-import {NextResponse} from "next/server"
-import {projects} from "@/lib/projects-data"
+import {type NextRequest, NextResponse} from "next/server"
+import {projects} from "@/lib/projectData"
 import {getProjectRoutes, insertStatusLog, validateProjectExists} from "@/lib/utils"
 
-export async function POST({params}: { params: Promise<{ site: string }> }) {
+export async function POST(_request: NextRequest, context: { params: Promise<{ site: string }> }) {
     try {
-        const {site} = await params
+        const {site} = await context.params
 
         // Validate that the site exists in our data
         if (!validateProjectExists(site)) {
@@ -17,15 +17,32 @@ export async function POST({params}: { params: Promise<{ site: string }> }) {
         }
 
         const routes = getProjectRoutes(site)
+        // Split routes into static and dynamic (placeholder) routes.
+        // Dynamic routes contain '[' (e.g. /api/items/[id]) and need real params to be checked.
+        const staticRoutes = routes.filter((r) => !r.includes("["))
+        const dynamicRoutes = routes.filter((r) => r.includes("["))
         const results = []
 
-        console.log(`[v0] Updating all statuses for site: ${site}`)
+        // For dynamic routes, don't attempt to fetch placeholder URLs; mark as skipped.
+        for (const routePath of dynamicRoutes) {
+            results.push({
+                route: routePath,
+                statusCode: -1,
+                responseTime: 0,
+                success: false,
+                error: "dynamic route skipped (requires concrete params)",
+                logged: false,
+            })
+            console.log(`[API] Skipping dynamic route ${routePath} for site ${site}`)
+        }
 
-        // Check each route and log the status
-        for (const routePath of routes) {
+        console.log(`[API] Updating all statuses for site: ${site}`)
+
+        // Check each static route and log the status
+        for (const routePath of staticRoutes) {
+            const startTime = Date.now()
             try {
                 const targetUrl = `${project.visitLink}${routePath}`
-                const startTime = Date.now()
 
                 const response = await fetch(targetUrl, {
                     method: "GET",
@@ -37,29 +54,46 @@ export async function POST({params}: { params: Promise<{ site: string }> }) {
 
                 const responseTime = Date.now() - startTime
 
-                // Insert status log into database
-                await insertStatusLog(site, routePath, response.status)
+                // Determine whether we log this route
+                const willLog = ![401, 403, 405].includes(response.status)
+                if (willLog) {
+                    await insertStatusLog(site, routePath, response.status, responseTime)
+                }
 
                 results.push({
                     route: routePath,
                     statusCode: response.status,
                     responseTime,
                     success: response.ok,
+                    methodMismatch: response.status === 405,
+                    redirected: response.redirected || (response.status >= 300 && response.status < 400),
+                    redirectLocation: response.headers.get("location") || undefined,
+                    logged: willLog,
                 })
 
-                console.log(`[v0] Checked ${routePath}: ${response.status} (${responseTime}ms)`)
+                console.log(`[API] Checked ${routePath}: ${response.status} (${responseTime}ms)`)
             } catch (error) {
-                // Log error status (0 for connection errors)
-                await insertStatusLog(site, routePath, 0)
+                const responseTime = Date.now() - startTime
+
+                // Log error status (0 for connection errors) and ensure responseTime is stored
+                let insertSucceeded = false
+                try {
+                    await insertStatusLog(site, routePath, 0, responseTime)
+                    insertSucceeded = true
+                } catch (e) {
+                    console.error(`[API] Failed to insert error log for ${routePath}:`, e)
+                }
 
                 results.push({
                     route: routePath,
                     statusCode: 0,
+                    responseTime,
                     success: false,
                     error: error instanceof Error ? error.message : "Unknown error",
+                    logged: insertSucceeded,
                 })
 
-                console.log(`[v0] Error checking ${routePath}:`, error)
+                console.log(`[API] Error checking ${routePath}:`, error)
             }
         }
 
@@ -70,7 +104,7 @@ export async function POST({params}: { params: Promise<{ site: string }> }) {
             results,
         })
     } catch (error) {
-        console.error("[v0] Error in updateStatus:", error)
+        console.error("[API] Error in updateStatus:", error)
         return NextResponse.json(
             {
                 error: "Failed to update status",

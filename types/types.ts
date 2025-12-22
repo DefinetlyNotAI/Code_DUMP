@@ -1,7 +1,10 @@
-export interface Route {
+type RouteReplacement = [item: string, replacement: string];
+
+interface Route {
     path: string
     title: string
     description: string
+    valueReplacement?: RouteReplacement[]
 }
 
 export interface Project {
@@ -26,10 +29,4 @@ export interface RouteStatus {
     uptime: number
     lastChecked: Date | null
     statusLogs: StatusLog[]
-}
-
-export interface ProjectStatus {
-    slug: string
-    overallStatus: "working" | "degraded" | "broken" | "unknown"
-    routeStatuses: RouteStatus[]
 }

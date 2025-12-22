@@ -1,5 +1,5 @@
 import Link from "next/link"
-import {projects} from "@/lib/projects-data"
+import {projects} from "@/lib/projectData"
 import {getProjectStatus} from "@/lib/utils"
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card"
 import {Badge} from "@/components/ui/badge"

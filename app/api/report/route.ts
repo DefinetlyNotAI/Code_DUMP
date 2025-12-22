@@ -1,5 +1,5 @@
 import {type NextRequest, NextResponse} from "next/server"
-import {projects} from "@/lib/projects-data"
+import {projects} from "@/lib/projectData"
 import {insertStatusLog} from "@/lib/utils"
 
 export async function POST(request: NextRequest) {
@@ -37,24 +37,52 @@ export async function POST(request: NextRequest) {
 
             const responseTime = Date.now() - startTime
 
-            await insertStatusLog(projectSlug, routePath, response.status)
+            // Determine whether we'll log this response (skip auth/method-related statuses)
+            const willLog = ![401, 403, 405].includes(response.status)
+            if (willLog) {
+                await insertStatusLog(projectSlug, routePath, response.status, responseTime)
+            }
 
-            const result = {
+            const result: any = {
                 timestamp: new Date().toISOString(),
                 statusCode: response.status,
                 responseTime,
                 success: response.ok,
                 url: targetUrl,
+                // Detect if the response involved redirects
+                redirected: response.redirected || (response.status >= 300 && response.status < 400),
+                redirectLocation: response.headers.get("location") || undefined,
+                logged: willLog,
+            }
+
+            // If status indicates an auth/method problem, return a friendly payload guiding the user
+            if ([401, 403].includes(response.status)) {
+                return NextResponse.json({
+                    message: "Authentication required",
+                    result,
+                    help: "The endpoint returned an authentication error (401/403). Ensure public access or provide credentials. These errors are not stored in the status log.",
+                    logged: false,
+                }, {status: 200})
+            }
+
+            if (response.status === 405) {
+                return NextResponse.json({
+                    message: "Method not allowed",
+                    result,
+                    help: "The endpoint returned 405 (method not allowed). Verify the route supports GET or update the monitoring method. This is not stored in the status log.",
+                    logged: false,
+                }, {status: 200})
             }
 
             return NextResponse.json({
                 message: "Manual check completed",
                 result,
+                logged: willLog,
             })
         } catch (error) {
             const responseTime = Date.now() - startTime
 
-            await insertStatusLog(projectSlug, routePath, 0)
+            await insertStatusLog(projectSlug, routePath, 0, responseTime)
 
             return NextResponse.json({
                 message: "Manual check completed with error",
@@ -65,6 +93,7 @@ export async function POST(request: NextRequest) {
                     success: false,
                     error: error instanceof Error ? error.message : "Unknown error",
                 },
+                logged: true,
             })
         }
     } catch (error) {

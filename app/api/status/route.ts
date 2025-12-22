@@ -1,5 +1,5 @@
 import {type NextRequest, NextResponse} from "next/server"
-import {projects} from "@/lib/projects-data"
+import {projects} from "@/lib/projectData"
 import {getRouteStatus} from "@/lib/utils"
 
 export async function GET(request: NextRequest) {

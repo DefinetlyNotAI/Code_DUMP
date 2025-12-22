@@ -48,6 +48,7 @@ async function main() {
                 project_slug TEXT        NOT NULL,
                 route_path   TEXT        NOT NULL,
                 status_code  INTEGER     NOT NULL,
+                response_time INTEGER    NULL,
                 created_at   timestamptz NOT NULL DEFAULT now()
             );
         `
@@ -74,4 +75,3 @@ async function main() {
 if (require.main === module) {
     main().catch(console.error)
 }
-

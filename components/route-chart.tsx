@@ -19,7 +19,7 @@ export function RouteChart({logs}: RouteChartProps) {
     }, [logs])
 
     return (
-        <div className="h-[200px] w-full">
+        <div className="h-50 w-full">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3}/>
@@ -68,10 +68,10 @@ export function RouteChart({logs}: RouteChartProps) {
                     <Line
                         type="monotone"
                         dataKey="responseTime"
-                        stroke="hsl(var(--primary))"
+                        stroke="#ffffff"
                         strokeWidth={2}
-                        dot={{fill: "hsl(var(--primary))", r: 3}}
-                        activeDot={{r: 5, fill: "hsl(var(--primary))"}}
+                        dot={{fill: "#ffffff", r: 3}}
+                        activeDot={{r: 5, fill: "#ffffff"}}
                     />
                 </LineChart>
             </ResponsiveContainer>
