@@ -385,13 +385,17 @@ export async function getEmail(params: GetEmailParams): Promise<EmailDetail | nu
                                 html: sanitizedHtml,
                                 text: parsed.text,
                                 attachments:
-                                    parsed.attachments?.map((att: any, index: number) => ({
-                                        filename: att.filename,
-                                        contentType: att.contentType,
-                                        size: att.size,
-                                        contentId: att.contentId,
-                                        partId: att.partId || `${index + 1}`,
-                                    })) || [],
+                                    parsed.attachments?.map((att: any, index: number) => {
+                                        const partId = `${index + 1}`
+                                        console.log(`[IMAP] Mapping attachment ${index}: ${att.filename}, partId: ${partId}`)
+                                        return {
+                                            filename: att.filename,
+                                            contentType: att.contentType,
+                                            size: att.size,
+                                            contentId: att.contentId,
+                                            partId: partId,
+                                        }
+                                    }) || [],
                             }
 
                             resolve(emailData)
@@ -484,6 +488,17 @@ export async function getAttachment(params: GetAttachmentParams): Promise<{
                             // Find the attachment by partId (index-based)
                             const attachments = parsed.attachments || []
                             const index = parseInt(partId, 10) - 1
+
+                            console.log(`[IMAP] Looking for attachment with partId ${partId} (index ${index}), total attachments: ${attachments.length}`)
+
+                            if (attachments.length > 0) {
+                                console.log(`[IMAP] Available attachments:`, attachments.map((a: any, i: number) => ({
+                                    index: i,
+                                    filename: a.filename,
+                                    size: a.size,
+                                    contentType: a.contentType
+                                })))
+                            }
 
                             if (index >= 0 && index < attachments.length) {
                                 const attachment = attachments[index]

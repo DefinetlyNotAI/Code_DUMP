@@ -17,10 +17,9 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export async function GET(
-    request: NextRequest,
-    {params}: { params: Promise<{ accountId: string; uid: string; partId: string }> }
-) {
+export async function GET(request: NextRequest, {params}: {
+    params: Promise<{ accountId: string; uid: string; partId: string }>
+}) {
     try {
         // Check authentication
         const isAuthenticated = await requireAuth()
@@ -33,6 +32,21 @@ export async function GET(
 
         const {accountId, uid, partId} = await params
 
+        // Parse query params
+        const searchParams = request.nextUrl.searchParams
+        const folder = searchParams.get("folder")
+        const filename = searchParams.get("filename") || "attachment"
+
+        console.log(`[API] Attachment request - accountId: ${accountId}, uid: ${uid}, partId: ${partId}, folder: ${folder}, filename: ${filename}`)
+
+        if (!folder) {
+            console.error(`[API] Missing folder parameter`)
+            return NextResponse.json(
+                {error: "Folder parameter required"},
+                {status: 400}
+            )
+        }
+
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
         const rateLimit = checkRateLimit(`attachment:${ip}`, RateLimitSettings.attachmentsLimit, RateLimitSettings.windowMs)
@@ -41,18 +55,6 @@ export async function GET(
             return NextResponse.json(
                 {error: "Too many requests"},
                 {status: 429}
-            )
-        }
-
-        // Parse query params
-        const searchParams = request.nextUrl.searchParams
-        const folder = searchParams.get("folder")
-        const filename = searchParams.get("filename") || "attachment"
-
-        if (!folder) {
-            return NextResponse.json(
-                {error: "Folder parameter required"},
-                {status: 400}
             )
         }
 
