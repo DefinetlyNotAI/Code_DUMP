@@ -104,3 +104,28 @@ export interface CacheItem<T> {
     timestamp: number
     ttl: number
 }
+
+// IMAP Service Function Parameter Types
+export interface ListEmailsOptions {
+    limit?: number
+    offset?: number
+}
+
+export interface GetEmailParams {
+    accountId: string
+    folderPath: string
+    uid: number
+}
+
+export interface GetAttachmentParams {
+    accountId: string
+    folderPath: string
+    uid: number
+    partId: string
+}
+
+export interface ListEmailsParams {
+    accountId: string
+    folderPath: string
+    options?: ListEmailsOptions
+}

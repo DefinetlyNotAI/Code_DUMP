@@ -86,7 +86,11 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         }
 
         // Get email
-        const email = await getEmail(accountId, folder, uidNum)
+        const email = await getEmail({
+            accountId,
+            folderPath: folder,
+            uid: uidNum
+        })
 
         if (!email) {
             return NextResponse.json(

@@ -75,7 +75,11 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
         }
 
         // Get emails
-        const result = await listEmails(accountId, folder, {limit, offset})
+        const result = await listEmails({
+            accountId,
+            folderPath: folder,
+            options: {limit, offset}
+        })
 
         return NextResponse.json(
             result,
