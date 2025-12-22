@@ -65,16 +65,16 @@ MASTER_PASSWORD_BCRYPT_HASH=your-bcrypt-hash-here
 # Generate with: openssl rand -base64 32
 SESSION_SECRET=your-random-secret-here
 
-# IMAP Configuration (JSON format)
-# Add all your email accounts in this JSON structure
-IMAP_CONFIG={"accounts":[{"id":"account1","label":"Account 1","imap":{"host":"imap.example.com","port":993,"secure":true,"user":"user@example.com","password":"your-password"}}]}
+# IMAP Configuration (base64-encoded JSON)
+# Create your JSON config, then encode: Buffer.from(JSON.stringify(config)).toString('base64')
+IMAP_CONFIG=base64-encoded-json-here
 ```
 
 ### 2. IMAP Configuration Details
 
-> VERY IMPORTANT: Please escape all $ signs in passwords with a backslash (`\$`) when setting environment variables
+The `IMAP_CONFIG` environment variable accepts a base64-encoded JSON string with the following structure:
 
-The `IMAP_CONFIG` environment variable accepts a JSON object with the following structure:
+**First, create your JSON configuration:**
 
 ```json
 {
@@ -92,6 +92,16 @@ The `IMAP_CONFIG` environment variable accepts a JSON object with the following 
     }
   ]
 }
+```
+
+**Then encode it to base64:**
+
+```javascript
+const config = {
+  "accounts": [...]
+};
+const base64Config = Buffer.from(JSON.stringify(config)).toString('base64');
+console.log(base64Config);
 ```
 
 **Example with multiple accounts:**
@@ -150,8 +160,8 @@ The `IMAP_CONFIG` environment variable accepts a JSON object with the following 
     - User: Your full email address
     - Password: Your email password or app-specific password
 
-**Important**: The IMAP_CONFIG value must be a single-line JSON string with no line breaks when set as an environment
-variable.
+**Note**: With base64 encoding, special characters in passwords (like `$`, `#`, `!`) are automatically handled - no
+escaping needed!
 
 See [SECURITY.md](./SECURITY.md) for detailed configuration instructions.
 

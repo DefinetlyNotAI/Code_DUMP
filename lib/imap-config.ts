@@ -24,9 +24,9 @@ export function getImapConfig(): ImapConfig {
 
     console.log("[IMAP CONFIG] Reading config from IMAP_CONFIG environment variable")
 
-    const configString = process.env.IMAP_CONFIG
+    const configBase64 = process.env.IMAP_CONFIG
 
-    if (!configString) {
+    if (!configBase64) {
         const error = new Error("IMAP_CONFIG environment variable is not set")
         console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
             error: error.message,
@@ -38,7 +38,10 @@ export function getImapConfig(): ImapConfig {
 
     let config: ImapConfig
     try {
-        console.log("[IMAP CONFIG] Config environment variable read successfully")
+        console.log("[IMAP CONFIG] Decoding base64-encoded config...")
+        // Decode base64 to get JSON string
+        const configString = Buffer.from(configBase64, 'base64').toString('utf8')
+        console.log("[IMAP CONFIG] Config decoded successfully, parsing JSON...")
         config = JSON.parse(configString) as ImapConfig
     } catch (parseError) {
         console.error("[IMAP CONFIG] Failed to parse IMAP_CONFIG environment variable", {
