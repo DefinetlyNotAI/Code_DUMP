@@ -29,7 +29,7 @@ export interface EmailAttachment {
     contentType?: string
     size?: number
     contentId?: string
-    partId?: string
+    partId: string // Required for downloading attachments
 }
 
 export interface EmailFolder {

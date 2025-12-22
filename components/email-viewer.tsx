@@ -107,26 +107,43 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
     async function downloadAttachment(att: EmailAttachment) {
         try {
-            const response = await fetch(
-                `/api/accounts/${accountId}/emails/${uid}/attachments/${att.partId}?folder=${encodeURIComponent(folder)}&filename=${encodeURIComponent(att.filename || 'attachment')}`
-            )
+            const url = `/api/accounts/${accountId}/emails/${uid}/attachments/${att.partId}?folder=${encodeURIComponent(folder)}&filename=${encodeURIComponent(att.filename || 'attachment')}`
+            console.log(`[EmailViewer] Downloading attachment:`, {
+                partId: att.partId,
+                filename: att.filename,
+                url: url,
+                accountId,
+                uid,
+                folder
+            })
+
+            const response = await fetch(url)
 
             if (!response.ok) {
-                console.error("Failed to download attachment")
+                const errorText = await response.text()
+                console.error("Failed to download attachment", {
+                    status: response.status,
+                    statusText: response.statusText,
+                    url: url,
+                    errorBody: errorText
+                })
+                alert(`Failed to download attachment: ${response.status} ${response.statusText}\n${errorText}`)
                 return
             }
 
             const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
+            const downloadUrl = window.URL.createObjectURL(blob)
             const a = document.createElement('a')
-            a.href = url
+            a.href = downloadUrl
             a.download = att.filename || 'attachment'
             document.body.appendChild(a)
             a.click()
-            window.URL.revokeObjectURL(url)
+            window.URL.revokeObjectURL(downloadUrl)
             document.body.removeChild(a)
+            console.log(`[EmailViewer] Successfully downloaded: ${att.filename}`)
         } catch (error) {
             console.error("Error downloading attachment:", error)
+            alert(`Error downloading attachment: ${error instanceof Error ? error.message : 'Unknown error'}`)
         }
     }
 
