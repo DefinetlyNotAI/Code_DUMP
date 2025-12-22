@@ -8,12 +8,15 @@ import {ProjectPreview} from "@/components/project-preview"
 import {StatusBadge} from "@/components/status-badge"
 
 export default async function DashboardPage() {
-    const projectStatuses = await Promise.all(
-        projects.map(async (project) => ({
+    // Process projects serially to avoid overwhelming the single DB connection
+    const projectStatuses = []
+    for (const project of projects) {
+        const status = await getProjectStatus(project.slug, project.routes)
+        projectStatuses.push({
             ...project,
-            status: await getProjectStatus(project.slug, project.routes),
-        })),
-    )
+            status,
+        })
+    }
 
     return (
         <div className="min-h-screen bg-background">

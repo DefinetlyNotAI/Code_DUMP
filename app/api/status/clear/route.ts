@@ -19,9 +19,13 @@ export async function POST(request: NextRequest) {
     try {
         if (!dbPool) return NextResponse.json({error: "DB not initialized"}, {status: 500})
 
-        await dbPool.query(`DELETE FROM status_logs WHERE project_slug = $1`, [projectSlug])
-
-        return NextResponse.json({message: `Cleared logs for ${projectSlug}`})
+        const client = await dbPool.connect()
+        try {
+            await client.query(`DELETE FROM status_logs WHERE project_slug = $1`, [projectSlug])
+            return NextResponse.json({message: `Cleared logs for ${projectSlug}`})
+        } finally {
+            client.release()
+        }
     } catch (err) {
         return NextResponse.json({
             error: "Failed to clear logs",

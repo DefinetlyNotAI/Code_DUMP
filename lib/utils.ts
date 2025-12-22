@@ -19,9 +19,20 @@ function ensureDb() {
     if (!dbPool) throw new Error("Database pool not initialized")
 }
 
-export async function insertStatusLog(projectSlug: string, routePath: string, statusCode: number, responseTime?: number) {
+// Wrapper to execute queries with automatic connection cleanup
+async function executeQuery<T = any>(query: string, params: any[]): Promise<T> {
     ensureDb()
+    const client = await dbPool.connect()
+    try {
+        const result = await client.query(query, params)
+        return result as T
+    } finally {
+        // Always release the connection back to the pool
+        client.release()
+    }
+}
 
+export async function insertStatusLog(projectSlug: string, routePath: string, statusCode: number, responseTime?: number) {
     // Insert a single row into status_logs. Store response_time when available.
     const q = `INSERT INTO status_logs (project_slug, route_path, status_code, response_time)
                VALUES ($1, $2, $3, $4)`
@@ -30,8 +41,8 @@ export async function insertStatusLog(projectSlug: string, routePath: string, st
 
     try {
         console.log(`[DB] insertStatusLog: project=${projectSlug}, route=${routePath}, status=${statusCode}, response_time=${dbResponseTime}`)
-        const res = await dbPool.query(q, [projectSlug, routePath, statusCode, dbResponseTime])
-        console.log(`[DB] insertStatusLog: query ok, rowsAffected=${(res as any)?.rowCount ?? 'unknown'}`)
+        const res = await executeQuery(q, [projectSlug, routePath, statusCode, dbResponseTime])
+        console.log('[DB] insertStatusLog: query ok, rowsAffected=', (res as any)?.rowCount ?? 'unknown')
     } catch (err) {
         console.error('[DB] insertStatusLog: query failed', err)
         throw err
@@ -40,15 +51,13 @@ export async function insertStatusLog(projectSlug: string, routePath: string, st
 
 // Read recent logs for a route. Returns last N records ordered newest-first
 export async function getRecentRouteLogs(projectSlug: string, routePath: string, limit = 20): Promise<StatusLog[]> {
-    ensureDb()
-
     const q = `SELECT created_at, status_code, response_time
                FROM status_logs
                WHERE project_slug = $1
                  AND route_path = $2
                ORDER BY created_at DESC
                LIMIT $3`
-    const res = await dbPool.query(q, [projectSlug, routePath, limit])
+    const res = await executeQuery(q, [projectSlug, routePath, limit])
 
     // Map rows to StatusLog[] (newest first)
     return res.rows.map((r: any) => ({
@@ -114,7 +123,12 @@ export async function getRouteStatus(projectSlug: string, route: Route): Promise
 }
 
 export async function getProjectStatus(projectSlug: string, routes: Route[]): Promise<ProjectStatus> {
-    const routeStatuses = await Promise.all(routes.map((r) => getRouteStatus(projectSlug, r)))
+    // Process routes serially to avoid overwhelming the single DB connection
+    const routeStatuses: RouteStatus[] = []
+    for (const route of routes) {
+        const status = await getRouteStatus(projectSlug, route)
+        routeStatuses.push(status)
+    }
 
     // Determine overall status: worst status among routes
     const statusOrder: Record<RouteStatus['currentStatus'] | ProjectStatus['overallStatus'], number> = {

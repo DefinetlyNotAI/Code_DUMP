@@ -29,32 +29,79 @@ export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProp
             let html = await response.text()
 
             // Remove script tags to make it static (no JavaScript execution)
-            html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            // Use iterative replacement to handle nested or overlapping patterns
+            let previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/<script[\s\S]*?<\/script>/gi, '')
+                html = html.replace(/<script[^>]*>/gi, '')
+            }
 
             // Remove noscript tags (they're not needed in a static preview)
-            html = html.replace(/<noscript\b[^<]*(?:(?!<\/noscript>)<[^<]*)*<\/noscript>/gi, '')
+            previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
+            }
 
             // Remove preload links for scripts (since we removed the scripts)
-            html = html.replace(/<link[^>]*rel=["']?preload["'][^>]*as=["']?script["'][^>]*>/gi, '')
-            html = html.replace(/<link[^>]*as=["']?script["'][^>]*rel=["']?preload["'][^>]*>/gi, '')
+            html = html.replace(/<link[^>]*rel\s*=\s*["']?preload["'][^>]*as\s*=\s*["']?script["'][^>]*>/gi, '')
+            html = html.replace(/<link[^>]*as\s*=\s*["']?script["'][^>]*rel\s*=\s*["']?preload["'][^>]*>/gi, '')
 
             // Remove modulepreload links as well
-            html = html.replace(/<link[^>]*rel=["']?modulepreload["'][^>]*>/gi, '')
+            html = html.replace(/<link[^>]*rel\s*=\s*["']?modulepreload["'][^>]*>/gi, '')
 
             // Remove inline event handlers (onclick, onload, onerror, etc.)
-            html = html.replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, '')
-            html = html.replace(/\s+on\w+\s*=\s*[^\s>]*/gi, '')
+            // Use iterative replacement to handle overlapping patterns like "ononclick"
+            previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ' ')
+                html = html.replace(/\son\w+\s*=\s*[^\s>]+/gi, ' ')
+            }
+
+            // Remove javascript: URIs
+            previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/\s(href|src|action|formaction|data)\s*=\s*["']?\s*javascript:/gi, ' data-blocked-$1="javascript:')
+            }
+
+            // Remove data: URIs that could contain HTML/SVG with scripts
+            previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/\s(href|src|action|formaction)\s*=\s*["']?\s*data:text\/html/gi, ' data-blocked-$1="data:text/html')
+            }
+
+            // Remove potentially dangerous tags (object, embed, applet)
+            previousHtml = ''
+            while (previousHtml !== html) {
+                previousHtml = html
+                html = html.replace(/<(object|embed|applet)[\s\S]*?<\/\1>/gi, '')
+                html = html.replace(/<(object|embed|applet)[^>]*>/gi, '')
+            }
 
             // Remove existing CSP meta tags that might conflict
-            html = html.replace(/<meta[^>]*http-equiv=["']?Content-Security-Policy["']?[^>]*>/gi, '')
+            html = html.replace(/<meta[^>]*http-equiv\s*=\s*["']?Content-Security-Policy["']?[^>]*>/gi, '')
 
             // Get the base URL (in case of redirects, use the final URL)
             const baseUrl = new URL(response.url)
             // Use the full origin with trailing slash to ensure all resources load correctly
             const baseHref = baseUrl.origin + '/'
 
+            // Helper function to escape HTML attributes
+            const escapeHtmlAttr = (str: string) => {
+                return str
+                    .replace(/&/g, '&amp;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#x27;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+            }
+
             // Inject base tag, CSP meta tag (blocking all scripts), and no-scroll style in the head
-            const baseTag = `<base href="${baseHref}">`
+            const baseTag = `<base href="${escapeHtmlAttr(baseHref)}">`
             const cspMeta = `<meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'none'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src * data: blob:;">`
             const noScrollStyle = `<style>html, body { overflow: hidden !important; }</style>`
 
