@@ -2,7 +2,7 @@ import {Badge} from "@/components/ui/badge"
 import {Circle} from "lucide-react"
 
 interface StatusBadgeProps {
-    status: "working" | "degraded" | "broken" | "unknown"
+    status: "working" | "degraded" | "broken" | "unknown" | "previous-degradations"
     showDot?: boolean
 }
 
@@ -19,6 +19,12 @@ export function StatusBadge({status, showDot = true}: StatusBadgeProps) {
             variant: "secondary" as const,
             className: "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-500/20 border-yellow-500/20",
             dotClassName: "fill-yellow-500",
+        },
+        "previous-degradations": {
+            label: "Previous Degradations",
+            variant: "secondary" as const,
+            className: "bg-orange-500/10 text-orange-700 dark:text-orange-400 hover:bg-orange-500/20 border-orange-500/20",
+            dotClassName: "fill-orange-500",
         },
         broken: {
             label: "Broken",

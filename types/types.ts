@@ -25,7 +25,7 @@ export interface RouteStatus {
     path: string
     title: string
     description: string
-    currentStatus: "working" | "degraded" | "broken" | "unknown"
+    currentStatus: "working" | "degraded" | "broken" | "unknown" | "previous-degradations"
     uptime: number
     lastChecked: Date | null
     statusLogs: StatusLog[]

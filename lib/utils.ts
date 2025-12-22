@@ -72,15 +72,27 @@ function determineStatusFromLogs(logs: StatusLog[]): {
     const upCount = logs.filter((l) => l.statusCode >= 200 && l.statusCode < 300).length
     const uptime = Math.round((upCount / total) * 100)
 
-    const hasServerErrors = logs.some((l) => l.statusCode >= 500)
-    const hasConnectionErrors = logs.some((l) => l.statusCode === 0)
-    const hasClientErrors = logs.some((l) => l.statusCode >= 400 && l.statusCode < 500)
-    const hasRedirects = logs.some((l) => l.statusCode >= 300 && l.statusCode < 400)
+    // Check ONLY the most recent log for current broken state
+    const lastStatus = logs[0].statusCode
+    const isCurrentlyBroken = lastStatus === 0 || lastStatus >= 500
+
+    // Check the most recent log for current degraded issues
+    const hasCurrentClientErrors = lastStatus >= 400 && lastStatus < 500
+    const hasCurrentRedirects = lastStatus >= 300 && lastStatus < 400
 
     let currentStatus: RouteStatus['currentStatus'] = "working"
-    if (hasConnectionErrors || hasServerErrors) currentStatus = "broken"
-    // Treat redirects similarly to client errors: degraded (e.g., redirect-to-login)
-    else if (hasClientErrors || hasRedirects || uptime < 70) currentStatus = "degraded"
+
+    if (isCurrentlyBroken) {
+        currentStatus = "broken"
+    }
+    // Current degraded issues take priority
+    else if (hasCurrentClientErrors || hasCurrentRedirects) {
+        currentStatus = "degraded"
+    }
+    // If no current issues but uptime < 70%, mark as previous degradations
+    else if (uptime < 70) {
+        currentStatus = "previous-degradations"
+    }
 
     return {currentStatus, uptime, lastChecked}
 }
@@ -107,9 +119,10 @@ export async function getProjectStatus(projectSlug: string, routes: Route[]): Pr
     // Determine overall status: worst status among routes
     const statusOrder: Record<RouteStatus['currentStatus'] | ProjectStatus['overallStatus'], number> = {
         working: 0,
-        degraded: 1,
-        broken: 2,
-        unknown: 3,
+        "previous-degradations": 1,
+        degraded: 2,
+        broken: 3,
+        unknown: 4,
     }
 
     const worst = routeStatuses.reduce<ProjectStatus['overallStatus']>((acc: ProjectStatus['overallStatus'], rs: RouteStatus) => {

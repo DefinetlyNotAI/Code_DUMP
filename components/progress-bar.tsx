@@ -2,7 +2,7 @@ import {cn} from "@/lib/ui"
 
 interface ProgressBarProps {
     value: number
-    status: "working" | "degraded" | "broken" | "unknown"
+    status: "working" | "degraded" | "broken" | "unknown" | "previous-degradations"
     className?: string
 }
 
@@ -10,6 +10,7 @@ export function ProgressBar({value, status, className}: ProgressBarProps) {
     const statusColors = {
         working: "bg-green-500",
         degraded: "bg-yellow-500",
+        "previous-degradations": "bg-orange-500",
         broken: "bg-red-500",
         unknown: "bg-gray-400",
     }
