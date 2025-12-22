@@ -12,6 +12,7 @@ export interface Project {
     title: string
     description: string
     visitLink: string
+    renderUrl?: string
     routes: Route[]
 }
 

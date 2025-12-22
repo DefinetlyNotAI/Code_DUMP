@@ -6,6 +6,7 @@ export const projects: Project[] = [
         title: "WESMUN Email",
         description: "Read-only Web-based email client platform for WESMUN with authenticated access, account-scoped mailboxes, and attachment handling.",
         visitLink: "https://email.wesmun.com",
+        renderUrl: "https://email.wesmun.com/login", // Use login page for preview to avoid auth issues
         routes: [
             {
                 path: "/",

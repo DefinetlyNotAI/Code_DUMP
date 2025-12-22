@@ -5,14 +5,18 @@ import {ExternalLink} from "lucide-react"
 interface ProjectPreviewProps {
     url: string
     title: string
+    renderUrl?: string
 }
 
-export async function ProjectPreview({url, title}: ProjectPreviewProps) {
+export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProps) {
     let htmlContent = ""
     let error = false
 
+    // Use renderUrl if provided, otherwise use the regular url
+    const urlToFetch = renderUrl || url
+
     try {
-        const response = await fetch(url, {
+        const response = await fetch(urlToFetch, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             },
@@ -46,11 +50,12 @@ export async function ProjectPreview({url, title}: ProjectPreviewProps) {
 
             // Get the base URL (in case of redirects, use the final URL)
             const baseUrl = new URL(response.url)
-            const baseHref = `${baseUrl.protocol}//${baseUrl.host}`
+            // Use the full origin with trailing slash to ensure all resources load correctly
+            const baseHref = baseUrl.origin + '/'
 
             // Inject base tag, CSP meta tag (blocking all scripts), and no-scroll style in the head
-            const baseTag = `<base href="${baseHref}/">`
-            const cspMeta = `<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline' https:; img-src * data: blob:; font-src * data:; connect-src * data: blob:;">`
+            const baseTag = `<base href="${baseHref}">`
+            const cspMeta = `<meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'none'; style-src * 'unsafe-inline'; img-src * data: blob:; font-src * data:; connect-src * data: blob:;">`
             const noScrollStyle = `<style>html, body { overflow: hidden !important; }</style>`
 
             if (html.includes('<head>')) {
@@ -70,7 +75,7 @@ export async function ProjectPreview({url, title}: ProjectPreviewProps) {
     }
 
     return (
-        <div className="relative aspect-video w-full overflow-hidden bg-muted rounded-lg border border-border">
+        <div className="relative w-full h-48 overflow-hidden bg-muted rounded-lg border border-border">
             {error ? (
                 <div className="flex h-full items-center justify-center text-muted-foreground p-4">
                     <div className="text-center">

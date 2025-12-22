@@ -26,7 +26,7 @@ export default async function DashboardPage() {
             </header>
 
             <main className="container mx-auto px-4 py-8">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-6 grid-cols-1">
                     {projectStatuses.map(({status, ...project}) => (
                         <Link
                             key={project.slug}
@@ -34,7 +34,11 @@ export default async function DashboardPage() {
                             className="group transition-transform hover:scale-[1.02]"
                         >
                             <Card className="h-full overflow-hidden border-2 transition-colors hover:border-primary">
-                                <ProjectPreview url={project.visitLink} title={project.title}/>
+                                <ProjectPreview
+                                    url={project.visitLink}
+                                    title={project.title}
+                                    renderUrl={project.renderUrl}
+                                />
 
                                 <CardHeader>
                                     <div className="flex items-start justify-between gap-2">
