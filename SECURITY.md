@@ -57,23 +57,32 @@ It provides **read-only** access to IMAP mailboxes through a secure web interfac
 ### Required Variables
 
 ```bash
-# Master password hash (generate with bcryptjs)
+# Master password hash (base64-encoded bcrypt hash)
 MASTER_PASSWORD_BCRYPT_HASH=
 
 # Session secret (generate a random string)
 SESSION_SECRET=
 
-# IMAP configuration (JSON format)
+# IMAP configuration (base64-encoded JSON)
 IMAP_CONFIG=
 ```
 
 ### Generating MASTER_PASSWORD_HASH
 
+The master password hash is stored as a base64-encoded bcrypt hash:
+
 ```javascript
 import bcrypt from 'bcryptjs'
 
 const hash = await bcrypt.hash('your-secure-password', 10)
-console.log(hash)
+const base64Hash = Buffer.from(hash).toString('base64')
+console.log(base64Hash)
+```
+
+Or use the provided setup script:
+
+```bash
+node scripts/setup-password.js
 ```
 
 ### Generating SESSION_SECRET
@@ -83,6 +92,8 @@ openssl rand -base64 32
 ```
 
 ### IMAP Configuration Format
+
+The IMAP configuration is stored as base64-encoded JSON. First, create your JSON configuration:
 
 ```json
 {
@@ -101,6 +112,18 @@ openssl rand -base64 32
   ]
 }
 ```
+
+Then encode it to base64:
+
+```javascript
+const config = {
+  "accounts": [...]
+};
+const base64Config = Buffer.from(JSON.stringify(config)).toString('base64');
+console.log(base64Config);
+```
+
+Set the base64 string in your `.env` file as `IMAP_CONFIG`.
 
 ## Security Considerations
 

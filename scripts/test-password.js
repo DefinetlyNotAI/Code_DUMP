@@ -3,7 +3,7 @@
  *
  * Usage: node scripts/test-password.js "your-password"
  *
- * This will test your password against the hash in MASTER_PASSWORD_BCRYPT_HASH
+ * This will test your password against the base64-encoded hash in MASTER_PASSWORD_BCRYPT_HASH
  */
 
 const bcrypt = require('bcryptjs');
@@ -18,21 +18,27 @@ if (!password) {
     process.exit(1);
 }
 
-const hash = process.env.MASTER_PASSWORD_BCRYPT_HASH;
+const base64Hash = process.env.MASTER_PASSWORD_BCRYPT_HASH;
 
-if (!hash) {
+if (!base64Hash) {
     console.error('ERROR: MASTER_PASSWORD_BCRYPT_HASH not found in environment');
-    console.error('Make sure you have a .env.local file with MASTER_PASSWORD_BCRYPT_HASH set');
+    console.error('Make sure you have a .env file with MASTER_PASSWORD_BCRYPT_HASH set');
     process.exit(1);
 }
 
 console.log('Testing password...');
 console.log('Password length:', password.length);
 console.log('Password (first 3 chars):', password.substring(0, 3) + '***');
-console.log('Hash exists:', !!hash);
-console.log('Hash starts with $2:', hash.startsWith('$2'));
-console.log('Hash length:', hash.length);
-console.log('Hash format:', hash.substring(0, 7) + '...');
+console.log('Base64 hash exists:', !!base64Hash);
+console.log('Base64 hash length:', base64Hash.length);
+console.log('Base64 hash (first 20 chars):', base64Hash.substring(0, 20) + '...');
+
+// Decode the base64 hash
+const hash = Buffer.from(base64Hash, 'base64').toString('utf8');
+console.log('Decoded hash exists:', !!hash);
+console.log('Decoded hash starts with $2:', hash.startsWith('$2'));
+console.log('Decoded hash length:', hash.length);
+console.log('Decoded hash format:', hash.substring(0, 7) + '...');
 
 bcrypt.compare(password, hash).then(result => {
     console.log('\n' + '='.repeat(50));

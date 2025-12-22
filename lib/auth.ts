@@ -15,9 +15,14 @@ import {cookies} from "next/headers"
 import {SessionData} from "@/types/server";
 import {SecuritySettings} from "@/lib/settings";
 
-// Master password hash stored in environment variable
-// Generate with: bcrypt.hash('your-password', 10)
-const MASTER_PASSWORD_BCRYPT_HASH = process.env.MASTER_PASSWORD_BCRYPT_HASH
+// Master password hash stored in environment variable as base64-encoded bcrypt hash
+// Generate with: Buffer.from(await bcrypt.hash('your-password', 10)).toString('base64')
+const MASTER_PASSWORD_BCRYPT_HASH_BASE64 = process.env.MASTER_PASSWORD_BCRYPT_HASH
+
+// Decode the base64-encoded bcrypt hash at runtime
+const MASTER_PASSWORD_BCRYPT_HASH = MASTER_PASSWORD_BCRYPT_HASH_BASE64
+    ? Buffer.from(MASTER_PASSWORD_BCRYPT_HASH_BASE64, 'base64').toString('utf8')
+    : undefined
 
 // Validate environment variables at runtime, not at module load
 function validateEnvironment() {

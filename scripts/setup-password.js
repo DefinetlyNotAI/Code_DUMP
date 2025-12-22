@@ -6,8 +6,9 @@
  * This script will:
  * 1. Ask you for your desired master password
  * 2. Generate a bcrypt hash
- * 3. Update the .env file automatically
- * 4. Test that everything works correctly
+ * 3. Base64 encode the hash for storage
+ * 4. Update the .env file automatically
+ * 5. Test that everything works correctly
  */
 
 import bcrypt from 'bcryptjs';
@@ -94,10 +95,16 @@ async function main() {
         const hash = await bcrypt.hash(password, 10);
 
         log('✓ Hash generated successfully!', 'green');
-        log(`\nGenerated hash: ${colors.cyan}${hash}${colors.reset}\n`);
+        log(`\nGenerated bcrypt hash: ${colors.cyan}${hash}${colors.reset}`);
 
-        // Step 4: Update .env file
-        log('Step 4: Updating .env file...', 'bright');
+        // Step 4: Base64 encode the hash
+        log('\nStep 4: Encoding hash to base64...', 'bright');
+        const base64Hash = Buffer.from(hash).toString('base64');
+        log('✓ Hash encoded successfully!', 'green');
+        log(`\nBase64-encoded hash: ${colors.cyan}${base64Hash}${colors.reset}\n`);
+
+        // Step 5: Update .env file
+        log('Step 5: Updating .env file...', 'bright');
 
         const envPath = path.join(__dirname, '..', '.env');
 
@@ -111,17 +118,14 @@ async function main() {
         // Read current .env file
         let envContent = fs.readFileSync(envPath, 'utf8');
 
-        // Escape backslashes and $ characters to prevent unintended interpolation in .env files
-        const escapedHash = hash.replace(/\\/g, '\\\\').replace(/\$/g, '\\$');
-
-        // Replace the hash line
+        // Replace the hash line with base64-encoded hash
         const hashRegex = /^MASTER_PASSWORD_BCRYPT_HASH=.*/m;
         if (hashRegex.test(envContent)) {
-            envContent = envContent.replace(hashRegex, `MASTER_PASSWORD_BCRYPT_HASH=${hash}`);
+            envContent = envContent.replace(hashRegex, `MASTER_PASSWORD_BCRYPT_HASH=${base64Hash}`);
             log('✓ Found and updated existing MASTER_PASSWORD_BCRYPT_HASH', 'green');
         } else {
             // Add it if it doesn't exist
-            envContent = `MASTER_PASSWORD_BCRYPT_HASH=${hash}\n` + envContent;
+            envContent = `MASTER_PASSWORD_BCRYPT_HASH=${base64Hash}\n` + envContent;
             log('✓ Added MASTER_PASSWORD_BCRYPT_HASH to .env', 'green');
         }
 
