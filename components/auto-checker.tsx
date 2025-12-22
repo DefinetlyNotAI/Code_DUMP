@@ -1,6 +1,7 @@
 "use client"
 
 import {useEffect, useState} from "react"
+import {clientConfig} from '@/lib/settings'
 
 interface RouteInfo {
     projectSlug: string
@@ -8,10 +9,12 @@ interface RouteInfo {
     lastChecked: string | null
 }
 
-// Auto-check is always enabled. Use NEXT_PUBLIC_DISABLE_AUTO_CHECK to opt out if required.
-const AUTO_CHECK_ENABLED = process.env.NEXT_PUBLIC_DISABLE_AUTO_CHECK !== "true"
-const STALE_MINUTES = 45
-const SESSION_KEY_PREFIX = "auto_check_last_attempt_"
+// Use clientConfig values (fallbacks already handled by settings)
+const AUTO_CHECK_ENABLED = clientConfig.autoCheck.enabled
+const STALE_MINUTES = clientConfig.autoCheck.staleMinutes
+const SESSION_KEY_PREFIX = clientConfig.autoCheck.sessionKeyPrefix
+const REQUEST_DELAY_MS = clientConfig.autoCheck.requestDelayMs
+const MOBILE_REDUCE_FACTOR = clientConfig.autoCheck.mobileReducedFrequencyFactor ?? 2
 
 function getSessionKey(project: string, path: string) {
     return `${SESSION_KEY_PREFIX}${project}::${path}`
@@ -40,7 +43,12 @@ function markAttemptedNow(project: string, path: string) {
     }
 }
 
-export default function AutoChecker({routes}: {routes: RouteInfo[]}) {
+function isMobileUserAgent() {
+    if (typeof navigator === 'undefined') return false
+    return /Mobi|Android|iPhone|iPad|iPod|Silk/i.test(navigator.userAgent)
+}
+
+export default function AutoChecker({routes}: { routes: RouteInfo[] }) {
     const [running, setRunning] = useState(false)
 
     useEffect(() => {
@@ -70,6 +78,9 @@ export default function AutoChecker({routes}: {routes: RouteInfo[]}) {
         ;(async () => {
             let anyLogged = false
             try {
+                const mobile = isMobileUserAgent()
+                const delayFactor = mobile ? MOBILE_REDUCE_FACTOR : 1
+
                 // Fire checks sequentially to avoid hammering origin
                 for (const rt of staleRoutes) {
                     // mark attempt now so reloads in this tab don't re-trigger
@@ -90,7 +101,7 @@ export default function AutoChecker({routes}: {routes: RouteInfo[]}) {
                     }
 
                     // small delay between requests
-                    await new Promise((res) => setTimeout(res, 200))
+                    await new Promise((res) => setTimeout(res, REQUEST_DELAY_MS * delayFactor))
                 }
             } catch (err) {
                 // ignore overall failures

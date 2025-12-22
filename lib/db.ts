@@ -1,6 +1,10 @@
 import {Pool} from 'pg'
 import fs from "fs"
 import path from "path"
+import settings, {validateServerSettings} from '@/lib/settings'
+
+// Validate server settings and require DB URL for DB module
+validateServerSettings(true)
 
 // In development with Next.js, modules may be reloaded multiple times creating many Pool instances.
 // Store a singleton on globalThis to avoid exhausting Postgres connection limits.
@@ -9,12 +13,12 @@ const caPath = path.join(process.cwd(), 'certs', 'ca.pem')
 const ca = fs.existsSync(caPath) ? fs.readFileSync(caPath).toString() : undefined
 
 const poolConfig: any = {
-    connectionString: process.env.POSTGRES_URL,
-    max: process.env.POSTGRES_MAX_CLIENTS ? Number(process.env.POSTGRES_MAX_CLIENTS) : 5,
+    connectionString: settings.db.url ?? undefined,
+    max: settings.db.maxClients,
     // Connection pool settings to prevent exhaustion
     idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
     connectionTimeoutMillis: 10000, // Wait max 10 seconds for a connection from the pool
-    allowExitOnIdle: process.env.NODE_ENV === 'development', // In dev, allow pool to close when idle
+    allowExitOnIdle: settings.db.allowExitOnIdle,
 }
 
 if (ca) {

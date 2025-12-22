@@ -1,4 +1,5 @@
 import {type NextRequest, NextResponse} from "next/server"
+import settings from '@/lib/settings'
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
@@ -9,28 +10,27 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        // We want to detect redirects and, if present, wait 3-5 seconds before following them.
-        // Do a manual redirect fetch to inspect 3xx responses and Location header.
-        const maxRedirects = 3
+        // We want to detect redirects and, if present, wait a configured amount before following them.
+        const maxRedirects = settings.preview.maxRedirects
         let currentUrl = url
         let response: Response | null = null
 
         for (let i = 0; i <= maxRedirects; i++) {
             response = await fetch(currentUrl, {
                 headers: {
-                    "User-Agent": "Website-Monitor-Preview/1.0",
+                    "User-Agent": settings.preview.userAgent,
                 },
                 // don't auto-follow redirects so we can pause before following
                 redirect: "manual",
-                signal: AbortSignal.timeout(10000),
+                signal: AbortSignal.timeout(settings.preview.fetchTimeoutMs),
             })
 
-            // If we hit a redirect (3xx) and have a Location header, wait 3-5s then follow
+            // If we hit a redirect (3xx) and have a Location header, wait then follow
             if (response.status >= 300 && response.status < 400) {
                 const location = response.headers.get("location")
                 if (location) {
-                    // wait 3-5 seconds before following
-                    const waitMs = 3000 + Math.floor(Math.random() * 2000)
+                    // wait configured min + jitter before following
+                    const waitMs = settings.preview.redirectWaitMsMin + Math.floor(Math.random() * settings.preview.redirectWaitMsJitter)
                     await new Promise((res) => setTimeout(res, waitMs))
 
                     // Resolve relative redirects against current URL
@@ -67,6 +67,51 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({error: `Failed to fetch: ${response.status}`}, {status: response.status})
         }
 
+        // If configured to wait for full client-side load, return an iframe wrapper that waits for load event
+        if (settings.preview.waitForFullLoad) {
+            const iframeHtml = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Preview: ${currentUrl}</title>
+<style>
+  html,body { height:100%; margin:0 }
+  #frame { width:100%; height:100vh; border:0; display:none }
+  #loader { display:flex; align-items:center; justify-content:center; height:100vh; font-family:system-ui,Segoe UI,Roboto,Arial; }
+</style>
+</head>
+<body>
+<div id="loader">Loading preview…</div>
+<iframe id="frame" src="${currentUrl}" sandbox="allow-same-origin allow-scripts allow-forms allow-pointer-lock"></iframe>
+<script>
+  const iframe = document.getElementById('frame');
+  const loader = document.getElementById('loader');
+  let handled = false;
+  const onLoaded = () => {
+    if (handled) return; handled = true;
+    loader.style.display = 'none';
+    iframe.style.display = 'block';
+  };
+  iframe.addEventListener('load', onLoaded);
+  // Fallback timeout
+  setTimeout(() => {
+    if (handled) return; handled = true;
+    loader.innerText = 'Preview is taking too long to load. Showing available content.';
+    iframe.style.display = 'block';
+  }, ${settings.preview.waitForFullLoadTimeoutMs});
+</script>
+</body>
+</html>`
+
+            return new NextResponse(iframeHtml, {
+                headers: {
+                    'Content-Type': 'text/html',
+                    'Cache-Control': `public, max-age=${settings.preview.cacheSeconds}`,
+                },
+            })
+        }
+
         let html = await response.text()
 
         html = html.replace(
@@ -77,7 +122,7 @@ export async function GET(request: NextRequest) {
         return new NextResponse(html, {
             headers: {
                 "Content-Type": "text/html",
-                "Cache-Control": "public, max-age=300",
+                "Cache-Control": `public, max-age=${settings.preview.cacheSeconds}`,
             },
         })
     } catch (error) {
