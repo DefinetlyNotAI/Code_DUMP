@@ -32,9 +32,11 @@ const CustomActiveDot = (props: any) => {
 
 export function RouteChart({logs}: RouteChartProps) {
     const chartData = useMemo(() => {
-        return logs.map((log) => ({
+        // logs are returned newest-first from the DB; reverse to chronological (oldest first)
+        const chronological = [...logs].reverse()
+        return chronological.map((log) => ({
             time: new Date(log.timestamp).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}),
-            responseTime: log.responseTime || 0,
+            responseTime: log.responseTime ?? 0,
             status: log.statusCode,
             fullTime: new Date(log.timestamp).toLocaleString(),
         }))

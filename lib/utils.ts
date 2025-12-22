@@ -27,7 +27,15 @@ export async function insertStatusLog(projectSlug: string, routePath: string, st
                VALUES ($1, $2, $3, $4)`
     // Important: use explicit undefined check so that 0 is stored (0 is falsy, don't coerce to null)
     const dbResponseTime = responseTime === undefined ? null : responseTime
-    await dbPool.query(q, [projectSlug, routePath, statusCode, dbResponseTime])
+
+    try {
+        console.log(`[DB] insertStatusLog: project=${projectSlug}, route=${routePath}, status=${statusCode}, response_time=${dbResponseTime}`)
+        const res = await dbPool.query(q, [projectSlug, routePath, statusCode, dbResponseTime])
+        console.log(`[DB] insertStatusLog: query ok, rowsAffected=${(res as any)?.rowCount ?? 'unknown'}`)
+    } catch (err) {
+        console.error('[DB] insertStatusLog: query failed', err)
+        throw err
+    }
 }
 
 // Read recent logs for a route. Returns last N records ordered newest-first
