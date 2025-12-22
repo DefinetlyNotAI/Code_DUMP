@@ -1,4 +1,3 @@
-Cache.remove is unused (also .clear)
 imap-service should have all input types for functions be a proper indexed @/type
 Many settings.ts are unused, please make them properly used
 Change the bcrypt to be base64(bcrypt), where the env file contains a base64 encoded string, and the runtime decodes the base64 to get the bcrypt hash

@@ -63,6 +63,24 @@ export class Cache {
     }
 
     /**
+     * Remove all cache items matching a prefix
+     * @param prefix Cache key prefix to match
+     */
+    static removeByPrefix(prefix: string): void {
+        try {
+            const keys = Object.keys(localStorage)
+            const cachePrefix = `cache:${prefix}`
+            keys.forEach(key => {
+                if (key.startsWith(cachePrefix)) {
+                    localStorage.removeItem(key)
+                }
+            })
+        } catch (error) {
+            console.warn('[Cache] Failed to remove cache items by prefix:', error)
+        }
+    }
+
+    /**
      * Clear all cache items
      */
     static clear(): void {
