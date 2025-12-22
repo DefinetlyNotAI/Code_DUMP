@@ -66,12 +66,12 @@ export const projects: Project[] = [
                 description: "Endpoint to approve pending user registrations."
             },
             {
-                path: "/api/admin/pending-users",
+                path: "/api/admin/pending-users/test",
                 title: "Pending Users API",
                 description: "Lists users awaiting approval in the admin panel."
             },
             {
-                path: "/api/audit",
+                path: "/api/audit/test",
                 title: "Audit Logs API",
                 description: "Retrieves system audit logs for monitoring and review."
             },
@@ -96,7 +96,7 @@ export const projects: Project[] = [
                 description: "Registers new users in the NFC system."
             },
             {
-                path: "/api/auth/validate",
+                path: "/api/auth/validate/test",
                 title: "Validate API",
                 description: "Validates user authentication tokens or credentials."
             },
@@ -106,7 +106,7 @@ export const projects: Project[] = [
                 description: "Lists all NFC links associated with users."
             },
             {
-                path: "/api/users",
+                path: "/api/users/test",
                 title: "Users API",
                 description: "Fetches and manages all user accounts."
             },
@@ -131,7 +131,7 @@ export const projects: Project[] = [
                 description: "Creates multiple user records without NFC assignment."
             },
             {
-                path: "/api/users/export",
+                path: "/api/users/export/test",
                 title: "Export Users API",
                 description: "Exports user data for reporting or backup purposes."
             },

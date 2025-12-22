@@ -10,7 +10,11 @@ const ca = fs.existsSync(caPath) ? fs.readFileSync(caPath).toString() : undefine
 
 const poolConfig: any = {
     connectionString: process.env.POSTGRES_URL,
-    max: process.env.POSTGRES_MAX_CLIENTS ? Number(process.env.POSTGRES_MAX_CLIENTS) : 10,
+    max: process.env.POSTGRES_MAX_CLIENTS ? Number(process.env.POSTGRES_MAX_CLIENTS) : 5,
+    // Connection pool settings to prevent exhaustion
+    idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+    connectionTimeoutMillis: 10000, // Wait max 10 seconds for a connection from the pool
+    allowExitOnIdle: process.env.NODE_ENV === 'development', // In dev, allow pool to close when idle
 }
 
 if (ca) {

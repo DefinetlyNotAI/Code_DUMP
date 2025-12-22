@@ -1,7 +1,7 @@
 import {notFound} from "next/navigation"
 import Link from "next/link"
 import {projects} from "@/lib/projectData"
-import {getRouteStatus} from "@/lib/utils"
+import {getProjectStatus} from "@/lib/utils"
 import {Button} from "@/components/ui/button"
 import {CollapsibleRoute} from "@/components/collapsible-route"
 import AutoChecker from "@/components/auto-checker"
@@ -20,9 +20,8 @@ export default async function ProjectPage({params}: ProjectPageProps) {
         notFound()
     }
 
-    const routeStatuses = await Promise.all(
-        project.routes.map((route) => getRouteStatus(projectSlug, route))
-    )
+    const projectStatus = await getProjectStatus(projectSlug, project.routes)
+    const routeStatuses = projectStatus.routeStatuses
 
     return (
         <div className="min-h-screen bg-background">
