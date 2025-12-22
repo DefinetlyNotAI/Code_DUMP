@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "setup-password": "node scripts/setup-password.js"
+    "setup-env": "node scripts/setup-env.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
