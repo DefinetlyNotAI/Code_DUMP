@@ -173,4 +173,35 @@
     :root:not(.dark) *::-webkit-scrollbar-thumb:hover {
         background-color: oklch(0.439 0 0);
     }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+        /* Thinner scrollbars on mobile */
+        .dark *::-webkit-scrollbar,
+        :root:not(.dark) *::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .dark *::-webkit-scrollbar-thumb,
+        :root:not(.dark) *::-webkit-scrollbar-thumb {
+            border-width: 1px;
+        }
+    }
+
+    /* Prevent text selection on mobile UI elements */
+    @media (max-width: 768px) {
+        button, .mobile-nav-item {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+    }
+
+    /* Touch-friendly sizing */
+    @media (max-width: 768px) {
+        button, a {
+            min-height: 44px;
+            min-width: 44px;
+        }
+    }
 }

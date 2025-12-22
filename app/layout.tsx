@@ -1,5 +1,5 @@
 import type React from "react"
-import type {Metadata} from "next"
+import type {Metadata, Viewport} from "next"
 import {Analytics} from "@vercel/analytics/next"
 import "./globals.css"
 
@@ -23,6 +23,17 @@ export const metadata: Metadata = {
             },
         ],
     },
+}
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+    themeColor: [
+        {media: "(prefers-color-scheme: light)", color: "white"},
+        {media: "(prefers-color-scheme: dark)", color: "black"},
+    ],
 }
 
 export default function RootLayout({
