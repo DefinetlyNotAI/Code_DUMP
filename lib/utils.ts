@@ -80,7 +80,7 @@ function determineStatusFromLogs(logs: StatusLog[]): {
     let currentStatus: RouteStatus['currentStatus'] = "working"
     if (hasConnectionErrors || hasServerErrors) currentStatus = "broken"
     // Treat redirects similarly to client errors: degraded (e.g., redirect-to-login)
-    else if (hasClientErrors || hasRedirects || uptime < 90) currentStatus = "degraded"
+    else if (hasClientErrors || hasRedirects || uptime < 70) currentStatus = "degraded"
 
     return {currentStatus, uptime, lastChecked}
 }
