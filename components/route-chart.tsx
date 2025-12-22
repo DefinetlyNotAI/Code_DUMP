@@ -20,14 +20,14 @@ const CustomDot = (props: any) => {
     const {cx, cy, payload} = props
     if (cx == null || cy == null) return null
     const color = getColorForStatus(payload?.status)
-    return <circle cx={cx} cy={cy} r={3} fill={color} stroke="transparent" />
+    return <circle cx={cx} cy={cy} r={3} fill={color} stroke="transparent"/>
 }
 
 const CustomActiveDot = (props: any) => {
     const {cx, cy, payload} = props
     if (cx == null || cy == null) return null
     const color = getColorForStatus(payload?.status)
-    return <circle cx={cx} cy={cy} r={6} fill={color} stroke="#fff" strokeWidth={1} />
+    return <circle cx={cx} cy={cy} r={6} fill={color} stroke="#fff" strokeWidth={1}/>
 }
 
 export function RouteChart({logs}: RouteChartProps) {
@@ -98,8 +98,8 @@ export function RouteChart({logs}: RouteChartProps) {
                         dataKey="responseTime"
                         stroke="#ffffff"
                         strokeWidth={2}
-                        dot={<CustomDot />}
-                        activeDot={<CustomActiveDot />}
+                        dot={<CustomDot/>}
+                        activeDot={<CustomActiveDot/>}
                     />
                 </LineChart>
             </ResponsiveContainer>

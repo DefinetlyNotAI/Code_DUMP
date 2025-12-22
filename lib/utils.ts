@@ -51,7 +51,11 @@ export async function getRecentRouteLogs(projectSlug: string, routePath: string,
     const res = await dbPool.query(q, [projectSlug, routePath, limit])
 
     // Map rows to StatusLog[] (newest first)
-    return res.rows.map((r: any) => ({timestamp: new Date(r.created_at), statusCode: Number(r.status_code), responseTime: r.response_time !== null ? Number(r.response_time) : undefined}))
+    return res.rows.map((r: any) => ({
+        timestamp: new Date(r.created_at),
+        statusCode: Number(r.status_code),
+        responseTime: r.response_time !== null ? Number(r.response_time) : undefined
+    }))
 }
 
 // Determine route status from recent logs

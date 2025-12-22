@@ -23,7 +23,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({message: `Cleared logs for ${projectSlug}`})
     } catch (err) {
-        return NextResponse.json({error: "Failed to clear logs", details: err instanceof Error ? err.message : String(err)}, {status: 500})
+        return NextResponse.json({
+            error: "Failed to clear logs",
+            details: err instanceof Error ? err.message : String(err)
+        }, {status: 500})
     }
 }
 

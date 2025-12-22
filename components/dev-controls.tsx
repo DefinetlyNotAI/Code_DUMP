@@ -2,7 +2,7 @@
 
 import {useState} from "react"
 import {Button} from "@/components/ui/button"
-import {Trash, RefreshCw} from "lucide-react"
+import {RefreshCw, Trash} from "lucide-react"
 import {useToast} from "@/hooks/use-toast"
 
 interface DevControlsProps {
@@ -29,7 +29,11 @@ export default function DevControls({projectSlug}: DevControlsProps) {
                 toast({title: "Cleared logs", description: data.message || "Logs cleared"})
                 setTimeout(() => window.location.reload(), 800)
             } else {
-                toast({title: "Failed to clear logs", description: data.error || JSON.stringify(data), variant: "destructive"})
+                toast({
+                    title: "Failed to clear logs",
+                    description: data.error || JSON.stringify(data),
+                    variant: "destructive"
+                })
             }
         } catch (err) {
             toast({title: "Error", description: "Failed to clear logs", variant: "destructive"})
@@ -48,7 +52,11 @@ export default function DevControls({projectSlug}: DevControlsProps) {
                 toast({title: "Check All started", description: data.message || "Triggered checks"})
                 setTimeout(() => window.location.reload(), 1500)
             } else {
-                toast({title: "Failed to trigger checks", description: data.error || JSON.stringify(data), variant: "destructive"})
+                toast({
+                    title: "Failed to trigger checks",
+                    description: data.error || JSON.stringify(data),
+                    variant: "destructive"
+                })
             }
         } catch (err) {
             toast({title: "Error", description: "Failed to trigger checks", variant: "destructive"})
@@ -59,11 +67,13 @@ export default function DevControls({projectSlug}: DevControlsProps) {
 
     return (
         <div className="flex items-center gap-2 mt-4">
-            <Button variant="ghost" size="sm" onClick={() => setConfirmAction("checkAll")} disabled={loadingCheckAll} className="bg-transparent">
+            <Button variant="ghost" size="sm" onClick={() => setConfirmAction("checkAll")} disabled={loadingCheckAll}
+                    className="bg-transparent">
                 <RefreshCw className={`mr-2 h-4 w-4 ${loadingCheckAll ? "animate-spin" : ""}`}/>
                 {loadingCheckAll ? "Checking..." : "Check All"}
             </Button>
-            <Button variant="destructive" size="sm" onClick={() => setConfirmAction("delete")} disabled={loadingDelete} className="bg-transparent">
+            <Button variant="destructive" size="sm" onClick={() => setConfirmAction("delete")} disabled={loadingDelete}
+                    className="bg-transparent">
                 <Trash className={`mr-2 h-4 w-4`}/>
                 {loadingDelete ? "Deleting..." : "Delete all"}
             </Button>
@@ -71,7 +81,7 @@ export default function DevControls({projectSlug}: DevControlsProps) {
             {/* Confirmation modal (in-app, no native alert) */}
             {confirmAction && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <div className="absolute inset-0 bg-black/50" onClick={() => setConfirmAction(null)} />
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setConfirmAction(null)}/>
                     <div className="relative z-10 w-full max-w-md rounded-lg bg-card p-6 shadow-lg">
                         <h3 className="text-lg font-semibold text-foreground mb-2">
                             {confirmAction === "delete" ? "Confirm delete all logs" : "Confirm check all routes"}

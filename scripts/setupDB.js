@@ -5,7 +5,7 @@ require('dotenv').config({
     path: path.resolve(__dirname, '../.env')
 })
 
-const { Client } = require('pg')
+const {Client} = require('pg')
 const fs = require('fs')
 
 async function main() {

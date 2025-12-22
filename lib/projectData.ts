@@ -272,12 +272,12 @@ export const projects: Project[] = [
         visitLink: "https://flask-bank.vercel.app",
         routes: [
             // Public Routes
-            { path: "/", title: "Home", description: "Main landing page for the banking system." },
-            { path: "/setup", title: "Setup", description: "Setup page to initialize the bank system (GET, POST)." },
-            { path: "/login", title: "Login", description: "Login page for users to access the system (GET, POST)." },
-            { path: "/logout", title: "Logout", description: "Logs out the current user." },
-            { path: "/leaderboard", title: "Leaderboard", description: "Displays the leaderboard of users or wallets." },
-            { path: "/logs", title: "Public Logs", description: "Publicly accessible system logs." },
+            {path: "/", title: "Home", description: "Main landing page for the banking system."},
+            {path: "/setup", title: "Setup", description: "Setup page to initialize the bank system (GET, POST)."},
+            {path: "/login", title: "Login", description: "Login page for users to access the system (GET, POST)."},
+            {path: "/logout", title: "Logout", description: "Logs out the current user."},
+            {path: "/leaderboard", title: "Leaderboard", description: "Displays the leaderboard of users or wallets."},
+            {path: "/logs", title: "Public Logs", description: "Publicly accessible system logs."},
 
             // User Routes
             // { path: "/user/logs", title: "User Logs", description: "User's private wallet logs (login required)." },
@@ -297,7 +297,11 @@ export const projects: Project[] = [
             // { path: "/api/get/user/requests", title: "User Requests API", description: "Get user requests (GET, login required)." },
             // { path: "/api/get/walletList", title: "All Wallets API", description: "Get all wallets (GET, admin required)." },
             // { path: "/api/get/requests", title: "All Requests API", description: "Get all pending requests (GET, admin required)." },
-            { path: "/api/check-database", title: "Database Check API", description: "Check database connection status (GET)." },
+            {
+                path: "/api/check-database",
+                title: "Database Check API",
+                description: "Check database connection status (GET)."
+            },
 
             // Request API
             // { path: "/api/request/wallet", title: "Request Wallet API", description: "Request creation of a new wallet (POST)." },
