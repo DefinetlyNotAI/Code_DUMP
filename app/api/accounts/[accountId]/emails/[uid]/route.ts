@@ -11,7 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {getEmail} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
-import {CacheSettings} from "@/lib/settings"
+import {CacheSettings, RateLimitSettings} from "@/lib/settings"
 
 // Force Node.js runtime (required for cookies())
 export const runtime = 'nodejs'
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
 
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
-        const rateLimit = checkRateLimit(`email:${ip}`, 30, 60 * 1000) // 30 per minute
+        const rateLimit = checkRateLimit(`email:${ip}`, RateLimitSettings.emailLimit, RateLimitSettings.windowMs)
 
         if (!rateLimit.allowed) {
             return NextResponse.json(

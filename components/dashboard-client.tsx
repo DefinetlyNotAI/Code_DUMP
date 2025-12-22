@@ -14,6 +14,7 @@ import {Alert, AlertDescription} from "@/components/ui/alert"
 import {AlertCircle} from "lucide-react"
 import {Account} from "@/types";
 import {Cache} from "@/lib/cache"
+import {UISettings} from "@/lib/settings"
 
 export function DashboardClient() {
     const [accounts, setAccounts] = useState<Account[]>([])
@@ -153,7 +154,7 @@ export function DashboardClient() {
 
             <div className="flex h-[calc(100vh-4rem)]">
                 {/* Folder sidebar */}
-                <div className="w-64 border-r bg-muted/30 overflow-y-auto">
+                <div className="border-r bg-muted/30 overflow-y-auto" style={{width: `${UISettings.sidebarWidth}px`}}>
                     {selectedAccount && (
                         <FolderList
                             accountId={selectedAccount}
@@ -172,7 +173,8 @@ export function DashboardClient() {
                 </div>
 
                 {/* Email list */}
-                <div className="w-96 border-r bg-background overflow-y-auto">
+                <div className="border-r bg-background overflow-y-auto"
+                     style={{width: `${UISettings.emailListWidth}px`}}>
                     {selectedAccount && selectedFolder && (
                         <EmailList
                             accountId={selectedAccount}

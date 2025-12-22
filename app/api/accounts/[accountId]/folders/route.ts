@@ -11,7 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {listFolders} from "@/lib/imap-service"
 import {checkRateLimit} from "@/lib/rate-limit"
-import {CacheSettings} from "@/lib/settings"
+import {CacheSettings, RateLimitSettings} from "@/lib/settings"
 
 export async function GET(request: NextRequest, {params}: { params: Promise<{ accountId: string }> }) {
     try {
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest, {params}: { params: Promise<{ ac
 
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
-        const rateLimit = checkRateLimit(`folders:${ip}`, 30, 60 * 1000) // 30 per minute
+        const rateLimit = checkRateLimit(`folders:${ip}`, RateLimitSettings.foldersLimit, RateLimitSettings.windowMs)
 
         if (!rateLimit.allowed) {
             console.log("[API] /api/accounts/[accountId]/folders - Rate limit exceeded")

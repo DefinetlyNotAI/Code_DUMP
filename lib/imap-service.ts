@@ -15,7 +15,7 @@ import {simpleParser} from "mailparser"
 import {getAccountById} from "./imap-config"
 import DOMPurify from "isomorphic-dompurify"
 import {EmailCount, EmailDetail, EmailFolder, GetAttachmentParams, GetEmailParams, ListEmailsParams} from "@/types";
-import {FolderSettings} from "./settings"
+import {FolderSettings, ImapSettings} from "./settings"
 
 /**
  * Create IMAP connection
@@ -58,9 +58,8 @@ function createImapConnection(accountId: string): Promise<Imap> {
             port: account.imap.port,
             tls: account.imap.secure,
             tlsOptions: {rejectUnauthorized: true},
-            // Connection timeout
-            connTimeout: 30000,
-            authTimeout: 10000,
+            connTimeout: ImapSettings.connectionTimeout,
+            authTimeout: ImapSettings.authTimeout,
         })
 
         imap.once("ready", () => {

@@ -15,6 +15,7 @@ import {Download, Paperclip} from "lucide-react"
 import {EmailAddress, EmailAttachment, EmailDetail, EmailViewerProps} from "@/types";
 import {Cache} from "@/lib/cache"
 import {formatPlainText} from "@/lib/text-formatter"
+import {CacheSettings, EmailDisplaySettings} from "@/lib/settings"
 
 export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
     const [email, setEmail] = useState<EmailDetail | null>(null)
@@ -57,7 +58,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                 }
 
                 // Cache for 10 minutes (emails don't change often)
-                Cache.set(cacheKey, data.email, 10 * 60 * 1000)
+                Cache.set(cacheKey, data.email, CacheSettings.client.email)
 
                 setEmail(data.email)
                 setLoading(false)
@@ -73,7 +74,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
     // Auto-detect best view mode
     const defaultTab = useMemo(() => {
-        if (!email) return "text"
+        if (!email) return EmailDisplaySettings.defaultView
 
         // If only text exists, use text
         if (email.text && !email.html) return "text"
@@ -101,7 +102,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
             return hasFormatting ? "html" : "text"
         }
 
-        return "text"
+        return EmailDisplaySettings.defaultView
     }, [email])
 
     async function downloadAttachment(att: EmailAttachment) {
@@ -162,7 +163,12 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
 
     function formatAddress(addr?: EmailAddress[]): string {
         if (!addr || addr.length === 0) return "Unknown"
-        return addr.map((a) => a.name || a.address).join(", ")
+        return addr.map((a) => {
+            if (EmailDisplaySettings.showEmailAddresses && a.name && a.address) {
+                return `${a.name} <${a.address}>`
+            }
+            return a.name || a.address || "Unknown"
+        }).join(", ")
     }
 
     return (
@@ -187,7 +193,7 @@ export function EmailViewer({accountId, folder, uid}: EmailViewerProps) {
                     )}
                     <div className="flex gap-2">
                         <span className="text-muted-foreground w-16">Date:</span>
-                        <span>{email.date ? format(new Date(email.date), "PPpp") : "Unknown"}</span>
+                        <span>{email.date ? format(new Date(email.date), EmailDisplaySettings.dateFormat) : "Unknown"}</span>
                     </div>
                 </div>
 

@@ -7,6 +7,7 @@
  * - Exponential backoff on repeated failures
  */
 import {RateLimitEntry, RateLimitResult} from "@/types/server";
+import {RateLimitSettings, SecuritySettings} from "./settings";
 
 
 // In-memory store (use Redis in production for multi-instance deployments)
@@ -37,9 +38,9 @@ setInterval(
  */
 export function checkRateLimit(
     identifier: string,
-    maxAttempts: number = 10,
-    windowMs: number = 15 * 60 * 1000, // 15 minutes
-    blockDurationMs: number = 30 * 60 * 1000, // 30 minutes
+    maxAttempts: number = SecuritySettings.maxLoginAttempts,
+    windowMs: number = RateLimitSettings.windowMs,
+    blockDurationMs: number = SecuritySettings.lockoutDuration,
 ): RateLimitResult {
     const now = Date.now()
     const entry = store.get(identifier)

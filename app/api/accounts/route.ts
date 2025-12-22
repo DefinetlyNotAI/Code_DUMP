@@ -11,6 +11,7 @@ import {type NextRequest, NextResponse} from "next/server"
 import {requireAuth} from "@/lib/auth"
 import {getAccountList} from "@/lib/imap-config"
 import {checkRateLimit} from "@/lib/rate-limit"
+import {RateLimitSettings} from "@/lib/settings"
 
 // Force Node.js runtime (required for cookies())
 export const runtime = 'nodejs'
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
 
         // Rate limiting
         const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
-        const rateLimit = checkRateLimit(`accounts:${ip}`, 30, 60 * 1000) // 30 per minute
+        const rateLimit = checkRateLimit(`accounts:${ip}`, RateLimitSettings.accountsLimit, RateLimitSettings.windowMs)
 
         if (!rateLimit.allowed) {
             console.log("[API] /api/accounts - Rate limit exceeded for IP:", ip)
