@@ -25,7 +25,9 @@ export async function insertStatusLog(projectSlug: string, routePath: string, st
     // Insert a single row into status_logs. Store response_time when available.
     const q = `INSERT INTO status_logs (project_slug, route_path, status_code, response_time)
                VALUES ($1, $2, $3, $4)`
-    await dbPool.query(q, [projectSlug, routePath, statusCode, responseTime || null])
+    // Important: use explicit undefined check so that 0 is stored (0 is falsy, don't coerce to null)
+    const dbResponseTime = responseTime === undefined ? null : responseTime
+    await dbPool.query(q, [projectSlug, routePath, statusCode, dbResponseTime])
 }
 
 // Read recent logs for a route. Returns last N records ordered newest-first

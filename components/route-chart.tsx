@@ -8,6 +8,28 @@ interface RouteChartProps {
     logs: StatusLog[]
 }
 
+function getColorForStatus(status: number | undefined) {
+    if (typeof status !== "number") return "#9CA3AF" // gray
+    if (status >= 200 && status < 300) return "#22c55e" // green-500
+    if (status >= 300 && status < 400) return "#f59e0b" // amber-500 (yellow)
+    // 4xx, 5xx, 0, and others -> red
+    return "#ef4444" // red-500
+}
+
+const CustomDot = (props: any) => {
+    const {cx, cy, payload} = props
+    if (cx == null || cy == null) return null
+    const color = getColorForStatus(payload?.status)
+    return <circle cx={cx} cy={cy} r={3} fill={color} stroke="transparent" />
+}
+
+const CustomActiveDot = (props: any) => {
+    const {cx, cy, payload} = props
+    if (cx == null || cy == null) return null
+    const color = getColorForStatus(payload?.status)
+    return <circle cx={cx} cy={cy} r={6} fill={color} stroke="#fff" strokeWidth={1} />
+}
+
 export function RouteChart({logs}: RouteChartProps) {
     const chartData = useMemo(() => {
         return logs.map((log) => ({
@@ -45,19 +67,23 @@ export function RouteChart({logs}: RouteChartProps) {
                         content={({active, payload}) => {
                             if (!active || !payload?.length) return null
                             const data = payload[0].payload
+                            const status = data.status
+                            const isGreen = typeof status === "number" && status >= 200 && status < 300
+                            const isYellow = typeof status === "number" && status >= 300 && status < 400
+
+                            const badgeClasses = isGreen
+                                ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                                : isYellow
+                                    ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
+                                    : "bg-red-500/10 text-red-700 dark:text-red-400"
+
                             return (
                                 <div className="rounded-lg border border-border bg-card p-3 shadow-lg">
                                     <div className="text-xs text-muted-foreground mb-1">{data.fullTime}</div>
                                     <div className="flex items-center gap-2">
                                         <div className="text-sm font-semibold text-foreground">{data.responseTime}ms
                                         </div>
-                                        <div
-                                            className={`text-xs px-2 py-0.5 rounded ${
-                                                data.status >= 200 && data.status < 400
-                                                    ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                                                    : "bg-red-500/10 text-red-700 dark:text-red-400"
-                                            }`}
-                                        >
+                                        <div className={`text-xs px-2 py-0.5 rounded ${badgeClasses}`}>
                                             {data.status}
                                         </div>
                                     </div>
@@ -70,8 +96,8 @@ export function RouteChart({logs}: RouteChartProps) {
                         dataKey="responseTime"
                         stroke="#ffffff"
                         strokeWidth={2}
-                        dot={{fill: "#ffffff", r: 3}}
-                        activeDot={{r: 5, fill: "#ffffff"}}
+                        dot={<CustomDot />}
+                        activeDot={<CustomActiveDot />}
                     />
                 </LineChart>
             </ResponsiveContainer>
