@@ -31,7 +31,7 @@ It provides **read-only** access to IMAP mailboxes through a secure web interfac
 
 ### Content Security
 
-- **HTML sanitization** - All email HTML sanitized with DOMPurify before display
+- **HTML sanitization** - All email HTML sanitized with sanitize-html before display
 - **Allowed HTML tags whitelist** - Only safe formatting tags permitted
 - **Content Security Policy** - Strict CSP headers on all responses
 - **XSS protection** - Multiple layers prevent cross-site scripting
