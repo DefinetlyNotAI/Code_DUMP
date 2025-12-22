@@ -138,12 +138,11 @@ const serverSettings: ServerSettings = {
         maxRedirects: parseNumber(process.env.PREVIEW_MAX_REDIRECTS ?? process.env.PREVIEW_MAX_REDIRECTS, 3),
         redirectWaitMsMin: parseNumber(process.env.PREVIEW_REDIRECT_WAIT_MS_MIN, 3000),
         redirectWaitMsJitter: parseNumber(process.env.PREVIEW_REDIRECT_WAIT_MS_JITTER, 2000),
-        fetchTimeoutMs: parseNumber(process.env.PREVIEW_FETCH_TIMEOUT_MS, 10000),
+        fetchTimeoutMs: parseNumber(process.env.PREVIEW_FETCH_TIMEOUT_MS, 15000),
         cacheSeconds: parseNumber(process.env.PREVIEW_CACHE_SECONDS, 300),
         userAgent: parseString(process.env.PREVIEW_USER_AGENT, 'Website-Monitor-Preview/1.0'),
-        // Default to waiting for full client-side load to get accurate previews
         waitForFullLoad: parseBool(process.env.PREVIEW_WAIT_FOR_FULL_LOAD, true),
-        waitForFullLoadTimeoutMs: parseNumber(process.env.PREVIEW_WAIT_FOR_FULL_LOAD_TIMEOUT_MS, 10_000),
+        waitForFullLoadTimeoutMs: parseNumber(process.env.PREVIEW_WAIT_FOR_FULL_LOAD_TIMEOUT_MS, 15000),
     },
 
     api: {
@@ -165,7 +164,7 @@ const serverSettings: ServerSettings = {
     },
 
     layout: {
-        // sensible defaults: desktop 1 per row, mobile 1 per row
+        // sensible defaults: desktop 3 per row, mobile 1 per row
         projectsPerRowDesktop: parseNumber(process.env.PROJECTS_PER_ROW_DESKTOP, 1),
         projectsPerRowMobile: parseNumber(process.env.PROJECTS_PER_ROW_MOBILE, 1),
         mobileBreakpointPx: parseNumber(process.env.MOBILE_BREAKPOINT_PX, 720),
