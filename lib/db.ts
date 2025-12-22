@@ -18,7 +18,10 @@ if (ca) {
 }
 
 // Use a typed alias to avoid TypeScript complaining about indexing global
-const g = global as unknown as { __dbPool?: Pool }
+const g = global as unknown as {
+    __dbPool?: Pool
+    __dbPoolShutdownRegistered?: boolean
+}
 
 if (!g.__dbPool) {
     g.__dbPool = new Pool(poolConfig)
@@ -27,16 +30,21 @@ if (!g.__dbPool) {
 export const dbPool = g.__dbPool
 
 // Graceful shutdown: ensure the pool is closed on process exit signals
-const shutdown = async () => {
-    try {
-        if (g.__dbPool) {
-            await g.__dbPool.end()
+// Register these listeners only once to avoid MaxListenersExceededWarning when Next reloads modules
+if (!g.__dbPoolShutdownRegistered) {
+    const shutdown = async () => {
+        try {
+            if (g.__dbPool) {
+                await g.__dbPool.end()
+            }
+        } catch (err) {
+            // ignore
         }
-    } catch (err) {
-        // ignore
     }
-}
 
-process.on('SIGINT', shutdown)
-process.on('SIGTERM', shutdown)
-process.on('exit', shutdown)
+    process.on('SIGINT', shutdown)
+    process.on('SIGTERM', shutdown)
+    process.on('exit', shutdown)
+
+    g.__dbPoolShutdownRegistered = true
+}
