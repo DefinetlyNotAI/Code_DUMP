@@ -1,5 +1,3 @@
----
-
 # NetMon: A Simple Windows SysAdmin Panel for Network Monitoring
 
 NetMon is a lightweight and simple network monitoring tool designed to run on Windows, ideal for sysadmins and network professionals. It allows you to monitor system and network data locally through a Flask-based interface. 
