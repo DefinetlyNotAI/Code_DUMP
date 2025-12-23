@@ -40,7 +40,8 @@ A comprehensive, production-ready website monitoring and status dashboard built 
 
 ### Smart Status Detection
 - **Working**: Routes with 200-299 responses and >70% uptime
-- **Degraded**: Routes with 4xx errors, redirects or bad uptime (<70%)
+- **Previous Degradations**: Routes that were previously degraded but are now healthy [Routes with 200-299 responses and <70% uptime]
+- **Degraded**: Routes with 4xx errors or redirects too often
 - **Broken**: Routes with connection failures (timeout/network) or 5xx server errors
 - **Unknown**: Routes with no recent check data
 

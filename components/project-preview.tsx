@@ -1,8 +1,7 @@
 // noinspection HtmlRequiredLangAttribute
 
 import {ExternalLink} from "lucide-react"
-import {JSDOM} from "jsdom"
-import createDOMPurify from "dompurify"
+import sanitizeHtml from "sanitize-html"
 
 interface ProjectPreviewProps {
     url: string
@@ -30,14 +29,10 @@ export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProp
         if (response.ok) {
             let html = await response.text()
 
-            // Use DOMPurify for proper HTML sanitization
-            const window = new JSDOM('').window
-            const DOMPurify = createDOMPurify(window as any)
-
-            // Configure DOMPurify to be strict but allow necessary elements
-            html = DOMPurify.sanitize(html, {
-                ALLOWED_TAGS: [
-                    'html', 'head', 'body', 'title', 'meta', 'link', 'style',
+            // Server-side sanitization using sanitize-html (no jsdom/jsdom parse5 ESM issues)
+            html = sanitizeHtml(html, {
+                allowedTags: [
+                    'html', 'head', 'body', 'title', 'meta', 'link',
                     'div', 'span', 'p', 'a', 'img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
                     'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
                     'header', 'footer', 'nav', 'section', 'article', 'aside', 'main',
@@ -47,25 +42,24 @@ export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProp
                     'video', 'audio', 'source', 'track', 'canvas', 'svg', 'path', 'circle',
                     'rect', 'line', 'polyline', 'polygon', 'g', 'text', 'tspan'
                 ],
-                ALLOWED_ATTR: [
-                    'href', 'src', 'alt', 'title', 'class', 'id', 'style', 'width', 'height',
-                    'data-*', 'aria-*', 'role', 'rel', 'target', 'type', 'name', 'value',
-                    'placeholder', 'disabled', 'readonly', 'checked', 'selected',
-                    'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border',
-                    'viewBox', 'd', 'fill', 'stroke', 'stroke-width', 'transform',
-                    'xmlns', 'xmlns:xlink', 'x', 'y', 'cx', 'cy', 'r', 'rx', 'ry',
-                    'x1', 'x2', 'y1', 'y2', 'points'
-                ],
-                FORBID_TAGS: ['script', 'noscript', 'object', 'embed', 'applet', 'iframe', 'base'],
-                FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur'],
-                ALLOW_DATA_ATTR: true,
-                ALLOW_ARIA_ATTR: true,
-                WHOLE_DOCUMENT: true,
-                RETURN_DOM: false,
-                RETURN_DOM_FRAGMENT: false,
-                SANITIZE_DOM: true,
-                KEEP_CONTENT: true,
-                IN_PLACE: false
+                allowedAttributes: {
+                    '*': [
+                        'href', 'src', 'alt', 'title', 'class', 'id', 'width', 'height',
+                        'role', 'rel', 'target', 'type', 'name', 'value', 'placeholder', 'disabled', 'readonly', 'checked', 'selected',
+                        'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border',
+                        'viewBox', 'd', 'fill', 'stroke', 'stroke-width', 'transform',
+                        'xmlns', 'xmlns:xlink', 'x', 'y', 'cx', 'cy', 'r', 'rx', 'ry',
+                        'x1', 'x2', 'y1', 'y2', 'points',
+                        'data-*', 'aria-*'
+                    ]
+                },
+                // Disallow potentially dangerous tags/attributes
+                disallowedTagsMode: 'discard',
+                // Allow data and blob URLs for images
+                allowProtocolRelative: true,
+                allowedSchemesByTag: {
+                    img: ['http', 'https', 'data', 'blob']
+                }
             })
 
             // Remove existing CSP meta tags that might conflict
