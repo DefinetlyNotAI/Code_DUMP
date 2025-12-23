@@ -1,6 +1,8 @@
 // noinspection HtmlRequiredLangAttribute
 
 import {ExternalLink} from "lucide-react"
+import {JSDOM} from "jsdom"
+import createDOMPurify from "dompurify"
 
 interface ProjectPreviewProps {
     url: string
@@ -28,59 +30,43 @@ export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProp
         if (response.ok) {
             let html = await response.text()
 
-            // Remove script tags to make it static (no JavaScript execution)
-            // Use iterative replacement to handle nested or overlapping patterns
-            let previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/<script[\s\S]*?<\/script>/gi, '')
-                html = html.replace(/<script[^>]*>/gi, '')
-            }
+            // Use DOMPurify for proper HTML sanitization
+            const window = new JSDOM('').window
+            const DOMPurify = createDOMPurify(window as any)
 
-            // Remove noscript tags (they're not needed in a static preview)
-            previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
-            }
-
-            // Remove preload links for scripts (since we removed the scripts)
-            html = html.replace(/<link[^>]*rel\s*=\s*["']?preload["'][^>]*as\s*=\s*["']?script["'][^>]*>/gi, '')
-            html = html.replace(/<link[^>]*as\s*=\s*["']?script["'][^>]*rel\s*=\s*["']?preload["'][^>]*>/gi, '')
-
-            // Remove modulepreload links as well
-            html = html.replace(/<link[^>]*rel\s*=\s*["']?modulepreload["'][^>]*>/gi, '')
-
-            // Remove inline event handlers (onclick, onload, onerror, etc.)
-            // Use iterative replacement to handle overlapping patterns like "ononclick"
-            previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ' ')
-                html = html.replace(/\son\w+\s*=\s*[^\s>]+/gi, ' ')
-            }
-
-            // Remove javascript: URIs
-            previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/\s(href|src|action|formaction|data)\s*=\s*["']?\s*javascript:/gi, ' data-blocked-$1="javascript:')
-            }
-
-            // Remove data: URIs that could contain HTML/SVG with scripts
-            previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/\s(href|src|action|formaction)\s*=\s*["']?\s*data:text\/html/gi, ' data-blocked-$1="data:text/html')
-            }
-
-            // Remove potentially dangerous tags (object, embed, applet)
-            previousHtml = ''
-            while (previousHtml !== html) {
-                previousHtml = html
-                html = html.replace(/<(object|embed|applet)[\s\S]*?<\/\1>/gi, '')
-                html = html.replace(/<(object|embed|applet)[^>]*>/gi, '')
-            }
+            // Configure DOMPurify to be strict but allow necessary elements
+            html = DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: [
+                    'html', 'head', 'body', 'title', 'meta', 'link', 'style',
+                    'div', 'span', 'p', 'a', 'img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                    'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
+                    'header', 'footer', 'nav', 'section', 'article', 'aside', 'main',
+                    'form', 'input', 'button', 'label', 'select', 'option', 'textarea',
+                    'strong', 'em', 'b', 'i', 'u', 'small', 'mark', 'del', 'ins', 'sub', 'sup',
+                    'br', 'hr', 'pre', 'code', 'blockquote', 'figure', 'figcaption',
+                    'video', 'audio', 'source', 'track', 'canvas', 'svg', 'path', 'circle',
+                    'rect', 'line', 'polyline', 'polygon', 'g', 'text', 'tspan'
+                ],
+                ALLOWED_ATTR: [
+                    'href', 'src', 'alt', 'title', 'class', 'id', 'style', 'width', 'height',
+                    'data-*', 'aria-*', 'role', 'rel', 'target', 'type', 'name', 'value',
+                    'placeholder', 'disabled', 'readonly', 'checked', 'selected',
+                    'colspan', 'rowspan', 'cellpadding', 'cellspacing', 'border',
+                    'viewBox', 'd', 'fill', 'stroke', 'stroke-width', 'transform',
+                    'xmlns', 'xmlns:xlink', 'x', 'y', 'cx', 'cy', 'r', 'rx', 'ry',
+                    'x1', 'x2', 'y1', 'y2', 'points'
+                ],
+                FORBID_TAGS: ['script', 'noscript', 'object', 'embed', 'applet', 'iframe', 'base'],
+                FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onfocus', 'onblur'],
+                ALLOW_DATA_ATTR: true,
+                ALLOW_ARIA_ATTR: true,
+                WHOLE_DOCUMENT: true,
+                RETURN_DOM: false,
+                RETURN_DOM_FRAGMENT: false,
+                SANITIZE_DOM: true,
+                KEEP_CONTENT: true,
+                IN_PLACE: false
+            })
 
             // Remove existing CSP meta tags that might conflict
             html = html.replace(/<meta[^>]*http-equiv\s*=\s*["']?Content-Security-Policy["']?[^>]*>/gi, '')
@@ -146,7 +132,6 @@ export async function ProjectPreview({url, title, renderUrl}: ProjectPreviewProp
                     className="h-full w-full scale-[0.5] origin-top-left pointer-events-none overflow-hidden"
                     style={{width: "200%", height: "200%", overflow: "hidden"}}
                     sandbox="allow-same-origin"
-                    scrolling="no"
                 />
             )}
         </div>
