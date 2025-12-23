@@ -1,5 +1,5 @@
 # Define repo URLs and base target
-$baseRepo = "https://github.com/USERNAME/DUMP_PROJECT_NAME"
+$baseRepo = "https://github.com/DefinetlyNotAI/Code_DUMP"
 $reposToImport = @(
     "https://github.com/USERNAME/PROJECT_NAME",
 )
