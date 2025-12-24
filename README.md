@@ -39,4 +39,5 @@
 - [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
 - [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template/lockdown)
 - [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
+- [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/IGCSE%20Grade%20Equivelancy%20Calculator)
 ---
