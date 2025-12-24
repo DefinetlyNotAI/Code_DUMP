@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mu'adala Score Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Mu'adala Score Calculator</h1>
+      <p class="subtitle">Calculate O Level and A/AS Level equivalency scores</p>
+    </header>
+
+    <main>
+      <div class="section">
+        <div class="section-header">
+          <h2>O Level Subjects</h2>
+          <button class="btn-add" onclick="addSubject('olevel')">+ Add O Level</button>
+        </div>
+        <div id="olevel-container" class="subjects-container"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>A Level Subjects</h2>
+          <button class="btn-add" onclick="addSubject('alevel')">+ Add A Level</button>
+        </div>
+        <div id="alevel-container" class="subjects-container"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2>AS Level Subjects</h2>
+          <button class="btn-add" onclick="addSubject('aslevel')">+ Add AS Level</button>
+        </div>
+        <p class="info-text">Note: AS Levels must be in pairs (2 AS = 1 A Level)</p>
+        <div id="aslevel-container" class="subjects-container"></div>
+      </div>
+
+      <div class="section weighting-section">
+        <h2>Weighting</h2>
+        <div class="slider-container">
+          <label>O Level: <span id="olevel-weight">50</span>%</label>
+          <input type="range" id="weight-slider" min="0" max="100" value="50" oninput="updateWeighting()">
+          <label>A Level: <span id="alevel-weight">50</span>%</label>
+        </div>
+      </div>
+
+      <div class="section target-section">
+        <h2>Target Percentage</h2>
+        <input type="number" id="target-percentage" min="0" max="100" step="0.1" value="90" placeholder="Enter target percentage">
+      </div>
+
+      <div class="button-group">
+        <button class="btn-primary" onclick="calculateMuadala()">Calculate Current Score</button>
+        <button class="btn-secondary" onclick="predictMinimumGrades()">Predict Minimum Grades</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
