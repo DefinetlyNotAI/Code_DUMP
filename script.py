@@ -4,6 +4,33 @@ import math
 import cv2
 import signal
 
+
+# bt_available: bool -- True if pyserial import succeeded
+# bt: serial.Serial or "TEST" or None -- active Bluetooth/serial connection object or mode
+# modelFile, configFile: paths to DNN model files (Caffe)
+# net, use_dnn: OpenCV DNN network object and flag if loaded
+# face_cascade: Haar cascade fallback classifier or None
+# _shoot_radius_norm: float -- normalized deadzone radius (relative to half-frame)
+# _shoot_acc_threshold: float -- required confidence to auto-shoot
+# _PAN_RANGE, _TILT_RANGE: float -- how normalized dx/dy map to pan/tilt absolute ranges
+# _RECOIL_IMPULSE, _RECOIL_DECAY: recoil simulation settings
+# _sim_*: simulation state variables (pan, tilt, recoil, last_time)
+# last_signal: last string command sent to Arduino (to avoid flooding)
+# _stop: flag set by signal handler to request clean shutdown
+#
+# Functions:
+# - connect_bluetooth(port, baud, timeout): try to open serial port to Arduino
+# - get_bt_connection(): top-level connection logic; can return "TEST" to simulate
+# - detect_faces(frame, conf_threshold): returns list of detections (x1,y1,x2,y2,conf)
+# - compute_best_target(detections, w, h): returns (has_target, dx, dy, acc)
+# - simulate_robot(...): used only in TEST mode to emulate pan/tilt/recoil
+# - _signal_handler(sig, frame): sets _stop flag so main loop exits gracefully
+# Notes: Commands sent to Arduino are text lines:
+#   "S,dx,dy,acc" -> shoot command (S)
+#   "M,dx,dy,acc" -> move/track command (M)
+#   "SCAN"       -> no target / scanning
+# Arduino must parse lines terminated by "\n".
+
 try:
     # noinspection PyUnusedImports
     import serial
@@ -232,6 +259,13 @@ def _signal_handler(_sig, _frame):
 # register handler for Ctrl+C
 signal.signal(signal.SIGINT, _signal_handler)
 
+# Register SIGTERM if available (helps when running under process managers)
+if hasattr(signal, "SIGTERM"):
+    try:
+        signal.signal(signal.SIGTERM, _signal_handler)
+    except Exception:
+        pass
+
 try:
     while True:
         # allow signal handler to break the loop
@@ -334,9 +368,26 @@ try:
 except KeyboardInterrupt:
     # fallback in case signal didn't trigger; ensure graceful exit
     print("KeyboardInterrupt received, exiting...")
+    _stop = True
 
 finally:
+    # ensure we inform Arduino (if connected) that we are stopping to leave it safe
+    try:
+        if bt is not None and bt != "TEST":
+            try:
+                # prefer an explicit stop command; the Arduino should handle this by
+                # stopping motors, disabling actuators and/or going to a safe state
+                bt.write(b"STOP\n")
+                time.sleep(0.05)
+            except Exception:
+                # best-effort, ignore write errors during shutdown
+                pass
+            try:
+                bt.close()
+            except Exception:
+                pass
+    except Exception:
+        pass
+
     cap.release()
     cv2.destroyAllWindows()
-    if bt != "TEST" and bt is not None:
-        bt.close()
