@@ -1,6 +1,7 @@
 ## **1. Arduino Implementation**
 
-The Arduino acts as the actuator for your robotic system. It receives simple textual commands from the Python script over Bluetooth (or serial) and controls pan/tilt servos (and potentially a shooting mechanism).
+The Arduino acts as the actuator for your robotic system. It receives simple textual commands from the Python script
+over Bluetooth (or serial) and controls pan/tilt servos (and potentially a shooting mechanism).
 
 ### **Expected Arduino setup:**
 
@@ -137,4 +138,5 @@ The Arduino acts as the actuator for your robotic system. It receives simple tex
 
 ---
 
-This setup allows your Python code to **detect faces**, **compute the best target**, **decide whether to shoot**, and either **simulate** the robot in TEST mode or **send commands to Arduino**.
+This setup allows your Python code to **detect faces**, **compute the best target**, **decide whether to shoot**, and
+either **simulate** the robot in TEST mode or **send commands to Arduino**.

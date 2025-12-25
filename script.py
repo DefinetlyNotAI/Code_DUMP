@@ -1,9 +1,9 @@
-import time
-import os
 import math
-import cv2
+import os
 import signal
+import time
 
+import cv2
 
 # bt_available: bool -- True if pyserial import succeeded
 # bt: serial.Serial or "TEST" or None -- active Bluetooth/serial connection object or mode
@@ -179,10 +179,10 @@ _shoot_radius_norm = 0.08  # small circle: ~8% of half-frame (tunable)
 _shoot_acc_threshold = 0.60  # require reasonable confidence to auto-shoot
 
 # --- Modified simulation constants & state (new) ---
-_PAN_RANGE = 90.0     # degrees (or arbitrary units) for dx = ±1 -> pan target ±_PAN_RANGE
-_TILT_RANGE = 45.0    # degrees for dy = ±1 -> tilt target ±_TILT_RANGE
+_PAN_RANGE = 90.0  # degrees (or arbitrary units) for dx = ±1 -> pan target ±_PAN_RANGE
+_TILT_RANGE = 45.0  # degrees for dy = ±1 -> tilt target ±_TILT_RANGE
 _RECOIL_IMPULSE = 3.0  # small tilt change when shooting
-_RECOIL_DECAY = 3.0    # per-second decay of recoil back to zero
+_RECOIL_DECAY = 3.0  # per-second decay of recoil back to zero
 
 _sim_pan = 0.0
 _sim_tilt = 0.0
