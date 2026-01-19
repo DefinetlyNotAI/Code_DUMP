@@ -100,13 +100,29 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
     }, [selected])
 
     const onDownloadAll = useCallback(async () => {
+        // Generate filename based on active filters
+        let filename: string
+        if (activeFilters.has(ALL_KEY)) {
+            filename = 'Entire_Gallery.zip'
+        } else {
+            const filterNames = Array.from(activeFilters)
+                .map(f => f.replace(/\//g, '_'))
+                .join('_')
+            filename = `${filterNames}_Gallery.zip`
+        }
+
+        // If ALL is selected, use mode 'all', otherwise send the filtered image paths
+        const body = activeFilters.has(ALL_KEY)
+            ? {mode: 'all', filename}
+            : {items: visibleImages.map(img => img.path), filename}
+
         const res = await fetch('/api/download', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({mode: 'all'}),
+            body: JSON.stringify(body),
         })
-        await downloadBlob(res, 'gallery.zip')
-    }, [])
+        await downloadBlob(res, filename)
+    }, [activeFilters, ALL_KEY, visibleImages])
 
     // toolbar id (serializable)
     const toolbarId = useMemo(() => 'download-toolbar-' + Math.random().toString(36).slice(2, 8), [])
@@ -139,34 +155,14 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
                 onToggleFilterAction={toggleFilter}
             />
 
-            <DownloadToolbar id={toolbarId} selectedCount={selected.size} totalCount={visibleImages.length}/>
+            <DownloadToolbar
+                id={toolbarId}
+                selectedCount={selected.size}
+                totalCount={visibleImages.length}
+                onClearSelectionAction={clearSelection}
+            />
 
             <GalleryGrid images={visibleImages} selected={selectedArray} onToggle={toggleSelect}/>
-
-            {selected.size > 0 && (
-                <div className="mt-8 text-center">
-                    <button
-                        className="px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300"
-                        onClick={clearSelection}
-                        style={{
-                            background: 'transparent',
-                            color: '#D4AF37',
-                            border: '1px solid rgba(212, 175, 55, 0.3)',
-                            cursor: 'pointer'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = '#D4AF37'
-                            e.currentTarget.style.boxShadow = '0 2px 10px rgba(212, 175, 55, 0.15)'
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.3)'
-                            e.currentTarget.style.boxShadow = 'none'
-                        }}
-                    >
-                        Clear Selection
-                    </button>
-                </div>
-            )}
         </div>
     )
 }
