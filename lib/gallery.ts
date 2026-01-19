@@ -1,10 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import {promisify} from 'util'
 import sizeOf from 'image-size'
 
-const readdir = promisify(fs.readdir)
-const stat = promisify(fs.stat)
 
 export type ImageItem = {
     path: string // e.g. "opening_ceremony/photo.jpg"
@@ -63,33 +60,57 @@ async function statImageSize(filePath: string): Promise<{ width?: number; height
 
 async function readImageTreeFromFS(): Promise<Folder[]> {
     const root = PUBLIC_IMAGES_PATH
-    const folders: Folder[] = []
-    if (!fs.existsSync(root)) return folders
-    const items = await readdir(root)
-    for (const item of items) {
-        const p = path.join(root, item)
-        const s = await stat(p)
-        if (s.isDirectory()) {
-            const files = await readdir(p)
-            const images: ImageItem[] = []
-            for (const f of files) {
-                const ext = path.extname(f).toLowerCase()
+    if (!fs.existsSync(root)) return []
+
+    const foldersMap: Record<string, Folder> = {}
+
+    async function processDir(dirPath: string, relParts: string[]): Promise<void> {
+        const entries = await fs.promises.readdir(dirPath, {withFileTypes: true})
+
+        for (const entry of entries) {
+            const entryPath = path.join(dirPath, entry.name)
+
+            if (entry.isDirectory()) {
+                await processDir(entryPath, [...relParts, entry.name])
+            } else if (entry.isFile()) {
+                const ext = path.extname(entry.name).toLowerCase()
                 if (!['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.svg'].includes(ext)) continue
-                const absolute = path.join(p, f)
-                const dims = await statImageSize(absolute)
-                images.push({
-                    path: path.posix.join(item, f),
-                    filename: f,
-                    folder: item,
-                    url: `/images/${encodeURI(item)}/${encodeURI(f)}`,
+
+                // Determine top-level parent folder
+                const topFolder = relParts.length > 0 ? relParts[0] : ''
+                if (!topFolder) continue // Skip files in root
+
+                const dims = await statImageSize(entryPath)
+
+                // Build the relative path for this file
+                const relPathForFile = [...relParts, entry.name].join('/')
+                const urlParts = [...relParts, entry.name].map(encodeURIComponent)
+                const url = `/images/${urlParts.join('/')}`
+
+                if (!foldersMap[topFolder]) {
+                    foldersMap[topFolder] = {
+                        rawName: topFolder,
+                        title: normalizeFolderName(topFolder),
+                        files: []
+                    }
+                }
+
+                foldersMap[topFolder].files.push({
+                    path: relPathForFile,
+                    filename: entry.name,
+                    folder: topFolder,
+                    url,
                     width: dims.width,
                     height: dims.height,
                 })
             }
-            folders.push({rawName: item, title: normalizeFolderName(item), files: images})
         }
     }
-    // Sort folders alphabetically (by raw name)
+
+    await processDir(root, [])
+
+    // Convert map to array and sort
+    const folders = Object.values(foldersMap)
     folders.sort((a, b) => a.rawName.localeCompare(b.rawName))
     return folders
 }
