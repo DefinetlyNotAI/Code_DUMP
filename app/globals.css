@@ -1,20 +1,322 @@
-/* app/globals.css
-   Tailwind entry + basic global styles.
-   This file was referenced in components.json as "app/globals.css".
-*/
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Font */
+@font-face {
+    font-family: "Playfair Display";
+    /*noinspection CssUnknownTarget*/
+    src: url('/fonts/PlayfairDisplay-Regular.otf') format('opentype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --bg: #0f1724; /* dark navy */
+    --fg: #f8fafc; /* near white */
+    --muted: #9aa4b2;
+    --primary: #e0aa3e; /* gold */
+    --accent: #f3d88b;
+    --danger: #d9534f;
+    --radius: 8px;
+    --gap: 8px;
+    --glass: rgba(255, 255, 255, 0.04);
+}
+
+/* Prefer user's dark mode class if used elsewhere */
+html.light {
+    --bg: #ffffff;
+    --fg: #0f1724;
+    --glass: rgba(0, 0, 0, 0.04);
+}
+
+/* Base reset and sensible defaults */
+* {
+    box-sizing: border-box
+}
 
 html, body, #__next {
-    height: 100%;
+    height: 100%
 }
 
 body {
-    @apply bg-background text-foreground antialiased;
     margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Playfair Display", serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Add any project-wide custom variables or resets below */
+/* Headings */
+h1, h2, h3, h4 {
+    margin: 0 0 0.35em 0;
+    font-weight: 600
+}
+
+h1 {
+    font-size: 1.6rem
+}
+
+/* Links */
+a {
+    color: var(--primary);
+    text-decoration: none
+}
+
+a:hover {
+    text-decoration: underline
+}
+
+/* Accessibility: focus visible */
+:focus {
+    outline: none
+}
+
+:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--primary) 60%, transparent);
+    outline-offset: 3px;
+    border-radius: 6px
+}
+
+/* Buttons and controls - consistent, accessible styles */
+button, .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary);
+    color: var(--bg);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    transition: transform .14s ease, box-shadow .14s ease, opacity .12s ease;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-1px)
+}
+
+button:active, .btn:active {
+    transform: translateY(0)
+}
+
+button[aria-pressed="true"], .btn--active {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22)
+}
+
+/* Variant: ghost */
+.btn--ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid rgba(255, 255, 255, 0.06)
+}
+
+.icon-btn {
+    background: transparent;
+    padding: 8px;
+    border-radius: 50%;
+    border: 0;
+    color: var(--fg)
+}
+
+/* Form controls */
+input, textarea, select {
+    background: var(--glass);
+    color: var(--fg);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+textarea {
+    min-height: 96px;
+    resize: vertical
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--muted)
+}
+
+/* Tiny utility classes likely used by components */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+    padding: 10px;
+    border-radius: 12px
+}
+
+/* Gallery - mobile-first masonry using CSS columns */
+.gallery-masonry {
+    --gap: var(--gap);
+    column-width: 220px; /* ideal column width; browser will create N columns that fit */
+    column-gap: var(--gap);
+    width: 100%;
+    margin: 0 auto;
+    padding: 6px;
+}
+
+.gallery-masonry .gallery-item {
+    display: inline-block; /* allows column flow */
+    width: 100%;
+    margin: 0 0 var(--gap) 0;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(255, 255, 255, 0.02));
+}
+
+.gallery-masonry .gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    vertical-align: middle;
+    transition: transform .28s cubic-bezier(.2, .8, .2, 1), opacity .18s ease;
+}
+
+.gallery-masonry .gallery-item:hover img {
+    transform: scale(1.03)
+}
+
+/* Optional overlay actions (download, fav) positioned on image */
+.gallery-item .actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+/* Hide any textual captions / photo names - enforce no display */
+.gallery-item figcaption,
+.gallery-item .caption,
+.gallery-item .photo-name,
+.gallery-item .meta {
+    display: none !important;
+}
+
+/* Progressive image loading helper */
+.img--skeleton {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.04));
+    min-height: 60px
+}
+
+/* Responsive adjustments */
+@media (min-width: 420px) {
+    .gallery-masonry {
+        column-width: 240px;
+        padding: 8px
+    }
+}
+
+@media (min-width: 720px) {
+    .gallery-masonry {
+        column-width: 280px;
+        column-gap: 12px
+    }
+}
+
+@media (min-width: 1024px) {
+    .gallery-masonry {
+        column-width: 340px;
+        column-gap: 14px
+    }
+}
+
+/* Alternative grid fallback for environments not liking columns */
+.gallery-grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.gallery-grid .gallery-item {
+    width: 100%;
+}
+
+/* Lightbox / modal basics (used by gallery client) */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    padding: 20px;
+}
+
+.lightbox img {
+    max-width: calc(100% - 48px);
+    max-height: calc(100% - 48px);
+    object-fit: contain;
+    border-radius: 12px
+}
+
+.lightbox .close {
+    position: absolute;
+    top: 18px;
+    right: 18px
+}
+
+/* Tiny helpers used across site */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap
+}
+
+.flex {
+    display: flex
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column
+}
+
+.space-between {
+    justify-content: space-between
+}
+
+/* Keep Tailwind's layers available while removing many custom theme fragments */
+@layer utilities {
+    /* small utilities in case components rely on these names */
+    .no-select {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none
+    }
+}
