@@ -73,17 +73,6 @@ const nextConfig = {
             },
         ]
     },
-    // Fallback rewrite: if /com/banner/* is requested and no static file exists, serve a placeholder
-    async rewrites() {
-        return {
-            fallback: [
-                {
-                    source: '/com/banner/:path*',
-                    destination: '/img/placeholder.webp', // ensure this file exists in public/img/placeholder.webp
-                },
-            ],
-        };
-    },
 };
 
 export default nextConfig;
