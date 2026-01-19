@@ -35,8 +35,11 @@ export default function GalleryGrid({images, selected, onToggle}: Props) {
                     key={img.path}
                     className="gallery-item"
                     style={{
-                        animationDelay: `${Math.min(index * 0.03, 0.6)}s`,
-                        animation: isVisible ? 'slideUp 0.4s ease-out both' : 'none'
+                        animationName: isVisible ? 'slideUp' : 'none',
+                        animationDuration: '0.4s',
+                        animationTimingFunction: 'ease-out',
+                        animationFillMode: 'both',
+                        animationDelay: `${Math.min(index * 0.03, 0.6)}s`
                     }}
                 >
                     <GalleryItem
