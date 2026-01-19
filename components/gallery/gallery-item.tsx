@@ -26,9 +26,10 @@ export default function GalleryItem({image, isSelected, onToggle}: Props) {
                     (onToggle as Function)();
                 }
             }}
+            style={{margin: 0, padding: 0, display: 'block'}}
         >
-            {/* Image container that respects natural aspect ratio */}
-            <div className="w-full relative bg-black">
+            {/* Image container - no black space */}
+            <div className="w-full relative" style={{background: 'transparent', margin: 0, padding: 0}}>
                 {/* Loading skeleton */}
                 {!isLoaded && (
                     <div
@@ -46,36 +47,42 @@ export default function GalleryItem({image, isSelected, onToggle}: Props) {
                     alt={image.filename}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-auto object-contain block transition-opacity duration-300"
+                    className="w-full h-auto block transition-opacity duration-300"
                     style={{
                         aspectRatio: image.width && image.height
                             ? `${image.width} / ${image.height}`
                             : 'auto',
-                        opacity: isLoaded ? 1 : 0
+                        opacity: isLoaded ? 1 : 0,
+                        objectFit: 'cover',
+                        margin: 0,
+                        padding: 0,
+                        display: 'block'
                     }}
                     onLoad={() => setIsLoaded(true)}
                 />
             </div>
 
-            {/* Selection indicator with gold theme */}
-            <div className="select-indicator">
-                <Check
-                    className="w-5 h-5"
-                    style={{
-                        color: isSelected ? '#000' : 'rgba(212, 175, 55, 0.8)',
-                        strokeWidth: 3
-                    }}
-                />
-            </div>
+            {/* Selection indicator - ONLY show when selected */}
+            {isSelected && (
+                <div className="select-indicator" style={{opacity: 1}}>
+                    <Check
+                        className="w-5 h-5"
+                        style={{
+                            color: '#000',
+                            strokeWidth: 3
+                        }}
+                    />
+                </div>
+            )}
 
             {/* Selection overlay border */}
             {isSelected && (
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                        border: '3px solid rgba(212, 175, 55, 0.6)',
+                        border: '3px solid rgba(212, 175, 55, 0.8)',
                         borderRadius: '0',
-                        boxShadow: 'inset 0 0 20px rgba(212, 175, 55, 0.2)'
+                        boxShadow: 'inset 0 0 20px rgba(212, 175, 55, 0.25)'
                     }}
                 />
             )}

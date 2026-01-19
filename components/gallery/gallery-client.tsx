@@ -8,26 +8,57 @@ import DownloadToolbar from './download-toolbar'
 
 export default function GalleryClient({folders}: { folders: Folder[] }) {
     const ALL_KEY = 'ALL'
-    const [active, setActive] = useState<string>(ALL_KEY)
+    const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set([ALL_KEY]))
     const [selected, setSelected] = useState<Set<string>>(new Set())
 
-    // Visible images: include files in the selected folder and any of its nested subfolders
+    // Handle filter toggle
+    const toggleFilter = useCallback((filterKey: string) => {
+        setActiveFilters((prev) => {
+            const next = new Set(prev)
+
+            if (filterKey === ALL_KEY) {
+                // If ALL is clicked, clear all other filters and select only ALL
+                return new Set([ALL_KEY])
+            } else {
+                // Remove ALL if it's present
+                next.delete(ALL_KEY)
+
+                // Toggle the clicked filter
+                if (next.has(filterKey)) {
+                    next.delete(filterKey)
+                } else {
+                    next.add(filterKey)
+                }
+
+                // If no filters remain, select ALL
+                if (next.size === 0) {
+                    return new Set([ALL_KEY])
+                }
+            }
+
+            return next
+        })
+    }, [ALL_KEY])
+
+    // Visible images: include files based on active filters
     const visibleImages = useMemo(() => {
-        if (active === ALL_KEY) return folders.flatMap((f) => f.files)
+        if (activeFilters.has(ALL_KEY)) {
+            return folders.flatMap((f) => f.files)
+        }
 
-        // Normalize active: remove leading/trailing slashes
-        const normActive = active.replace(/^\/+|\/+$/g, '')
-
-        // If normalized active is empty, fall back to showing everything
-        if (normActive === '') return folders.flatMap((f) => f.files)
-
+        const activeArray = Array.from(activeFilters)
         const matched = folders.filter((f) => {
             const raw = (f.rawName || '').replace(/^\/+|\/+$/g, '')
-            return raw === normActive || raw.startsWith(`${normActive}/`)
+
+            // Check if this folder matches any active filter
+            return activeArray.some(activeFilter => {
+                const normActive = activeFilter.replace(/^\/+|\/+$/g, '')
+                return raw === normActive || raw.startsWith(`${normActive}/`)
+            })
         })
 
         return matched.flatMap((f) => f.files)
-    }, [active, folders])
+    }, [activeFilters, folders])
 
     const toggleSelect = useCallback((path: string) => {
         setSelected((prev) => {
@@ -102,7 +133,11 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
 
     return (
         <div>
-            <FilterBar folders={folders} active={active} onSelectAction={(raw) => setActive(raw)}/>
+            <FilterBar
+                folders={folders}
+                activeFilters={activeFilters}
+                onToggleFilterAction={toggleFilter}
+            />
 
             <DownloadToolbar id={toolbarId} selectedCount={selected.size} totalCount={visibleImages.length}/>
 
@@ -135,3 +170,4 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
         </div>
     )
 }
+
