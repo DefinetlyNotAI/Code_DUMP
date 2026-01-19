@@ -5,7 +5,7 @@ import path from 'path'
 import yazl from 'yazl'
 import {Readable} from 'stream'
 
-export const runtime = 'node'
+export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
     try {
