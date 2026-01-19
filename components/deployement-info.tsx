@@ -11,7 +11,7 @@ export default function DeploymentInfo() {
         )
     }
 
-    const repoUrl = "https://github.com/DefinetlyNotAI/WesMun"
+    const repoUrl = "https://github.com/DefinetlyNotAI/WESMUN_Gallery"
 
     return (
         <div style={{marginTop: "1rem", fontSize: "0.75rem", color: "#aaa"}}>
