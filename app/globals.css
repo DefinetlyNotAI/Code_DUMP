@@ -1,0 +1,20 @@
+/* app/globals.css
+   Tailwind entry + basic global styles.
+   This file was referenced in components.json as "app/globals.css".
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #__next {
+    height: 100%;
+}
+
+body {
+    @apply bg-background text-foreground antialiased;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Add any project-wide custom variables or resets below */

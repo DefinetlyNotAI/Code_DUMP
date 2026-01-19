@@ -1,8 +1,9 @@
-/** @type {{plugins: {"@tailwindcss/postcss": {}}}} */
+/** @type {{plugins: Record<string, {}>}} */
 const config = {
-    plugins: {
-        '@tailwindcss/postcss': {},
-    },
+  plugins: {
+    'tailwindcss': {},
+    'autoprefixer': {},
+  },
 }
 
 export default config
