@@ -11,25 +11,25 @@ function isImage(file) {
 
 function capitalizeSegment(s) {
     if (!s) return s
-    // replace hyphens/underscores with spaces, trim, then capitalize first letter
     const cleaned = s.replace(/[-_]+/g, ' ').trim()
     return cleaned.charAt(0).toUpperCase() + cleaned.slice(1)
 }
 
 async function generate() {
-    const folders = []
     if (!fs.existsSync(ROOT)) {
         await fs.promises.writeFile(OUT, JSON.stringify([]))
         console.log('No images directory, wrote empty manifest.')
         return
     }
 
+    const foldersMap = {} // key: top-level folder, value: {title, files}
+
     async function processDir(dirPath, relParts) {
         const entries = await fs.promises.readdir(dirPath, {withFileTypes: true})
-        const images = []
 
         for (const entry of entries) {
             const entryPath = path.join(dirPath, entry.name)
+
             if (entry.isDirectory()) {
                 await processDir(entryPath, [...relParts, entry.name])
             } else if (entry.isFile() && isImage(entry.name)) {
@@ -41,30 +41,34 @@ async function generate() {
                     dims = {}
                 }
 
-                const rawFolder = relParts.join('/') // use forward slashes for manifest
-                const relPathForFile = rawFolder ? `${rawFolder}/${entry.name}` : entry.name
-                const url = rawFolder
+                // Determine top-level parent folder
+                const topFolder = relParts.length > 0 ? relParts[0] : ''
+                const title = topFolder ? capitalizeSegment(topFolder) : 'Root'
+
+                const relPathForFile = relParts.length > 0 ? `${relParts.join('/')}/${entry.name}` : entry.name
+                const url = relParts.length > 0
                     ? `/images/${relParts.map(encodeURIComponent).join('/')}/${encodeURIComponent(entry.name)}`
                     : `/images/${encodeURIComponent(entry.name)}`
 
-                images.push({
+                if (!foldersMap[topFolder]) {
+                    foldersMap[topFolder] = {rawName: topFolder, title, files: []}
+                }
+
+                foldersMap[topFolder].files.push({
                     path: relPathForFile,
                     filename: entry.name,
-                    folder: rawFolder,
+                    folder: topFolder,
                     url,
                     ...dims,
                 })
             }
         }
-
-        if (images.length > 0) {
-            const rawName = relParts.join('/')
-            const title = relParts.length > 0 ? relParts.map(capitalizeSegment).join(' - ') : 'Root'
-            folders.push({rawName, title, files: images})
-        }
     }
 
     await processDir(ROOT, [])
+
+    // Convert map to array
+    const folders = Object.values(foldersMap)
 
     await fs.promises.writeFile(OUT, JSON.stringify(folders, null, 2))
     console.log('Wrote manifest to', OUT)

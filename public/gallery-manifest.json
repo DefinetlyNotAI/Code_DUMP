@@ -1,493 +1,367 @@
 [
   {
-    "rawName": "committees/banner",
-    "title": "Committees - Banner",
+    "rawName": "committees",
+    "title": "Committees",
     "files": [
       {
         "path": "committees/banner/AL.webp",
         "filename": "AL.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/AL.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/AL.webp"
       },
       {
         "path": "committees/banner/ecosoc.webp",
         "filename": "ecosoc.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/ecosoc.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/ecosoc.webp"
       },
       {
         "path": "committees/banner/f1.webp",
         "filename": "f1.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/f1.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/f1.webp"
       },
       {
         "path": "committees/banner/ga1.webp",
         "filename": "ga1.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/ga1.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/ga1.webp"
       },
       {
         "path": "committees/banner/ga3.webp",
         "filename": "ga3.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/ga3.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/ga3.webp"
       },
       {
         "path": "committees/banner/hcc_final.webp",
         "filename": "hcc_final.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/hcc_final.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/hcc_final.webp"
       },
       {
         "path": "committees/banner/interpol.webp",
         "filename": "interpol.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/interpol.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/interpol.webp"
       },
       {
         "path": "committees/banner/pbc.webp",
         "filename": "pbc.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/pbc.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/pbc.webp"
       },
       {
         "path": "committees/banner/unhrc.webp",
         "filename": "unhrc.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unhrc.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unhrc.webp"
       },
       {
         "path": "committees/banner/unicef.webp",
         "filename": "unicef.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unicef.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unicef.webp"
       },
       {
         "path": "committees/banner/unodc.webp",
         "filename": "unodc.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unodc.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unodc.webp"
       },
       {
         "path": "committees/banner/unoosa.webp",
         "filename": "unoosa.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unoosa.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unoosa.webp"
       },
       {
         "path": "committees/banner/unsc.webp",
         "filename": "unsc.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unsc.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unsc.webp"
       },
       {
         "path": "committees/banner/unw.webp",
         "filename": "unw.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/unw.webp",
-        "width": 1200,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/banner/unw.webp"
       },
       {
         "path": "committees/banner/who.webp",
         "filename": "who.webp",
-        "folder": "committees/banner",
-        "url": "/images/committees/banner/who.webp",
-        "width": 1200,
-        "height": 300
-      }
-    ]
-  },
-  {
-    "rawName": "committees/single",
-    "title": "Committees - Single",
-    "files": [
+        "folder": "committees",
+        "url": "/images/committees/banner/who.webp"
+      },
       {
         "path": "committees/single/Adham_Hamdy_F1.webp",
         "filename": "Adham_Hamdy_F1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Adham_Hamdy_F1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Adham_Hamdy_F1.webp"
       },
       {
         "path": "committees/single/Ahmed_Saad_UNICEF.webp",
         "filename": "Ahmed_Saad_UNICEF.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Ahmed_Saad_UNICEF.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Ahmed_Saad_UNICEF.webp"
       },
       {
         "path": "committees/single/Alishba_Ahmed_UNOOSA.webp",
         "filename": "Alishba_Ahmed_UNOOSA.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Alishba_Ahmed_UNOOSA.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Alishba_Ahmed_UNOOSA.webp"
       },
       {
         "path": "committees/single/Amaan_Anas_Mohtasham_UNODC.webp",
         "filename": "Amaan_Anas_Mohtasham_UNODC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Amaan_Anas_Mohtasham_UNODC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Amaan_Anas_Mohtasham_UNODC.webp"
       },
       {
         "path": "committees/single/Anthony_Sami_UNW.webp",
         "filename": "Anthony_Sami_UNW.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Anthony_Sami_UNW.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Anthony_Sami_UNW.webp"
       },
       {
         "path": "committees/single/Antony_Michael_UNSC.webp",
         "filename": "Antony_Michael_UNSC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Antony_Michael_UNSC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Antony_Michael_UNSC.webp"
       },
       {
         "path": "committees/single/Ayia_Waleed_UNODC.webp",
         "filename": "Ayia_Waleed_UNODC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Ayia_Waleed_UNODC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Ayia_Waleed_UNODC.webp"
       },
       {
         "path": "committees/single/AytenToeima_UNHRC.webp",
         "filename": "AytenToeima_UNHRC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/AytenToeima_UNHRC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/AytenToeima_UNHRC.webp"
       },
       {
         "path": "committees/single/Dhruv_Hitesh_PBC.webp",
         "filename": "Dhruv_Hitesh_PBC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Dhruv_Hitesh_PBC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Dhruv_Hitesh_PBC.webp"
       },
       {
         "path": "committees/single/Drishti_Lohana_UNW.webp",
         "filename": "Drishti_Lohana_UNW.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Drishti_Lohana_UNW.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Drishti_Lohana_UNW.webp"
       },
       {
         "path": "committees/single/Dua_Ghani_INTERPOL.webp",
         "filename": "Dua_Ghani_INTERPOL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Dua_Ghani_INTERPOL.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Dua_Ghani_INTERPOL.webp"
       },
       {
         "path": "committees/single/Eyad_Samara_HCC.webp",
         "filename": "Eyad_Samara_HCC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Eyad_Samara_HCC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Eyad_Samara_HCC.webp"
       },
       {
         "path": "committees/single/Fatima_Hatem_AL.webp",
         "filename": "Fatima_Hatem_AL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Fatima_Hatem_AL.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Fatima_Hatem_AL.webp"
       },
       {
         "path": "committees/single/Habiba_Mohamed_WHO.webp",
         "filename": "Habiba_Mohamed_WHO.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Habiba_Mohamed_WHO.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Habiba_Mohamed_WHO.webp"
       },
       {
         "path": "committees/single/Hamza_Mohamad_Al_Wahsh_HCC.webp",
         "filename": "Hamza_Mohamad_Al_Wahsh_HCC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Hamza_Mohamad_Al_Wahsh_HCC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Hamza_Mohamad_Al_Wahsh_HCC.webp"
       },
       {
         "path": "committees/single/Hussam_El_Haj_WHO.webp",
         "filename": "Hussam_El_Haj_WHO.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Hussam_El_Haj_WHO.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Hussam_El_Haj_WHO.webp"
       },
       {
         "path": "committees/single/Imani_Karabu_UNHRC.webp",
         "filename": "Imani_Karabu_UNHRC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Imani_Karabu_UNHRC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Imani_Karabu_UNHRC.webp"
       },
       {
         "path": "committees/single/Joshua_John_Ligo_INTERPOL.webp",
         "filename": "Joshua_John_Ligo_INTERPOL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Joshua_John_Ligo_INTERPOL.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Joshua_John_Ligo_INTERPOL.webp"
       },
       {
         "path": "committees/single/Kabeer_Anil_UNODC.webp",
         "filename": "Kabeer_Anil_UNODC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Kabeer_Anil_UNODC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Kabeer_Anil_UNODC.webp"
       },
       {
         "path": "committees/single/Kamilia_Imtiaz_UNW.webp",
         "filename": "Kamilia_Imtiaz_UNW.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Kamilia_Imtiaz_UNW.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Kamilia_Imtiaz_UNW.webp"
       },
       {
         "path": "committees/single/Khalid_Ashraf_GA1.webp",
         "filename": "Khalid_Ashraf_GA1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Khalid_Ashraf_GA1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Khalid_Ashraf_GA1.webp"
       },
       {
         "path": "committees/single/Lara_Ameen_ECOSOC.webp",
         "filename": "Lara_Ameen_ECOSOC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Lara_Ameen_ECOSOC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Lara_Ameen_ECOSOC.webp"
       },
       {
         "path": "committees/single/Layal_Melhem_AL.webp",
         "filename": "Layal_Melhem_AL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Layal_Melhem_AL.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Layal_Melhem_AL.webp"
       },
       {
         "path": "committees/single/Leen_ElgharablyGA1.webp",
         "filename": "Leen_ElgharablyGA1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Leen_ElgharablyGA1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Leen_ElgharablyGA1.webp"
       },
       {
         "path": "committees/single/Lynn_Hassan_ECOSOC.webp",
         "filename": "Lynn_Hassan_ECOSOC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Lynn_Hassan_ECOSOC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Lynn_Hassan_ECOSOC.webp"
       },
       {
         "path": "committees/single/Maryam_Jandali_PBC.webp",
         "filename": "Maryam_Jandali_PBC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Maryam_Jandali_PBC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Maryam_Jandali_PBC.webp"
       },
       {
         "path": "committees/single/Mishall_Shahid_UNSC.webp",
         "filename": "Mishall_Shahid_UNSC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Mishall_Shahid_UNSC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Mishall_Shahid_UNSC.webp"
       },
       {
         "path": "committees/single/Mohamed_Matthana_UNHRC.webp",
         "filename": "Mohamed_Matthana_UNHRC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Mohamed_Matthana_UNHRC.webp",
-        "width": 300,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/single/Mohamed_Matthana_UNHRC.webp"
       },
       {
         "path": "committees/single/Nadine_Tabche_AL.webp",
         "filename": "Nadine_Tabche_AL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Nadine_Tabche_AL.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Nadine_Tabche_AL.webp"
       },
       {
         "path": "committees/single/Omar_El_Houssaini_ECOSOC.webp",
         "filename": "Omar_El_Houssaini_ECOSOC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Omar_El_Houssaini_ECOSOC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Omar_El_Houssaini_ECOSOC.webp"
       },
       {
         "path": "committees/single/Omar_Moamen_F1.webp",
         "filename": "Omar_Moamen_F1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Omar_Moamen_F1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Omar_Moamen_F1.webp"
       },
       {
         "path": "committees/single/Oshian_Thada_Magar_GA3.webp",
         "filename": "Oshian_Thada_Magar_GA3.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Oshian_Thada_Magar_GA3.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Oshian_Thada_Magar_GA3.webp"
       },
       {
         "path": "committees/single/QurratulainAzzaKazmi_PBC.webp",
         "filename": "QurratulainAzzaKazmi_PBC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/QurratulainAzzaKazmi_PBC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/QurratulainAzzaKazmi_PBC.webp"
       },
       {
         "path": "committees/single/Raghad_Mohammed_GA3.webp",
         "filename": "Raghad_Mohammed_GA3.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Raghad_Mohammed_GA3.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Raghad_Mohammed_GA3.webp"
       },
       {
         "path": "committees/single/Rahul_Girish_GA1.webp",
         "filename": "Rahul_Girish_GA1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Rahul_Girish_GA1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Rahul_Girish_GA1.webp"
       },
       {
         "path": "committees/single/Ram_Prasad_UNSC.webp",
         "filename": "Ram_Prasad_UNSC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Ram_Prasad_UNSC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Ram_Prasad_UNSC.webp"
       },
       {
         "path": "committees/single/Rawan_Helali_HCC.webp",
         "filename": "Rawan_Helali_HCC.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Rawan_Helali_HCC.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Rawan_Helali_HCC.webp"
       },
       {
         "path": "committees/single/Rayyan_Chams_F1.webp",
         "filename": "Rayyan_Chams_F1.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Rayyan_Chams_F1.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Rayyan_Chams_F1.webp"
       },
       {
         "path": "committees/single/Rohith_John_UNOOSA.webp",
         "filename": "Rohith_John_UNOOSA.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Rohith_John_UNOOSA.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Rohith_John_UNOOSA.webp"
       },
       {
         "path": "committees/single/Saisha_Shukla_INTERPOL.webp",
         "filename": "Saisha_Shukla_INTERPOL.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Saisha_Shukla_INTERPOL.webp",
-        "width": 300,
-        "height": 300
+        "folder": "committees",
+        "url": "/images/committees/single/Saisha_Shukla_INTERPOL.webp"
       },
       {
         "path": "committees/single/Syeda_Naba_Adnan_UNOOSA.webp",
         "filename": "Syeda_Naba_Adnan_UNOOSA.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Syeda_Naba_Adnan_UNOOSA.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Syeda_Naba_Adnan_UNOOSA.webp"
       },
       {
         "path": "committees/single/Tasnime_Zermout_GA3.webp",
         "filename": "Tasnime_Zermout_GA3.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Tasnime_Zermout_GA3.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Tasnime_Zermout_GA3.webp"
       },
       {
         "path": "committees/single/Wasiq_Nabeel_UNICEF.webp",
         "filename": "Wasiq_Nabeel_UNICEF.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Wasiq_Nabeel_UNICEF.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Wasiq_Nabeel_UNICEF.webp"
       },
       {
         "path": "committees/single/William_Bryant_WHO.webp",
         "filename": "William_Bryant_WHO.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/William_Bryant_WHO.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/William_Bryant_WHO.webp"
       },
       {
         "path": "committees/single/Zeina_Islam_UNICEF.webp",
         "filename": "Zeina_Islam_UNICEF.webp",
-        "folder": "committees/single",
-        "url": "/images/committees/single/Zeina_Islam_UNICEF.webp",
-        "width": 200,
-        "height": 200
+        "folder": "committees",
+        "url": "/images/committees/single/Zeina_Islam_UNICEF.webp"
       }
     ]
   },
@@ -499,105 +373,79 @@
         "path": "departments/cos.webp",
         "filename": "cos.webp",
         "folder": "departments",
-        "url": "/images/departments/cos.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/cos.webp"
       },
       {
         "path": "departments/crisis.webp",
         "filename": "crisis.webp",
         "folder": "departments",
-        "url": "/images/departments/crisis.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/crisis.webp"
       },
       {
         "path": "departments/dsg.webp",
         "filename": "dsg.webp",
         "folder": "departments",
-        "url": "/images/departments/dsg.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/dsg.webp"
       },
       {
         "path": "departments/finance.webp",
         "filename": "finance.webp",
         "folder": "departments",
-        "url": "/images/departments/finance.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/finance.webp"
       },
       {
         "path": "departments/group-photo.webp",
         "filename": "group-photo.webp",
         "folder": "departments",
-        "url": "/images/departments/group-photo.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/group-photo.webp"
       },
       {
         "path": "departments/hospitality.webp",
         "filename": "hospitality.webp",
         "folder": "departments",
-        "url": "/images/departments/hospitality.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/hospitality.webp"
       },
       {
         "path": "departments/it.webp",
         "filename": "it.webp",
         "folder": "departments",
-        "url": "/images/departments/it.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/it.webp"
       },
       {
         "path": "departments/logistics.webp",
         "filename": "logistics.webp",
         "folder": "departments",
-        "url": "/images/departments/logistics.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/logistics.webp"
       },
       {
         "path": "departments/media.webp",
         "filename": "media.webp",
         "folder": "departments",
-        "url": "/images/departments/media.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/media.webp"
       },
       {
         "path": "departments/pr.webp",
         "filename": "pr.webp",
         "folder": "departments",
-        "url": "/images/departments/pr.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/pr.webp"
       },
       {
         "path": "departments/security.webp",
         "filename": "security.webp",
         "folder": "departments",
-        "url": "/images/departments/security.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/security.webp"
       },
       {
         "path": "departments/sg-group.webp",
         "filename": "sg-group.webp",
         "folder": "departments",
-        "url": "/images/departments/sg-group.webp",
-        "width": 1200,
-        "height": 300
+        "url": "/images/departments/sg-group.webp"
       },
       {
         "path": "departments/sg.webp",
         "filename": "sg.webp",
         "folder": "departments",
-        "url": "/images/departments/sg.webp",
-        "width": 6000,
-        "height": 4000
+        "url": "/images/departments/sg.webp"
       }
     ]
   }
