@@ -108,11 +108,30 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
 
             <GalleryGrid images={visibleImages} selected={selectedArray} onToggle={toggleSelect}/>
 
-            <div className="mt-6 text-sm text-muted-foreground">
-                <button className="underline" onClick={clearSelection} disabled={selected.size === 0}>
-                    Clear selection
-                </button>
-            </div>
+            {selected.size > 0 && (
+                <div className="mt-8 text-center">
+                    <button
+                        className="px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300"
+                        onClick={clearSelection}
+                        style={{
+                            background: 'transparent',
+                            color: '#D4AF37',
+                            border: '1px solid rgba(212, 175, 55, 0.3)',
+                            cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = '#D4AF37'
+                            e.currentTarget.style.boxShadow = '0 2px 10px rgba(212, 175, 55, 0.15)'
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.3)'
+                            e.currentTarget.style.boxShadow = 'none'
+                        }}
+                    >
+                        Clear Selection
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

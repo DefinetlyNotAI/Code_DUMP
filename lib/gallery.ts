@@ -26,13 +26,28 @@ const MANIFEST_PATH = path.join(process.cwd(), 'public', 'gallery-manifest.json'
 
 function normalizeFolderName(raw: string): string {
     if (!raw) return raw
-    const clean = raw.replace(/[_-]+/g, ' ').trim()
-    if (/^who$/i.test(raw)) return 'WHO'
+
+    // Handle common acronyms that should be uppercase
+    const acronyms = ['WHO', 'AL', 'ECOSOC', 'F1', 'GA1', 'GA3', 'HCC', 'INTERPOL',
+        'PBC', 'UNHRC', 'UNICEF', 'UNW', 'UNODC', 'UNOOSA', 'UNSC'];
+
+    const upperRaw = raw.toUpperCase();
+    if (acronyms.includes(upperRaw)) return upperRaw;
+
+    // Replace underscores and hyphens with spaces
+    const clean = raw.replace(/[_-]+/g, ' ').trim();
+
     // Title case each word
     return clean
         .split(' ')
-        .map((w) => (w.length ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
-        .join(' ')
+        .map((w) => {
+            if (!w.length) return w;
+            // Check if entire word is an acronym
+            if (acronyms.includes(w.toUpperCase())) return w.toUpperCase();
+            // Normal title case
+            return w[0].toUpperCase() + w.slice(1).toLowerCase();
+        })
+        .join(' ');
 }
 
 async function statImageSize(filePath: string): Promise<{ width?: number; height?: number }> {
