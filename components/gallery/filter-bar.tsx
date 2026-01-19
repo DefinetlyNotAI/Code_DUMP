@@ -6,15 +6,15 @@ import type {Folder} from '@/lib/gallery'
 type Props = {
     folders: Folder[]
     active: string
-    onSelect: any
+    onSelectAction: (raw: string) => void
 }
 
-export default function FilterBar({folders, active, onSelect}: Props) {
+export default function FilterBar({folders, active, onSelectAction}: Props) {
     return (
         <div className="flex gap-2 flex-wrap items-center mb-4">
             <button
                 className={`px-3 py-1 rounded-md text-sm font-medium ${active === 'ALL' ? 'bg-primary text-primary-foreground' : 'border bg-transparent text-foreground/80'}`}
-                onClick={() => (onSelect as Function)('ALL')}
+                onClick={() => onSelectAction('ALL')}
                 aria-pressed={active === 'ALL'}
             >
                 ALL
@@ -24,7 +24,7 @@ export default function FilterBar({folders, active, onSelect}: Props) {
                 <button
                     key={f.rawName}
                     className={`px-3 py-1 rounded-md text-sm font-medium ${active === f.rawName ? 'bg-primary text-primary-foreground' : 'border bg-transparent text-foreground/80'}`}
-                    onClick={() => (onSelect as Function)(f.rawName)}
+                    onClick={() => onSelectAction(f.rawName)}
                     aria-pressed={active === f.rawName}
                 >
                     {f.title}

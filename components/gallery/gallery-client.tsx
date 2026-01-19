@@ -11,16 +11,23 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
     const [active, setActive] = useState<string>(ALL_KEY)
     const [selected, setSelected] = useState<Set<string>>(new Set())
 
-    const foldersMap = useMemo(() => {
-        const m = new Map<string, Folder>()
-        folders.forEach((f) => m.set(f.rawName, f))
-        return m
-    }, [folders])
-
+    // Visible images: include files in the selected folder and any of its nested subfolders
     const visibleImages = useMemo(() => {
         if (active === ALL_KEY) return folders.flatMap((f) => f.files)
-        return foldersMap.get(active)?.files ?? []
-    }, [active, folders, foldersMap])
+
+        // Normalize active: remove leading/trailing slashes
+        const normActive = active.replace(/^\/+|\/+$/g, '')
+
+        // If normalized active is empty, fall back to showing everything
+        if (normActive === '') return folders.flatMap((f) => f.files)
+
+        const matched = folders.filter((f) => {
+            const raw = (f.rawName || '').replace(/^\/+|\/+$/g, '')
+            return raw === normActive || raw.startsWith(`${normActive}/`)
+        })
+
+        return matched.flatMap((f) => f.files)
+    }, [active, folders])
 
     const toggleSelect = useCallback((path: string) => {
         setSelected((prev) => {
@@ -95,7 +102,7 @@ export default function GalleryClient({folders}: { folders: Folder[] }) {
 
     return (
         <div>
-            <FilterBar folders={folders} active={active} onSelect={(raw) => setActive(raw)}/>
+            <FilterBar folders={folders} active={active} onSelectAction={(raw) => setActive(raw)}/>
 
             <DownloadToolbar id={toolbarId} selectedCount={selected.size} totalCount={visibleImages.length}/>
 

@@ -37,7 +37,9 @@ function normalizeFolderName(raw: string): string {
 
 async function statImageSize(filePath: string): Promise<{ width?: number; height?: number }> {
     try {
-        const dims = sizeOf(filePath)
+        // Read file into a Buffer (Uint8Array is acceptable to image-size types)
+        const data = await fs.promises.readFile(filePath)
+        const dims = sizeOf(data as Buffer)
         return {width: dims.width || undefined, height: dims.height || undefined}
     } catch (e) {
         return {}
