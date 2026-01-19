@@ -1,9 +1,6 @@
 import React from 'react'
 import {readImageTree} from '@/lib/gallery'
-import dynamic from 'next/dynamic'
-
-// Load client component dynamically to avoid SSR hydration mismatch
-const GalleryClient = dynamic(() => import('@/components/gallery/gallery-client'), {ssr: false})
+import GalleryClientWrapper from '@/components/gallery/gallery-client-wrapper'
 
 export default async function GalleryPage() {
     const folders = await readImageTree()
@@ -17,7 +14,7 @@ export default async function GalleryPage() {
                         select images and download.</p>
                 </header>
 
-                <GalleryClient folders={folders}/>
+                <GalleryClientWrapper folders={folders}/>
             </div>
         </main>
     )
