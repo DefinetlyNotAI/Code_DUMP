@@ -1,0 +1,53 @@
+Dear [[delegateName]],
+
+We are pleased to inform you of your allocation for WESMUN 2026. You have been assigned to the following committee:
+
+Committee: [[name]]
+Country/Portfolio: [[allocation]]
+- Agenda 1: [[Agenda1]]
+- Agenda 2: [[Agenda2]]
+
+You can check more info at https://wesmun.com/committees/[[name.lowercase]]
+
+Conference Dates:
+- 31st January to 1st Feb 2026
+
+Venue Location:
+- Google Maps link: https://google.com/maps?ll=25.294047,55.450106&z=15&t=m&hl=en-GB&gl=US&mapclient=embed&cid=439979476831574513
+
+
+Before you agree to attending the conference, please sign the waiver form below and submit it in the following link (*NOTE: You will not be allowed into the conference without submitting this form*):
+- https://forms.gle/ERfAH7E15HFynUgV6
+
+
+Please find attached the following important documents:
+- Code of Conduct
+- Delegate Handbook
+- Conference Schedule
+- Background Guide for your committee
+
+These resources will help you prepare thoroughly for the event. Should you have any questions, feel free to reach out.
+
+Additionally, a position paper is a document required to be sent to *this email* as per the deadline given with the following guidelines
+1. Font - Times New Roman size 12
+2. Line Spacing 1
+3. Content - 700 word maximum excluding bibliography
+4. Bibliography is mandatory
+
+We recommend you include the following
+- A brief introduction to the agenda and its issues (15% of your paper)
+- Past actions taken by the UN and your nation (20%)
+- The stance of your nation, issues, initiatives taken (40%)
+- Solutions of your own that align with your nation (15%)
+- Conclusion (10%)
+Please note this is a suggestion. 
+
+Finally, please be sure to click the link below to join your committee group-chat:
+- [[GCLink]]
+
+*NOTE: YOU WILL NOT BE ALLOWED IN ANY COMMITTEE OTHER THAN YOUR OWN. Joining other group-chats may lead to termination of your delegation*
+
+We look forward to welcoming you to WESMUN 2026 and seeing your participation in a meaningful and engaging debate. 
+
+Regards,
+DIAS Of [[name]]
