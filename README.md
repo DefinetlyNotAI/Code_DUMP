@@ -31,6 +31,9 @@
 > [!IMPORTANT]
 > Don't trust commit history time, as most these projects were done back in 2020 covid era, but were rather archived in a USB before I discovered GitHub and created this repo, so don't judge any of the code based on commit dates!!
 
+> [!WARNING]
+> Some links inside the subproject README's may be broken or incorrect, if this occurs please open and issue!!
+
 ---
 
 ### Available GitHub webpages to test can be found here
@@ -40,4 +43,5 @@
 - [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template/lockdown)
 - [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
 - [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/IGCSE%20Grade%20Equivelancy%20Calculator)
+- [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/VulnScan_Data/NN%20features/Loss_Landscape_3D.html)
 ---
