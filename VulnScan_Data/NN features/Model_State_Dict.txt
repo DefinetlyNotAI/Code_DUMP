@@ -1,0 +1,6 @@
+fc.0.weight: torch.Size([256, 384])
+fc.0.bias: torch.Size([256])
+fc.2.weight: torch.Size([64, 256])
+fc.2.bias: torch.Size([64])
+fc.4.weight: torch.Size([1, 64])
+fc.4.bias: torch.Size([1])
