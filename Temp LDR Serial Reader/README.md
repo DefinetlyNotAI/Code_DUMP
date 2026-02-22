@@ -27,8 +27,6 @@ Here’s how to set up the circuitry:
   - One leg of the LDR: Connect to **A1** on the Arduino Nano.
   - The other leg of the LDR: Connect to **5V** on the Arduino Nano through a **10kΩ pull-down resistor** to **GND**. This configuration ensures the LDR provides a readable voltage level at **A1**.
 
-![Circuit diagram](https://github.com/user-attachments/assets/49237c92-5590-4c77-841c-89898fff56c5)
-
 ### Receiver Side
 
 The Arduino code sends data over the serial connection every second (note: not the most precise, but functional). The communication uses a **BAUD RATE** of **115200**.
