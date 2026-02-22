@@ -37,11 +37,11 @@
 ---
 
 ### Available GitHub webpages to test can be found here
-- [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old_BulletHell_Engine/)
+- [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old%20BulletHell%20Engine/)
 - [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
 - [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
 - [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template/lockdown)
 - [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
 - [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/IGCSE%20Grade%20Equivelancy%20Calculator)
-- [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/VulnScan_Data/NN%20features/Loss_Landscape_3D.html)
+- [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/VulnScan%20Data/NN%20features/Loss_Landscape_3D.html)
 ---
