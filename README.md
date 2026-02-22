@@ -14,7 +14,7 @@
 
 > [!NOTE]
 >
-> ### Most code here consists of tiny projects I’ve worked on. Some are abandoned or no longer work, while others include more effort and are somewhat more complete.
+> ### Most code here consists of tiny projects I’ve worked on. Some are abandoned or no longer work, while others include more effort and are somewhat more complete or are fully complete but still do not deserve their own repository.
 
 > [!CAUTION]
 > Many projects here are "archived" aka unmaintained by me and are also most likely offline/un-deployed (except pure static sites, which are managed by github pages)
