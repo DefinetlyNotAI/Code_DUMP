@@ -1,0 +1,126 @@
+"use client"
+
+import {type FormEvent, useState} from "react"
+import {useRouter, useSearchParams} from "next/navigation"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card"
+import {Alert, AlertDescription} from "@/components/ui/alert"
+import {Shield} from "lucide-react"
+import {fetchWithCsrf} from "@/lib/csrf-client"
+
+export default function LoginForm() {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const redirect = searchParams.get("redirect") || "/"
+
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        setError("")
+        setLoading(true)
+
+        try {
+            const response = await fetchWithCsrf("/api/auth/login", {
+                method: "POST",
+                body: JSON.stringify({password}),
+            })
+
+            // Check if response is JSON
+            const contentType = response.headers.get("content-type")
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text()
+                console.error("[LOGIN] Expected JSON but got:", contentType, text.substring(0, 200))
+                setError("Server configuration error. Please check the logs.")
+                return
+            }
+
+            const data = await response.json()
+
+            if (response.ok && data.success) {
+                // Clear password from memory
+                setPassword("")
+
+                // Redirect to intended destination
+                router.push(redirect)
+                router.refresh()
+            } else if (response.status === 429) {
+                setError(data.error || "Too many attempts. Please try again later.")
+            } else {
+                setError(data.error || "Authentication failed")
+            }
+        } catch (err) {
+            console.error("[LOGIN] Request failed", err)
+            if (err instanceof Error) {
+                setError(err.message)
+            } else {
+                setError("Unable to connect to server")
+            }
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <Card className="w-full max-w-md mx-4">
+            <CardHeader className="space-y-1 text-center px-4 md:px-6">
+                <div className="flex justify-center mb-4">
+                    <div className="h-12 w-12 rounded-lg bg-primary flex items-center justify-center">
+                        <Shield className="h-6 w-6 text-primary-foreground"/>
+                    </div>
+                </div>
+                <CardTitle className="text-xl md:text-2xl font-bold">Email Supervision Dashboard</CardTitle>
+                <CardDescription className="text-sm">Enter the master password to access the system</CardDescription>
+            </CardHeader>
+            <CardContent className="px-4 md:px-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Hidden username field for accessibility and password managers */}
+                    <input
+                        type="text"
+                        name="username"
+                        autoComplete="username"
+                        value="admin"
+                        readOnly
+                        style={{display: 'none'}}
+                        aria-hidden="true"
+                        tabIndex={-1}
+                    />
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Master Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter master password"
+                            required
+                            disabled={loading}
+                            autoFocus
+                            autoComplete="current-password"
+                        />
+                    </div>
+
+                    {error && (
+                        <Alert variant="destructive">
+                            <AlertDescription className="text-sm">{error}</AlertDescription>
+                        </Alert>
+                    )}
+
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? "Authenticating..." : "Sign In"}
+                    </Button>
+                </form>
+
+                <div className="mt-6 text-center text-xs md:text-sm text-muted-foreground">
+                    <p>This is a secure internal system.</p>
+                    <p>All access attempts are logged.</p>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
