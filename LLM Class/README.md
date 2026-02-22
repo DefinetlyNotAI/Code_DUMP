@@ -4,15 +4,6 @@ Welcome to `LLM_Class` 🌐,
 Crafted with python and Hugging Face 🐍, by DefinetlyNotAI 🤗.
 This comprehensive guide is here to equip you with everything you need to use `LLM_Class` effectively.
 
-<div align="center">
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class/issues"><img src="https://img.shields.io/github/issues/DefinetlyNotAI/LLM_Class" alt="GitHub Issues"></a>
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class/tags"><img src="https://img.shields.io/github/v/tag/DefinetlyNotAI/LLM_Class" alt="GitHub Tag"></a>
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class/graphs/commit-activity"><img src="https://img.shields.io/github/commit-activity/t/DefinetlyNotAI/LLM_Class" alt="GitHub Commit Activity"></a>
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class/languages"><img src="https://img.shields.io/github/languages/count/DefinetlyNotAI/LLM_Class" alt="GitHub Language Count"></a>
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class/actions"><img src="https://img.shields.io/github/check-runs/DefinetlyNotAI/LLM_Class/main" alt="GitHub Branch Check Runs"></a>
-    <a href="https://github.com/DefinetlyNotAI/LLM_Class"><img src="https://img.shields.io/github/repo-size/DefinetlyNotAI/LLM_Class" alt="GitHub Repo Size"></a>
-</div>
-
 # LLM_Class
 
 The `LLM_Class` is a Python class designed to provide financial market insights through
