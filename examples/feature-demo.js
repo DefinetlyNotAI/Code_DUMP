@@ -80,9 +80,18 @@ function renderMenu() {
 
 function showScreen() {
   console.clear();
-  console.log('╔═══════════════════════════════════════════════════════════════════════════╗');
-  console.log('║              TUI Framework Feature Demo & Interactive Tour                 ║');
-  console.log('╚═══════════════════════════════════════════════════════════════════════════╝\n');
+  
+  // Dynamic header based on terminal width
+  const headerWidth = getTerminalWidth();
+  const headerBorder = '═'.repeat(headerWidth);
+  const title = 'TUI Framework Feature Demo & Interactive Tour';
+  const padding = Math.max(0, headerWidth - title.length - 2);
+  const leftPad = Math.floor(padding / 2);
+  const rightPad = padding - leftPad;
+  
+  console.log(`╔${headerBorder}╗`);
+  console.log(`║${' '.repeat(leftPad)}${title}${' '.repeat(rightPad)}║`);
+  console.log(`╚${headerBorder}╝\n`);
   
   const content = getContent();
   const box = renderBox(demos[currentDemo].name, content);
