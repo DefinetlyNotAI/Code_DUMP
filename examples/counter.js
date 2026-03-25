@@ -1,7 +1,7 @@
 /**
- * Counter example - Demonstrates hooks and state management.
+ * Counter example - Simple state management demo.
  */
-const { createApp, useState, Element } = require('../src/index.js');
+const { Element } = require('../src/index.js');
 
 class Counter extends Element {
   constructor(props) {
@@ -27,33 +27,21 @@ class Counter extends Element {
     return content.join('\n');
   }
 
-  handleInput(event) {
-    if (event.key === '+') {
-      this.count++;
-      this.triggerRender();
-    } else if (event.key === '-') {
-      this.count--;
-      this.triggerRender();
-    } else if (event.key === 'q' || event.key === 'Q') {
-      process.exit(0);
-    }
+  increment() {
+    this.count++;
   }
 
-  triggerRender() {
-    if (this.onUpdate) {
-      this.onUpdate();
-    }
+  decrement() {
+    this.count--;
   }
 }
 
-const app = createApp({
-  debug: false,
-});
-
+// Demo usage
 const counter = new Counter({});
 
-console.log('Counter example created. Starting app...');
+console.log('Counter component created.');
+console.log(counter.render());
+counter.increment();
+console.log('\nAfter increment:');
+console.log(counter.render());
 
-const unrender = app.render(counter, document.body);
-
-console.log('Counter app is running. Press keys to interact.');
