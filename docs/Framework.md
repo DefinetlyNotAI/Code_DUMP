@@ -271,11 +271,6 @@ node examples/counter.js
 node examples/test-app.js
 ```
 
-### Demo App
-```bash
-node examples/demo-app.js
-```
-
 ## API Reference
 
 ### createApp(options)
