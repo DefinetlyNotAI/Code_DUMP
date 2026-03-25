@@ -14,12 +14,11 @@
  * - Styling and themes
  */
 
-const { createApp, Element, Colors, Style, Theme, defaultTheme, Screen, Buffer, ANSI, Engine, LayoutEngine, FlexLayout } = require('../src/index.js');
+const { Element, Colors, Style, Theme, defaultTheme, Buffer, ANSI, LayoutEngine } = require('../src/index.js');
 
 class TestApp extends Element {
   constructor(props) {
     super(props);
-    this.currentTest = 0;
     this.testsPassed = 0;
     this.testsFailed = 0;
     this.output = [];
@@ -235,7 +234,7 @@ class TestApp extends Element {
     }
   }
 
-  render() {
+  render(buffer, x, y, width, height) {
     if (this.output.length === 0) {
       this.runTests();
     }
@@ -260,4 +259,7 @@ async function main() {
   }
 }
 
-main();
+main().catch(err => {
+  console.error('Unexpected error:', err);
+  process.exit(1);
+});

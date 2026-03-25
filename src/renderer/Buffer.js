@@ -119,7 +119,6 @@ class Buffer {
    * Marks a cell as dirty for rendering.
    * @param {number} x - Column
    * @param {number} y - Row
-   * @private
    */
   markDirty(x, y) {
     this.dirtyRegions.add(`${x},${y}`);

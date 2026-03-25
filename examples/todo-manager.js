@@ -1,12 +1,12 @@
 /**
- * Todo Manager Application
+ * To-do Manager Application
  *
  * Comprehensive TUI app demonstrating all framework features:
  * - Text widgets for rendering content
  * - Button widgets for interaction
  * - Input widget for user input
  * - Checkbox widget for item selection
- * - List widget for todo display
+ * - List widget for to-do display
  * - Flex/Grid containers for layout
  * - Full event system
  * - Plugin system with Logger and DevTools
@@ -14,34 +14,17 @@
  * - Keyboard and simulated mouse interaction
  */
 
-const fs = require('fs');
-const path = require('path');
+
 const {
-  Box,
-  Text,
-  Button,
-  Input,
-  Checkbox,
-  List,
-  ScrollView,
-  Flex,
-  Grid,
-  Stack,
-  Absolute,
-  EventEmitter,
   PluginManager,
   LoggerPlugin,
   DevToolsPlugin,
-  Theme,
-  Colors,
   ANSI,
-  Style,
   clamp,
-  deepMerge,
 } = require('../src/index.js');
 
 /**
- * Todo Manager Application State
+ * To-do Manager Application State
  */
 class TodoManager {
   constructor() {
@@ -57,7 +40,6 @@ class TodoManager {
     this.inputText = '';
     this.filter = 'all'; // all, active, completed
     this.theme = 'default';
-    this.emitter = new EventEmitter();
   }
 
   getFilteredTodos() {
@@ -98,7 +80,7 @@ class TodoManager {
 }
 
 /**
- * Todo UI Renderer
+ * To-do UI Renderer
  */
 class TodoUI {
   constructor(manager) {
@@ -140,7 +122,6 @@ class TodoUI {
     const endIdx = Math.min(filtered.length, startIdx + maxLines);
 
     const lines = [];
-    const cyan = ANSI.fg16(36);
     const bgCyan = ANSI.bg16(46);
     const black = ANSI.fg16(30);
     const reset = ANSI.reset();

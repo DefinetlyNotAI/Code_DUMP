@@ -15,7 +15,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { EventEmitter, PluginManager, LoggerPlugin, DevToolsPlugin, Colors, ANSI, Style } = require('../src/index.js');
+const { PluginManager, LoggerPlugin, DevToolsPlugin, ANSI } = require('../src/index.js');
 
 /**
  * File Manager State
@@ -106,17 +106,6 @@ class FileManagerState {
     return false;
   }
 
-  goForward() {
-    if (this.historyIndex < this.history.length - 1) {
-      this.historyIndex++;
-      this.currentPath = this.history[this.historyIndex];
-      this.loadFiles();
-      this.statusMessage = 'Forward';
-      return true;
-    }
-    return false;
-  }
-
   getSelectedFile() {
     return this.files[this.selectedIndex];
   }
@@ -147,7 +136,6 @@ class FileManagerUI {
     this.state = state;
     this.width = 100;
     this.height = 30;
-    this.emitter = new EventEmitter();
   }
 
   updateSize(width, height) {
@@ -180,7 +168,6 @@ class FileManagerUI {
     const endIdx = Math.min(this.state.files.length, startIdx + maxLines);
 
     const lines = [];
-    const cyan = ANSI.fg16(36);
     const bgCyan = ANSI.bg16(46);
     const black = ANSI.fg16(30);
     const reset = ANSI.reset();
@@ -229,9 +216,7 @@ class FileManagerUI {
     }
 
     const size = selected.isDirectory ? '<DIR>' : `${selected.size} bytes`;
-    const info = `Selected: ${selected.name} (${size}) | Total: ${fileCount} files`;
-
-    return info;
+    return `Selected: ${selected.name} (${size}) | Total: ${fileCount} files`;
   }
 
   renderHelpBar() {
@@ -252,7 +237,6 @@ class FileManagerUI {
     const message = this.state.statusMessage;
     const filePath = this.state.currentPath;
     const status = `${message} | ${filePath}`.substring(0, this.width - 2);
-    const white = ANSI.fg16(37);
     const bgWhite = ANSI.bg16(47);
     const black = ANSI.fg16(30);
     const reset = ANSI.reset();
@@ -290,9 +274,8 @@ class FileManagerUI {
  * Input Handler
  */
 class InputHandler {
-  constructor(state, ui) {
+  constructor(state) {
     this.state = state;
-    this.ui = ui;
   }
 
   handleKey(key) {
@@ -450,7 +433,6 @@ async function main() {
 
   // Simulate keyboard input (demo mode)
   const demoKeys = ['down', 'down', 'up', 'enter', 'backspace', 'q'];
-  let demoIndex = 0;
 
   // Render initial state
   console.log(ui.render());

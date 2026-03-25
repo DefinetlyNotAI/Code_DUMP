@@ -9,13 +9,13 @@ class Counter extends Element {
     this.count = 0;
   }
 
-  render() {
+  render(buffer, x, y, width, height) {
     const content = [
       '',
       '  ╔════════════════════════╗',
       '  ║   Counter Demo         ║',
       '  ╠════════════════════════╣',
-      `  ║  Count: ${String(this.count).padStart(18, ' ')} ║`,
+      `  ║  Count: ${String(this.count).padStart(14, ' ')} ║`,
       '  ║                        ║',
       '  ║  [+] Increment         ║',
       '  ║  [-] Decrement         ║',
@@ -44,4 +44,6 @@ console.log(counter.render());
 counter.increment();
 console.log('\nAfter increment:');
 console.log(counter.render());
-
+counter.decrement();
+console.log('\nAfter decrement:');
+console.log(counter.render());
