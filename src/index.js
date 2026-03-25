@@ -38,6 +38,26 @@ const { defaultTheme } = require('./themes/default');
 const { lightTheme } = require('./themes/light');
 const { darkTheme } = require('./themes/dark');
 
+// Widgets
+const Box = require('./widgets/Box');
+const Text = require('./widgets/Text');
+const Button = require('./widgets/Button');
+const Input = require('./widgets/Input');
+const Checkbox = require('./widgets/Checkbox');
+const List = require('./widgets/List');
+const ScrollView = require('./widgets/ScrollView');
+
+// Containers
+const Flex = require('./containers/Flex');
+const Grid = require('./containers/Grid');
+const Stack = require('./containers/Stack');
+const Absolute = require('./containers/Absolute');
+
+// Plugins
+const { PluginManager } = require('./plugins/PluginManager');
+const { LoggerPlugin } = require('./plugins/LoggerPlugin');
+const { DevToolsPlugin } = require('./plugins/DevToolsPlugin');
+
 // Utilities
 const clamp = require('./utils/clamp');
 const deepMerge = require('./utils/deepMerge');
@@ -84,6 +104,26 @@ module.exports = {
   defaultTheme,
   lightTheme,
   darkTheme,
+
+  // Widgets
+  Box,
+  Text,
+  Button,
+  Input,
+  Checkbox,
+  List,
+  ScrollView,
+
+  // Containers
+  Flex,
+  Grid,
+  Stack,
+  Absolute,
+
+  // Plugins
+  PluginManager,
+  LoggerPlugin,
+  DevToolsPlugin,
 
   // Utilities
   clamp,

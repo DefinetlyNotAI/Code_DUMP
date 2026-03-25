@@ -403,7 +403,6 @@ theme.clone();
 
 - **FRAMEWORK.md** - Architecture overview and module guide
 - **examples/** - Working examples and test suite
-- **.github/copilot-instructions.md** - Detailed architecture documentation
 
 ## 🤝 Contributing
 
