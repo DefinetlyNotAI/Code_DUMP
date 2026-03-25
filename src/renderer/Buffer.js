@@ -53,7 +53,7 @@ class Buffer {
    * Gets cell at position.
    * @param {number} x - Column
    * @param {number} y - Row
-   * @returns {object|null} Cell object or null if out of bounds
+   * @returns {{char: string, fg: string|null, bg: string|null, bold: boolean, dim: boolean, italic: boolean, underline: boolean, reverse: boolean, hidden: boolean, strikethrough: boolean}|null} Cell object or null if out of bounds
    */
   getCell(x, y) {
     if (y < 0 || y >= this.height || x < 0 || x >= this.width) {

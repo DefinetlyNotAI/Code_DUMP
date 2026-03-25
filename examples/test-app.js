@@ -144,10 +144,12 @@ class TestApp extends Element {
     this.log('📝 Testing Layout System:');
 
     try {
+      /** @type {Node} */
       const mockNode = {
         type: 'element',
         children: [],
         bounds: {},
+        props: { type: 'flex' },
         layout: { direction: 'row' },
         applyLayout: function(bounds) { this.bounds = bounds; }
       };
