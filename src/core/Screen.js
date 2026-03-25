@@ -42,14 +42,14 @@ class Screen extends EventEmitter {
    * Checks COLORTERM and TERM environment variables.
    */
   detectColorCapability() {
-    const colorterm = process.env.COLORTERM || '';
+    const colorTerm = process.env.COLORTERM || '';
     const term = process.env.TERM || '';
 
-    if (colorterm.includes('truecolor') || colorterm.includes('24bit')) {
-      this.colorDepth = 16777216; // 24-bit truecolor
+    if (colorTerm.includes('true-color') || colorTerm.includes('24bit')) {
+      this.colorDepth = 16777216; // 24-bit true-color
     } else if (
       term.includes('256color') ||
-      colorterm === 'yes' ||
+      colorTerm === 'yes' ||
       process.platform === 'win32'
     ) {
       this.colorDepth = 256;

@@ -113,7 +113,7 @@ class ANSI {
   }
 
   /**
-   * Sets foreground color (truecolor RGB).
+   * Sets foreground color (true-color RGB).
    * @param {number} r - Red (0-255)
    * @param {number} g - Green (0-255)
    * @param {number} b - Blue (0-255)
@@ -124,7 +124,7 @@ class ANSI {
   }
 
   /**
-   * Sets background color (truecolor RGB).
+   * Sets background color (true-color RGB).
    * @param {number} r - Red (0-255)
    * @param {number} g - Green (0-255)
    * @param {number} b - Blue (0-255)

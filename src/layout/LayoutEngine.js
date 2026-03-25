@@ -22,7 +22,7 @@ class LayoutEngine {
   static layoutNode(node, x, y, width, height) {
     if (!node || !node.applyLayout) return;
 
-    let layout = [];
+    let layout;
 
     if (node.props?.type === 'grid') {
       layout = GridLayout.calculate(node, width, height);

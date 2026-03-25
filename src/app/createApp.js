@@ -31,12 +31,12 @@ function createApp(options = {}) {
 
   let isRunning = false;
 
-  const app = {
+  return {
     /**
      * Renders component tree.
      * @param {*} component - Root component
      * @param {object} container - Container element
-     * @returns {Function} Unrender function
+     * @returns {Function} Un-render function
      */
     render(component, container) {
       if (isRunning) {
@@ -108,8 +108,6 @@ function createApp(options = {}) {
       return isRunning;
     },
   };
-
-  return app;
 }
 
 module.exports = { createApp };
