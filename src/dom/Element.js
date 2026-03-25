@@ -5,6 +5,16 @@ const Node = require('./Node');
  * Represents renderable nodes in the DOM tree.
  */
 class Element extends Node {
+  /**
+   * @type {Element|null}
+   */
+  parent;
+
+  /**
+   * @type {Array<Element>}
+   */
+  children;
+
   constructor(type, props = {}) {
     super(type, props);
     this.bounds = {
@@ -15,8 +25,6 @@ class Element extends Node {
     };
     this.visible = props.visible !== false;
     this.zIndex = props.zIndex || 0;
-    this.parent = null;
-    this.children = [];
   }
 
   /**

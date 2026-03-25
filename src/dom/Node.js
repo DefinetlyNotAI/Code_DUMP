@@ -3,8 +3,13 @@
  * Provides fundamental tree structure and property management.
  */
 class Node {
+  /**
+   * @type {Node|null}
+   */
+  parent;
+
   constructor(type, props = {}) {
-    this.id = props.id || `node-${Math.random().toString(36).substr(2, 9)}`;
+    this.id = props.id || `node-${Math.random().toString(36).substring(2, 11)}`;
     this.type = type;
     this.props = { ...props };
     this.state = {};
