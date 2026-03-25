@@ -29,7 +29,16 @@ class Measure {
    * @returns {{width: number, height: number}}
    */
   static contentSize(node) {
-    if (node.measureContent) {
+    return this.measureContent(node);
+  }
+
+  /**
+   * Measures content dimensions of a node.
+   * @param {Node} node - Node to measure
+   * @returns {{width: number, height: number}} Content dimensions
+   */
+  static measureContent(node) {
+    if (node && typeof node.measureContent === 'function') {
       return node.measureContent();
     }
     return { width: 0, height: 0 };

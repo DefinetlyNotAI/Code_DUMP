@@ -146,6 +146,20 @@ class Node {
       child.traverse(callback, depth + 1);
     }
   }
+
+  /**
+   * Emits an event to all listeners.
+   * @param {string} event - Event name
+   * @param {...*} args - Arguments to pass to handlers
+   * @returns {boolean} True if at least one listener was called
+   */
+  emit(event, ...args) {
+    const handlers = this.getEventListeners(event);
+    for (const handler of handlers) {
+      handler(...args);
+    }
+    return handlers.length > 0;
+  }
 }
 
 module.exports = Node;

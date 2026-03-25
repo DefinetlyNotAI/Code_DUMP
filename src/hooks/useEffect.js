@@ -1,7 +1,11 @@
 /**
  * useEffect hook for side effects.
+ * @param {Function} effect - Effect function
+ * @param {Array} [deps] - Dependency array
+ * @type {Function}
  */
 function useEffect(effect, deps) {
+  // @type {object} currentComponentFiber
   if (!global.currentComponentFiber) {
     throw new Error('useEffect can only be called during component render');
   }

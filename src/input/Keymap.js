@@ -84,6 +84,15 @@ class Keymap {
   }
 
   /**
+   * Gets key name from input sequence (alias for getKeyName).
+   * @param {string} input - Input sequence
+   * @returns {string|null} Key name or null
+   */
+  static get(input) {
+    return this.getKeyName(input);
+  }
+
+  /**
    * Adds a custom key mapping.
    * @param {string} keyName - Key name
    * @param {string|Array} sequences - Sequence or array of sequences

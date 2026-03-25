@@ -1,7 +1,10 @@
 /**
  * useFocus hook for focus management.
+ * @type {Function}
  */
 function useFocus() {
+  // @type {object} currentComponentFiber
+  // @type {FocusManager} focusManager
   if (!global.currentComponentFiber) {
     throw new Error('useFocus can only be called during component render');
   }

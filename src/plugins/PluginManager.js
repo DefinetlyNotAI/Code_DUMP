@@ -9,6 +9,11 @@ class PluginManager {
 
   /**
    * Registers a plugin.
+   * @param {string} name - Plugin name
+   * @param {object} plugin - Plugin object
+   * @param {Function} [plugin.onRegister] - Called when plugin is registered
+   * @param {Function} [plugin.onUnregister] - Called when plugin is unregistered
+   * @returns {PluginManager} This instance for chaining
    */
   register(name, plugin) {
     if (this.plugins.has(name)) {
@@ -26,6 +31,8 @@ class PluginManager {
 
   /**
    * Unregisters a plugin.
+   * @param {string} name - Plugin name
+   * @returns {boolean} True if unregistered
    */
   unregister(name) {
     const plugin = this.plugins.get(name);

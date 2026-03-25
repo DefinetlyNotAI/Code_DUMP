@@ -1,5 +1,6 @@
 /**
  * React-like useState hook for functional components.
+ * @type {Function}
  */
 let currentComponent = null;
 const componentStates = new Map();
@@ -20,7 +21,7 @@ function useState(initialValue) {
   const setState = (newValue) => {
     const value = typeof newValue === 'function' ? newValue(state) : newValue;
     componentStates.set(hookKey, value);
-    if (currentComponent.requestRender) {
+    if (currentComponent && typeof currentComponent.requestRender === 'function') {
       currentComponent.requestRender();
     }
   };
