@@ -1,20 +1,21 @@
 # TUI Framework - Complete Terminal UI Framework
 
-A **production-ready**, **zero-dependency** Terminal User Interface framework in pure JavaScript. Build beautiful, interactive CLI applications with React-like components and modern architecture.
+A **production-ready**, **zero-dependency** Terminal User Interface framework in pure JavaScript. 
+Build beautiful, interactive CLI applications with React-like components and modern architecture.
 
-## ✨ Features
+## Features
 
-- **🚀 Zero Dependencies** - Pure Node.js, no npm packages required
-- **⚛️ React-like Hooks** - `useState`, `useEffect`, `useFocus` for component state
-- **📊 Efficient Rendering** - Diff-based updates minimize terminal output
-- **🎨 Flexible Layout** - FlexBox and CSS Grid-style layout engines
-- **🎯 Event System** - Full event propagation with capture/bubble phases
-- **🎭 Theming** - Complete theming system with built-in themes (default, light, dark)
-- **⌨️ Input Handling** - Keyboard and mouse event processing
-- **🔧 Extensible** - Plugin architecture for custom functionality
-- **📈 Performance** - Fiber-based reconciliation for incremental updates
+- **Zero Dependencies** - Pure Node.js, no npm packages required
+- **React-like Hooks** - `useState`, `useEffect`, `useFocus` for component state
+- **Efficient Rendering** - Diff-based updates minimize terminal output
+- **Flexible Layout** - FlexBox and CSS Grid-style layout engines
+- **Event System** - Full event propagation with capture/bubble phases
+- **Theming** - Complete theming system with built-in themes (default, light, dark)
+- **Input Handling** - Keyboard and mouse event processing
+- **Extensible** - Plugin architecture for custom functionality
+- **Performance** - Fiber-based reconciliation for incremental updates
 
-## 📦 What's Included
+## What's Included
 
 ### Core (67 Files)
 - **Application Factory** - `createApp()` to initialize TUI apps
@@ -87,7 +88,7 @@ clamp()             // Number clamping
 deepMerge()         // Object merging
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Basic Component
 
@@ -154,7 +155,7 @@ const app = createApp({ theme: defaultTheme });
 app.render(new StyledBox(), document.body);
 ```
 
-## 📐 Architecture
+## Architecture
 
 ### Strict Layered Design
 
@@ -200,7 +201,7 @@ src/
 └── index.js          # Main exports
 ```
 
-## 🎨 Theming
+## Theming
 
 ```javascript
 const { createApp, Element, defaultTheme, lightTheme, darkTheme } = require('tui');
@@ -218,7 +219,7 @@ const customTheme = new Theme('custom',
 );
 ```
 
-## ⌨️ Input Handling
+## Input Handling
 
 ```javascript
 const { createApp, InputManager } = require('tui');
@@ -233,7 +234,7 @@ input.on('key', (event) => {
 input.start();
 ```
 
-## 📊 Performance
+## Performance
 
 - **Diff-based rendering** - Only changed cells sent to terminal
 - **Dirty region tracking** - Minimal screen updates
@@ -241,7 +242,7 @@ input.start();
 - **Frame loop** - 60 FPS rendering with scheduling
 - **Event batching** - Input events processed per frame
 
-## 🧪 Testing
+## Testing
 
 Comprehensive test suite validating all systems:
 
@@ -258,7 +259,7 @@ Tests cover:
 - Theme management
 - Style processing
 
-## 📚 Examples
+## Examples
 
 ### Counter App
 ```bash
@@ -275,7 +276,7 @@ node examples/test-app.js
 node examples/demo-app.js
 ```
 
-## 🔧 API Reference
+## API Reference
 
 ### createApp(options)
 
@@ -373,9 +374,9 @@ theme.merge(otherTheme);
 theme.clone();
 ```
 
-## 🎯 Implementation Status
+## Implementation Status
 
-**✅ Complete (Phases 1-7)** - 48/66 todos done
+**Complete (Phases 1-7)** - 48/66 todos done
 - Foundation & core engine
 - Layout system
 - Event & input systems
@@ -385,12 +386,12 @@ theme.clone();
 - Application factory
 - Comprehensive testing
 
-**🚧 In Progress (Phases 8-10)** - 18 todos remaining
+**In Progress (Phases 8-10)** - 18 todos remaining
 - Plugin system
 - Widget implementations
 - Documentation
 
-## 💡 Design Principles
+## Design Principles
 
 1. **Zero Dependencies** - Uses only Node.js built-ins
 2. **Simplicity** - Clear, readable code without over-abstraction
@@ -399,36 +400,15 @@ theme.clone();
 5. **Extensibility** - Plugins and custom components without core changes
 6. **Maintainability** - Consistent patterns and clear architecture
 
-## 📖 Documentation
+## Documentation
 
 - **FRAMEWORK.md** - Architecture overview and module guide
 - **examples/** - Working examples and test suite
 
-## 🤝 Contributing
+## Contributing
 
 To extend the framework:
 
 1. **Add a Widget** - Create `src/widgets/MyWidget.js` extending Element
 2. **Add a Plugin** - Create `src/plugins/MyPlugin.js` implementing plugin interface
 3. **Add Examples** - Create `examples/my-example.js` demonstrating features
-
-## 📝 License
-
-MIT
-
-## 🎉 Summary
-
-This is a **complete, production-ready Terminal UI framework** with:
-
-- ✅ 67 implementation files
-- ✅ 4,800+ lines of code
-- ✅ 27 public module exports
-- ✅ 0 external dependencies
-- ✅ 23 passing tests
-- ✅ React-like component model
-- ✅ Efficient diff-based rendering
-- ✅ Full event system
-- ✅ Flexible layout engines
-- ✅ Complete theming system
-
-**Ready for building professional CLI applications!**
