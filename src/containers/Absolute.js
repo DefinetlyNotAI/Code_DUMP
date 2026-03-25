@@ -23,6 +23,7 @@ class Absolute extends Element {
 
   /**
    * Renders the absolute container.
+   * @returns {string} Rendered container content
    */
   render() {
     if (this.children.length === 0) return '';

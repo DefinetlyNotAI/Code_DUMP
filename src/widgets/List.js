@@ -42,6 +42,7 @@ class List extends Element {
 
   /**
    * Renders the list.
+   * @returns {string} Rendered list content
    */
   render() {
     const height = this.bounds.height || 10;

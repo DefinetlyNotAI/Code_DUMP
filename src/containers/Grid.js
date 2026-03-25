@@ -22,6 +22,7 @@ class Grid extends Element {
 
   /**
    * Renders the grid container.
+   * @returns {string} Rendered container content
    */
   render() {
     const childrenPerRow = this.cols;

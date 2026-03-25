@@ -21,6 +21,7 @@ class Checkbox extends Element {
 
   /**
    * Renders the checkbox.
+   * @returns {string} Rendered checkbox content
    */
   render() {
     const box = this.checked ? '[✓]' : '[ ]';

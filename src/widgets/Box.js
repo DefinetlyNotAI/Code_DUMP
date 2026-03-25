@@ -25,6 +25,7 @@ class Box extends Element {
 
   /**
    * Renders the box.
+   * @returns {string} Rendered box content
    */
   render() {
     const width = this.bounds.width || 40;

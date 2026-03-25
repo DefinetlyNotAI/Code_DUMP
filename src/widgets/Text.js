@@ -50,6 +50,7 @@ class Text extends Element {
 
   /**
    * Renders the text.
+   * @returns {string} Rendered text content
    */
   render() {
     const width = this.bounds.width || this.maxWidth;

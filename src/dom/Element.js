@@ -56,16 +56,21 @@ class Element extends Node {
   }
 
   /**
-   * Renders this element to a buffer.
-   * Should be overridden by subclasses.
-   * @param {Buffer} buffer - Target buffer
-   * @param {number} x - Starting x coordinate
-   * @param {number} y - Starting y coordinate
-   * @param {number} width - Rendering width
-   * @param {number} height - Rendering height
+   * Renders this element to a buffer or returns rendered content.
+   * Can be overridden by subclasses with either signature:
+   * - render(buffer, x, y, width, height): void - Renders to Buffer
+   * - render(): string - Returns rendered string
+   * 
+   * @param {Buffer} [buffer] - Target buffer (optional)
+   * @param {number} [x] - Starting x coordinate (optional)
+   * @param {number} [y] - Starting y coordinate (optional)
+   * @param {number} [width] - Rendering width (optional)
+   * @param {number} [height] - Rendering height (optional)
+   * @returns {string|void} Rendered string or void if rendering to buffer
    */
   render(buffer, x, y, width, height) {
     // Default implementation - should be overridden
+    return '';
   }
 
   /**

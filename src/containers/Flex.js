@@ -23,6 +23,7 @@ class Flex extends Element {
 
   /**
    * Renders the flex container.
+   * @returns {string} Rendered container content
    */
   render() {
     return this.children.map(child => child.render ? child.render() : String(child)).join('\n');

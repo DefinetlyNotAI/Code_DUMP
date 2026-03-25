@@ -62,6 +62,7 @@ class ScrollView extends Element {
 
   /**
    * Renders the scroll view.
+   * @returns {string} Rendered scroll view content
    */
   render() {
     const width = this.bounds.width || 80;

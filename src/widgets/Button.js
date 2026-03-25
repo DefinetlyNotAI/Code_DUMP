@@ -27,6 +27,7 @@ class Button extends Element {
 
   /**
    * Renders the button.
+   * @returns {string} Rendered button content
    */
   render() {
     const width = this.bounds.width || (this.label.length + 4);

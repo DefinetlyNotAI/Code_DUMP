@@ -50,6 +50,7 @@ class Input extends Element {
 
   /**
    * Renders the input.
+   * @returns {string} Rendered input content
    */
   render() {
     const width = this.bounds.width || 30;
