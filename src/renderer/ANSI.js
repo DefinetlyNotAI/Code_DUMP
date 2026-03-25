@@ -77,6 +77,15 @@ class ANSI {
   }
 
   /**
+   * Shorthand for fg16.
+   * @param {number} code - Color code
+   * @returns {string} ANSI color sequence
+   */
+  static fg(code) {
+    return this.fg16(code);
+  }
+
+  /**
    * Sets background color (16-color).
    * @param {number} code - Color code (40-47 for standard, 100-107 for bright)
    * @returns {string} ANSI color sequence
@@ -193,6 +202,14 @@ class ANSI {
    */
   static clearScreen() {
     return '\x1b[2J';
+  }
+
+  /**
+   * Shorthand for clearScreen.
+   * @returns {string} ANSI screen sequence
+   */
+  static clear() {
+    return this.clearScreen();
   }
 
   /**

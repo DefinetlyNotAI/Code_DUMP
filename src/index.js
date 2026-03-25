@@ -1,7 +1,3 @@
-/**
- * TUI Framework - Main Entry Point
- */
-
 // App factories
 const { createApp } = require('./app/createApp');
 
@@ -11,8 +7,8 @@ const { useEffect } = require('./hooks/useEffect');
 const { useFocus } = require('./hooks/useFocus');
 
 // Core classes
-const { Node } = require('./dom/Node');
-const { Element } = require('./dom/Element');
+const Node = require('./dom/Node');
+const Element = require('./dom/Element');
 const { Engine } = require('./core/Engine');
 const { Screen } = require('./core/Screen');
 
@@ -43,8 +39,8 @@ const { lightTheme } = require('./themes/light');
 const { darkTheme } = require('./themes/dark');
 
 // Utilities
-const { clamp } = require('./utils/clamp');
-const { deepMerge } = require('./utils/deepMerge');
+const clamp = require('./utils/clamp');
+const deepMerge = require('./utils/deepMerge');
 
 module.exports = {
   // App
@@ -93,3 +89,5 @@ module.exports = {
   clamp,
   deepMerge,
 };
+
+
