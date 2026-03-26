@@ -1,4 +1,4 @@
-# 🎨 TUI Framework
+# TUI Framework
 
 > A **zero-dependency**, modular Terminal UI framework built with plain JavaScript for Node.js. Create professional, interactive command-line applications with React-like components, hooks, and a powerful layout system.
 
@@ -8,16 +8,16 @@
 ![Tests](https://img.shields.io/badge/tests-23%2F23-brightgreen.svg)
 ![Code Style](https://img.shields.io/badge/code_style-JavaScript-yellow.svg)
 
-## ✨ Features
+## Features
 
-### 🚀 Core Architecture
+### Core Architecture
 - **Zero Dependencies** - Pure Node.js, no external packages
 - **Layered Architecture** - Clean separation of concerns across 15+ modules
 - **Modular Design** - Import only what you need, extend easily
 - **React-Like Components** - Familiar patterns for interactive UIs
 - **Efficient Rendering** - Diff-based screen updates, minimal ANSI output
 
-### 🎨 Component System
+### Component System
 - **7 Pre-built Widgets**
   - `Box` - Container with padding and styling
   - `Text` - Formatted text display
@@ -33,19 +33,19 @@
   - `Stack` - Convenient vertical flex wrapper
   - `Absolute` - Fixed positioning
 
-### 🪝 Hooks System
+### Hooks System
 - `useState` - State management in functional components
 - `useEffect` - Side effects and lifecycle management
 - `useFocus` - Focus state and control
 
-### ⌨️ Input & Events
+### Input & Events
 - **Keyboard Input** - 50+ keys, modifiers (ctrl, shift, alt)
 - **Mouse Support** - Click detection and tracking
 - **Event System** - Pub/sub with capture/bubble phases
 - **Focus Management** - Navigate between interactive elements
 - **Raw Terminal Mode** - Direct keyboard and mouse input
 
-### 🎨 Styling & Themes
+### Styling & Themes
 - **16-Color ANSI** - Standard terminal colors
 - **256-Color Mode** - Extended color palette
 - **Truecolor RGB** - Full 24-bit color support
@@ -53,25 +53,25 @@
 - **Built-in Themes** - Default, light, and dark themes
 - **Custom Themes** - Define your own color schemes
 
-### 📐 Layout System
+### Layout System
 - **Flex Layout Engine** - Direction, justify-content, align-items, gaps
 - **Grid Layout Engine** - Template columns/rows, spans, auto-placement
 - **Responsive** - Auto-adjusts to terminal size changes
 - **Nested Layouts** - Compose complex UIs with recursive layouts
 - **Measure Utilities** - Text width calculation, constraint resolution
 
-### 🔌 Plugins
+### Plugins
 - **PluginManager** - Register and manage plugins
 - **LoggerPlugin** - Diagnostics and event logging
 - **DevToolsPlugin** - Component inspection and performance metrics
 
-### ⚡ Performance
+### Performance
 - **Fiber Architecture** - Incremental rendering updates
 - **Diff-Based Rendering** - Only update changed regions
 - **Task Scheduling** - Priority-based task queue (60 FPS safe)
 - **Frame Loop** - Coordinated render cycles
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Using npm
@@ -83,7 +83,7 @@ cd tui-framework
 npm install
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Basic Counter App
 
@@ -115,7 +115,7 @@ const app = createApp(Counter);
 app.render();
 ```
 
-## 📚 Documentation
+## Documentation
 
 ### Project Structure
 
@@ -195,7 +195,7 @@ element.addEventListener('focus', () => {
 });
 ```
 
-## 🎯 Example Applications
+## Example Applications
 
 ### System Explorer
 Advanced file manager TUI application:
@@ -246,7 +246,7 @@ Validates:
 - `todo-manager.js` - Full-featured todo application
 - `file-manager.js` - File browser with advanced features
 
-## 🔧 API Reference
+## API Reference
 
 ### createApp(ComponentClass, options)
 Initialize a TUI application.
@@ -390,7 +390,7 @@ new Stack({
 })
 ```
 
-## 🎨 Theming
+## Theming
 
 ### Using Built-in Themes
 ```javascript
@@ -415,7 +415,7 @@ const customTheme = new Theme('custom', {
 });
 ```
 
-## 🧪 Testing
+## Testing
 
 Run the comprehensive test suite:
 
@@ -429,7 +429,7 @@ The framework includes:
 - Validation of all core systems
 - Example app demonstrations
 
-## 🔌 Plugins
+## Plugins
 
 ### Creating a Plugin
 ```javascript
@@ -477,16 +477,7 @@ const options = {
 };
 ```
 
-## 📊 Performance
-
-The framework is optimized for:
-- **Minimal Terminal Output** - Diff-based rendering reduces network traffic
-- **Efficient Rendering** - Only changed regions are redrawn
-- **60 FPS Safe** - Task scheduling respects frame timing
-- **Low Memory** - Modular architecture, no dependencies
-- **Terminal Compatibility** - Works on xterm, Linux, macOS, Windows
-
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please follow these guidelines:
 
@@ -495,41 +486,3 @@ Contributions are welcome! Please follow these guidelines:
 3. Add tests for new features
 4. Update documentation
 5. Follow existing code style
-
-## 📝 License
-
-MIT © 2024
-
-## 🙏 Acknowledgments
-
-Inspired by:
-- React (component model, hooks)
-- Vue (composition patterns)
-- Ink (terminal React rendering)
-- Blessed (terminal UI libraries)
-
-## 🚀 Roadmap
-
-- [ ] More widgets (DatePicker, ColorPicker, FilePicker)
-- [ ] Animation system
-- [ ] Web socket support for remote TUIs
-- [ ] TypeScript definitions
-- [ ] Performance profiling tools
-- [ ] Accessibility features
-
-## 💬 Support
-
-For questions, issues, or suggestions:
-- Open an issue on GitHub
-- Check existing documentation
-- Review example applications
-- Examine test suite
-
-## 📞 Contact
-
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
-
----
-
-**Happy building! Create amazing terminal UIs with TUI Framework.** 🎉
