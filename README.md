@@ -83,6 +83,7 @@
 | WesHack Showcase Template          | [![Download](https://img.shields.io/badge/-Download-blue?logo=rolldown&logoColor=white&label=)](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FDefinetlyNotAI%2FCode_DUMP%2Ftree%2Fmain%2FWesHack%20Showcase%20Template)            | ![Status](https://img.shields.io/badge/Status-Deployed-green)                             |
 | Wiki Template                      | [![Download](https://img.shields.io/badge/-Download-blue?logo=rolldown&logoColor=white&label=)](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FDefinetlyNotAI%2FCode_DUMP%2Ftree%2Fmain%2FWiki%20Template)                          | ![Status](https://img.shields.io/badge/Status-Semi--Complete-yellow)                      |
 | Windows Simulation                 | [![Download](https://img.shields.io/badge/-Download-blue?logo=rolldown&logoColor=white&label=)](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FDefinetlyNotAI%2FCode_DUMP%2Ftree%2Fmain%2FWindows%20Simulation)                     | ![Status](https://img.shields.io/badge/Status-Semi--Complete-yellow)                      |
+| WuWa Pull Calculator               | [![Download](https://img.shields.io/badge/-Download-blue?logo=rolldown&logoColor=white&label=)](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2FDefinetlyNotAI%2FCode_DUMP%2Ftree%2Fmain%2FWuWa%20Pull%20Calculator)                 | ![Status](https://img.shields.io/badge/Status-Deployed-green)                             |
 
 <details>
   <summary><h3>Tag Explanation</h3></summary>
@@ -114,10 +115,12 @@
 - [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old%20BulletHell%20Engine/)
 - [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
 - [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
+- [WuWa Pull Calculator](https://definetlynotai.github.io/Code_DUMP/WuWa%20Pull%20Calculator)
 - [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template/lockdown)
 - [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
 - [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/IGCSE%20Grade%20Equivelancy%20Calculator)
 - [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/VulnScan%20Data/NN%20features/Loss_Landscape_3D.html)
+
 ---
 
 ## Important final notes
