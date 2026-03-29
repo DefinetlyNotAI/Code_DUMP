@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>WuWa Pull Calculator</title>
+        <!-- favicon -->
+        <link rel="icon" href="icons/astrite.png">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- large header icon -->
+            <img class="hero-icon" src="icons/radiant.png">
+            <h1>Pull Calculator</h1>
+            <!-- Astrites -->
+            <div class="section">
+                <div class="row">
+                    <img src="icons/astrite.png">
+                    <input type="number" id="astrite" placeholder="Astrites">
+                </div>
+            </div>
+            <!-- Coral -->
+            <div class="section">
+                <div class="row">
+                    <img src="icons/coral.png">
+                    <input type="number" id="coral" placeholder="Afterglow Coral">
+                    <label class="checkbox">
+                    <input type="checkbox" id="disableCoral">
+                    <span></span>
+                    </label>
+                    <div class="inline-label">
+                        <a href="https://www.reddit.com/r/WutheringWaves/comments/1j6a5i6/number_of_corals_per_pull_on_each_banner/" target="_blank">ⓘ</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tides -->
+            <div class="section">
+                <div class="row">
+                    <img id="tideIcon" src="icons/radiant.png">
+                    <select id="tideType">
+                        <option value="radiant">Radiant</option>
+                        <option value="forging">Forging</option>
+                    </select>
+                    <input type="number" id="tides" placeholder="Count">
+                </div>
+            </div>
+            <button id="calc">Calculate</button>
+            <!-- Result box -->
+            <div class="result-box" id="resultSection" style="display:none;">
+                <div class="info-line">
+                    <span>Result</span>
+                    <span class="info-btn" id="formulaBtn">ⓘ</span>
+                </div>
+                <div class="result-row" id="pullResult"></div>
+                <div class="result-row" id="coralResult"></div>
+            </div>
+            <!-- popup -->
+            <div id="formulaPopup" class="popup">
+                <div class="popup-header">
+                    <span>Formula Used</span>
+                    <span id="closePopup" class="popup-close">✖</span>
+                </div>
+                <div class="popup-body" style="text-align: center;">
+                    (tides + astrites/160) +<br>
+                    (corals + 1.2(tides + astrites/160))/8
+                </div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
