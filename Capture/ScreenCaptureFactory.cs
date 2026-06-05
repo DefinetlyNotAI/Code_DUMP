@@ -49,6 +49,20 @@ public static class ScreenCaptureFactory
         return CreateAuto();
     }
 
+    public static IScreenCapture CreateForWindow(nint windowHandle)
+    {
+        var capture = new GdiWindowCapture(windowHandle);
+        if (capture.IsAvailable)
+        {
+            LogCaptureMethod("GDI Window BitBlt", true);
+            return capture;
+        }
+
+        capture.Dispose();
+        LogCaptureMethod("GDI Window BitBlt", false);
+        throw new PlatformNotSupportedException("The target application window is not available for capture.");
+    }
+
     /// <summary>
     /// Automatically selects the best available capture method.
     /// Order of preference: DXGI > GDI

@@ -35,6 +35,7 @@ public sealed class Configuration
     public bool LowLatencyMode { get; private set; }
 
     public CharacterSet CharacterSet { get; private set; } = CharacterSet.HalfBlock;
+    public string? TargetApplicationPath { get; private set; }
 
     public static Configuration Parse(string[] args)
     {
@@ -195,7 +196,18 @@ public sealed class Configuration
                     break;
 
                 default:
-                    config._parseErrors.Add($"Unknown option '{arg}'.");
+                    if (arg.StartsWith('-'))
+                    {
+                        config._parseErrors.Add($"Unknown option '{arg}'.");
+                    }
+                    else if (config.TargetApplicationPath is null)
+                    {
+                        config.TargetApplicationPath = arg;
+                    }
+                    else
+                    {
+                        config._parseErrors.Add($"Unexpected positional argument '{arg}'.");
+                    }
                     break;
             }
         }
@@ -231,6 +243,9 @@ public sealed class Configuration
 
         if (CaptureRegion.HasValue)
             errors.Add("Region capture is not implemented yet. Omit --region.");
+
+        if (TargetApplicationPath is { Length: > 0 } && !File.Exists(TargetApplicationPath))
+            errors.Add($"Target application path does not exist: {TargetApplicationPath}");
 
         return errors;
     }
@@ -311,7 +326,10 @@ public sealed class Configuration
             Renders your Windows desktop in the terminal using ANSI escape sequences.
 
             USAGE:
-                g2c [OPTIONS]
+                g2c [OPTIONS] [APPLICATION_PATH]
+
+            TARGET APPLICATION:
+                APPLICATION_PATH        Launch and render only that application's window
 
             RENDERING OPTIONS:
                 --fps=<1-120>           Target frame rate (default: 24)

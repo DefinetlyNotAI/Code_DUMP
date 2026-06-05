@@ -92,6 +92,7 @@ sealed class G2CApplication : IDisposable
     private AnsiRenderer? _renderer;
     private DiffEngine? _diffEngine;
     private InputBridge? _inputBridge;
+    private Process? _targetProcess;
     
     // Screen dimensions
     private int _screenWidth;
@@ -148,7 +149,7 @@ sealed class G2CApplication : IDisposable
         try
         {
             // Create screen capture
-            _capture = ScreenCaptureFactory.Create(_config.PreferredCaptureMethod);
+            _capture = CreateCapture();
             (_screenWidth, _screenHeight) = _capture.GetScreenSize();
 
             if (_screenWidth <= 0 || _screenHeight <= 0)
@@ -168,14 +169,7 @@ sealed class G2CApplication : IDisposable
                 return false;
             }
 
-            // Create frame buffer with scaling configuration
-            _frameBuffer = new FrameBufferManager(
-                _screenWidth, _screenHeight,
-                _termWidth, _termHeight,
-                _config.Grayscale,
-                _config.ScaleMode,
-                _config.CharacterSet,
-                _config.ThreadCount);
+            CreateFrameBuffer();
 
             // Create diff engine
             _diffEngine = new DiffEngine(_config.NoDiff);
@@ -190,11 +184,12 @@ sealed class G2CApplication : IDisposable
             _renderer.Initialize();
 
             // Create input bridge if mouse is enabled
-            if (_config.EnableMouse)
+            if (_config.EnableMouse && _config.TargetApplicationPath is null)
             {
+                var frameBuffer = _frameBuffer ?? throw new InvalidOperationException("Frame buffer was not initialized.");
                 _inputBridge = new InputBridge(
                     _screenWidth, _screenHeight,
-                    _frameBuffer.TerminalToScreen);
+                    frameBuffer.TerminalToScreen);
 
                 if (_inputBridge.EnableMouse())
                 {
@@ -213,6 +208,55 @@ sealed class G2CApplication : IDisposable
             Console.Error.WriteLine($"[G2C] Initialization failed: {ex.Message}");
             return false;
         }
+    }
+
+    private IScreenCapture CreateCapture()
+    {
+        if (_config.TargetApplicationPath is not { Length: > 0 } targetPath)
+            return ScreenCaptureFactory.Create(_config.PreferredCaptureMethod);
+
+        nint windowHandle = LaunchTargetAndWaitForWindow(targetPath);
+        return ScreenCaptureFactory.CreateForWindow(windowHandle);
+    }
+
+    private nint LaunchTargetAndWaitForWindow(string targetPath)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = targetPath,
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(targetPath)) ?? Environment.CurrentDirectory
+        };
+
+        _targetProcess = Process.Start(startInfo)
+            ?? throw new InvalidOperationException($"Failed to launch target application: {targetPath}");
+
+        DateTime deadline = DateTime.UtcNow.AddSeconds(15);
+        while (DateTime.UtcNow < deadline)
+        {
+            _targetProcess.Refresh();
+            if (_targetProcess.HasExited)
+                throw new InvalidOperationException("Target application exited before creating a window.");
+
+            if (_targetProcess.MainWindowHandle != nint.Zero)
+                return _targetProcess.MainWindowHandle;
+
+            Thread.Sleep(100);
+        }
+
+        throw new InvalidOperationException("Timed out waiting for the target application window.");
+    }
+
+    private void CreateFrameBuffer()
+    {
+        _frameBuffer?.Dispose();
+        _frameBuffer = new FrameBufferManager(
+            _screenWidth, _screenHeight,
+            _termWidth, _termHeight,
+            _config.Grayscale,
+            _config.ScaleMode,
+            _config.CharacterSet,
+            _config.ThreadCount);
     }
 
     /// <summary>
@@ -263,6 +307,9 @@ sealed class G2CApplication : IDisposable
         {
             long frameStart = _stopwatch.ElapsedMilliseconds;
 
+            if (_targetProcess is { HasExited: true })
+                break;
+
             // Check for terminal resize
             var resizeResult = await HandleTerminalResizeAsync(
                 lastTermWidth,
@@ -272,6 +319,11 @@ sealed class G2CApplication : IDisposable
             lastTermHeight = resizeResult.height;
 
             if (resizeResult.resized)
+            {
+                isFirstFrame = true;
+            }
+
+            if (RefreshCaptureDimensions())
             {
                 isFirstFrame = true;
             }
@@ -363,6 +415,19 @@ sealed class G2CApplication : IDisposable
         }
     }
 
+    private bool RefreshCaptureDimensions()
+    {
+        var (width, height) = _capture!.GetScreenSize();
+        if (width == _screenWidth && height == _screenHeight)
+            return false;
+
+        _screenWidth = width;
+        _screenHeight = height;
+        CreateFrameBuffer();
+        _diffEngine!.ResetAdaptiveState();
+        return true;
+    }
+
     private ColorMode GetRendererColorMode()
     {
         if (_config.Grayscale)
@@ -430,6 +495,7 @@ sealed class G2CApplication : IDisposable
         _diffEngine?.Dispose();
         _frameBuffer?.Dispose();
         _capture?.Dispose();
+        _targetProcess?.Dispose();
 
         // Print farewell message
         Console.WriteLine();
