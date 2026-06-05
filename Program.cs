@@ -5,6 +5,7 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using G2C;
 using G2C.Capture;
 using G2C.DiffEngine;
@@ -49,7 +50,7 @@ static async Task<int> RunApplication(string[] args)
     }
 
     // Setup console for proper rendering
-    TerminalUtils.SetupConsole();
+    TerminalUtils.SetupConsole(config.EnableMouse);
     TerminalUtils.OptimizeConsoleForRendering();
 
     // Initialize all components
@@ -94,6 +95,7 @@ sealed class G2CApplication : IDisposable
     private DiffEngine? _diffEngine;
     private InputBridge? _inputBridge;
     private Process? _targetProcess;
+    private nint _targetWindowHandle;
     
     // Screen dimensions
     private int _screenWidth;
@@ -225,17 +227,32 @@ sealed class G2CApplication : IDisposable
         };
 
         _targetProcess = Process.Start(startInfo)
-            ?? throw new InvalidOperationException($"Failed to launch target application: {targetPath}");
+            ?? null;
 
         DateTime deadline = DateTime.UtcNow.AddSeconds(15);
         while (DateTime.UtcNow < deadline)
         {
-            _targetProcess.Refresh();
-            if (_targetProcess.HasExited)
-                throw new InvalidOperationException("Target application exited before creating a window.");
+            if (_targetProcess is not null)
+            {
+                _targetProcess.Refresh();
+                if (_targetProcess.HasExited)
+                    throw new InvalidOperationException("Target application exited before creating a window.");
 
-            if (_targetProcess.MainWindowHandle != nint.Zero)
-                return _targetProcess.MainWindowHandle;
+                if (_targetProcess.MainWindowHandle != nint.Zero)
+                {
+                    _targetWindowHandle = _targetProcess.MainWindowHandle;
+                    return _targetWindowHandle;
+                }
+            }
+
+            nint foregroundWindow = NativeWindow.GetForegroundWindow();
+            if (foregroundWindow != nint.Zero &&
+                foregroundWindow != NativeWindow.GetConsoleWindow() &&
+                NativeWindow.IsWindowVisible(foregroundWindow))
+            {
+                _targetWindowHandle = foregroundWindow;
+                return _targetWindowHandle;
+            }
 
             Thread.Sleep(100);
         }
@@ -273,7 +290,8 @@ sealed class G2CApplication : IDisposable
         {
             long frameStart = _stopwatch.ElapsedMilliseconds;
 
-            if (_targetProcess is { HasExited: true })
+            if ((_targetProcess is { HasExited: true }) ||
+                (_targetWindowHandle != nint.Zero && !NativeWindow.IsWindow(_targetWindowHandle)))
                 break;
 
             if (HandleHotkeys())
@@ -487,6 +505,23 @@ sealed class G2CApplication : IDisposable
 
         _cts.Dispose();
     }
+}
+
+static partial class NativeWindow
+{
+    [DllImport("user32.dll")]
+    public static extern nint GetForegroundWindow();
+
+    [DllImport("kernel32.dll")]
+    public static extern nint GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindowVisible(nint hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindow(nint hWnd);
 }
 
 // ============================================================================

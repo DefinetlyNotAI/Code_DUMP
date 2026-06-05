@@ -22,7 +22,7 @@ public sealed class Configuration
     public ColorDepth ColorDepth { get; private set; } = ColorDepth.TrueColor;
     public DitherMode Dither { get; private set; } = DitherMode.None;
 
-    public bool EnableMouse { get; private set; } = true;
+    public bool EnableMouse { get; private set; }
     public bool EnableKeyboard { get; private set; }
 
     public bool ShowDebugInfo { get; private set; }
@@ -161,6 +161,10 @@ public sealed class Configuration
                 case "--no-mouse":
                 case "--nomouse":
                     config.EnableMouse = false;
+                    break;
+
+                case "--mouse":
+                    config.EnableMouse = true;
                     break;
 
                 case "--keyboard":
@@ -346,7 +350,8 @@ public sealed class Configuration
                 --capture=<method>      Capture method: dxgi, gdi, auto
 
             INPUT OPTIONS:
-                --no-mouse              Disable mouse input forwarding
+                --mouse                 Enable mouse input forwarding
+                --no-mouse              Keep mouse input forwarding disabled
                 --keyboard, -k          Reserved; not implemented
 
             DISPLAY OPTIONS:
