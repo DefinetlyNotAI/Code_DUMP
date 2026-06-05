@@ -176,7 +176,14 @@ public sealed class GdiWindowCapture : IScreenCapture
         width = _width;
         height = _height;
 
-        byte[] temp = new byte[GetRequiredBufferSize()];
+        int requiredSize = GetRequiredBufferSize();
+        if (buffer.Length < requiredSize)
+        {
+            Interlocked.Increment(ref _framesDropped);
+            return false;
+        }
+
+        byte[] temp = new byte[requiredSize];
         bool result = CaptureFrame(temp, out width, out height);
         if (result)
             temp.CopyTo(buffer);

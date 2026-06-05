@@ -224,6 +224,9 @@ g2c.exe --no-mouse
 
 # Use a specific capture backend
 g2c.exe --capture=dxgi
+
+# Launch and render only one application window
+g2c.exe "C:\Path\To\App.exe"
 ```
 
 ---
@@ -272,6 +275,8 @@ OTHER:
   --help, -h             Display this help message
   --version, -v          Display version information
 ```
+
+To avoid the infinity mirror effect, drag an application executable onto `g2c.exe` or pass it as `APPLICATION_PATH`. G2C launches that app and renders only its main window.
 
 ### Environment Variables
 
