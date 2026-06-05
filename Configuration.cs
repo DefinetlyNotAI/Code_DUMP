@@ -104,7 +104,7 @@ public sealed class Configuration
                         {
                             "dxgi" => CaptureMethod.Dxgi,
                             "gdi" => CaptureMethod.Gdi,
-                            "wgc" or "graphics-capture" => CaptureMethod.WindowsGraphicsCapture,
+                            "wgc" or "graphics-capture" => CaptureMethod.Auto,
                             _ => CaptureMethod.Auto
                         };
                         break;
@@ -286,7 +286,7 @@ public sealed class Configuration
             CAPTURE OPTIONS:
                 --monitor=<n>           Capture specific monitor
                 --region=<x,y,w,h>      Capture specific region
-                --capture=<method>      Capture method: dxgi, gdi, wgc, auto
+                --capture=<method>      Capture method: dxgi, gdi, auto
 
             INPUT OPTIONS:
                 --no-mouse              Disable mouse input forwarding

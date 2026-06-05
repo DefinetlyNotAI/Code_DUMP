@@ -79,7 +79,6 @@ public sealed class AnsiRenderer : IDisposable
     // Buffers - using ArrayPool for reduced allocations
     private char[] _charBuffer;
     private byte[] _byteBuffer;
-    private int _charPos;
     private int _bytePos;
 
     // Pre-computed escape sequences

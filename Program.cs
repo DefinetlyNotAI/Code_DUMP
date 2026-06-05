@@ -106,7 +106,6 @@ sealed class G2CApplication : IDisposable
     private readonly PerformanceTracker _perfTracker = new();
     
     // State
-    private bool _isInitialized;
     private bool _isDisposed;
 
     public G2CApplication(Configuration config)
@@ -160,8 +159,8 @@ sealed class G2CApplication : IDisposable
 
             // Get terminal size
             TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
-            _termWidth = size.Width;
-            _termHeight = size.Height;
+            _termWidth = size.Columns;
+            _termHeight = size.Rows;
 
             if (_termWidth <= 0 || _termHeight <= 0)
             {
@@ -175,7 +174,7 @@ sealed class G2CApplication : IDisposable
                 _termWidth, _termHeight,
                 _config.Grayscale,
                 _config.ScaleMode,
-                _config.CustomScale);
+                _config.CharacterSet);
 
             // Create diff engine
             _diffEngine = new DiffEngine(_config.NoDiff);
@@ -207,7 +206,6 @@ sealed class G2CApplication : IDisposable
                 }
             }
 
-            _isInitialized = true;
             return true;
         }
         catch (Exception ex)
@@ -376,8 +374,8 @@ sealed class G2CApplication : IDisposable
             return (false, lastWidth, lastHeight);
 
         TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
-        int newWidth = size.Width;
-        int newHeight = size.Height;
+        int newWidth = size.Columns;
+        int newHeight = size.Rows;
 
         if (newWidth == lastWidth && newHeight == lastHeight)
             return (false, lastWidth, lastHeight);
