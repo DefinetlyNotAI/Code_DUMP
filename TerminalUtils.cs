@@ -454,6 +454,8 @@ public static class TerminalUtils
 
     public static void OptimizeConsoleForRendering()
     {
+        TryRequestTerminalResize();
+
         try
         {
             nint consoleWindow = GetConsoleWindow();
@@ -464,6 +466,17 @@ public static class TerminalUtils
 
         TrySetTinyConsoleFont();
         TryUseLargestConsoleWindow();
+        TryRequestTerminalResize();
+    }
+
+    private static void TryRequestTerminalResize()
+    {
+        try
+        {
+            // xterm-compatible terminals: maximize window and request a very large character grid.
+            Console.Write("\x1b[9;1t\x1b[8;999;999t");
+        }
+        catch { }
     }
 
     private static void TrySetTinyConsoleFont()

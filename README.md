@@ -259,7 +259,8 @@ CAPTURE OPTIONS:
   --region=<X,Y,W,H>     Reserved; currently rejected
 
 INPUT OPTIONS:
-  --no-mouse             Disable mouse input bridging
+  --mouse                Enable mouse input bridging
+  --no-mouse             Keep mouse input bridging disabled
   --keyboard, -k         Reserved; currently rejected
 
 PERFORMANCE OPTIONS:
