@@ -8,6 +8,8 @@ namespace G2C;
 /// </summary>
 public sealed class Configuration
 {
+    private readonly List<string> _parseErrors = new();
+
     public bool ShowHelp { get; private set; }
     public bool ShowVersion { get; private set; }
     public double? CustomScale { get; private set; }
@@ -52,7 +54,7 @@ public sealed class Configuration
                         if (int.TryParse(value, out int fps) && fps is > 0 and <= 120)
                             config.TargetFps = fps;
                         else
-                            PrintWarning($"Invalid FPS value '{value}', using default (24)");
+                            config._parseErrors.Add("--fps must be an integer from 1 to 120.");
                         break;
 
                     case "--scale":
@@ -62,7 +64,7 @@ public sealed class Configuration
                             "fit" => ScaleMode.Fit,
                             "fill" => ScaleMode.Fill,
                             "pixel" => ScaleMode.PixelPerfect,
-                            _ => ScaleMode.Fit
+                            _ => AddParseError(config, "--scale must be one of: fit, stretch, fill, pixel.", ScaleMode.Fit)
                         };
                         break;
 
@@ -74,7 +76,7 @@ public sealed class Configuration
                             "256" or "8bit" => ColorDepth.Color256,
                             "16" or "4bit" => ColorDepth.Color16,
                             "ansi" => ColorDepth.AnsiBasic,
-                            _ => ColorDepth.TrueColor
+                            _ => AddParseError(config, "--color must be one of: truecolor, 256, 16, ansi.", ColorDepth.TrueColor)
                         };
                         break;
 
@@ -85,18 +87,22 @@ public sealed class Configuration
                             "ordered" or "bayer" => DitherMode.Ordered,
                             "floyd" or "floyd-steinberg" => DitherMode.FloydSteinberg,
                             "atkinson" => DitherMode.Atkinson,
-                            _ => DitherMode.None
+                            _ => AddParseError(config, "--dither must be one of: none, ordered, floyd, atkinson.", DitherMode.None)
                         };
                         break;
 
                     case "--monitor":
                         if (int.TryParse(value, out int monitor) && monitor >= 0)
                             config.TargetMonitor = monitor;
+                        else
+                            config._parseErrors.Add("--monitor must be a non-negative integer.");
                         break;
 
                     case "--region":
                         if (TryParseRegion(value, out Rectangle region))
                             config.CaptureRegion = region;
+                        else
+                            config._parseErrors.Add("--region must use x,y,width,height with positive width and height.");
                         break;
 
                     case "--capture":
@@ -104,14 +110,17 @@ public sealed class Configuration
                         {
                             "dxgi" => CaptureMethod.Dxgi,
                             "gdi" => CaptureMethod.Gdi,
-                            "wgc" or "graphics-capture" => CaptureMethod.Auto,
-                            _ => CaptureMethod.Auto
+                            "auto" => CaptureMethod.Auto,
+                            "wgc" or "graphics-capture" => AddParseError(config, "--capture=wgc is not implemented. Use dxgi, gdi, or auto.", CaptureMethod.Auto),
+                            _ => AddParseError(config, "--capture must be one of: dxgi, gdi, auto.", CaptureMethod.Auto)
                         };
                         break;
 
                     case "--threads":
                         if (int.TryParse(value, out int threads) && threads is > 0 and <= 64)
                             config.ThreadCount = threads;
+                        else
+                            config._parseErrors.Add("--threads must be an integer from 1 to 64.");
                         break;
 
                     case "--charset":
@@ -122,8 +131,12 @@ public sealed class Configuration
                             "braille" => CharacterSet.Braille,
                             "block" => CharacterSet.FullBlock,
                             "ascii" => CharacterSet.AsciiShade,
-                            _ => CharacterSet.HalfBlock
+                            _ => AddParseError(config, "--charset must be one of: half, quarter, braille, block, ascii.", CharacterSet.HalfBlock)
                         };
+                        break;
+
+                    default:
+                        config._parseErrors.Add($"Unknown option '{parts[0]}'.");
                         break;
                 }
 
@@ -180,6 +193,10 @@ public sealed class Configuration
                 case "-v":
                     config.ShowVersion = true;
                     break;
+
+                default:
+                    config._parseErrors.Add($"Unknown option '{arg}'.");
+                    break;
             }
         }
 
@@ -195,12 +212,25 @@ public sealed class Configuration
     public List<string> Validate()
     {
         List<string> errors = new();
+        errors.AddRange(_parseErrors);
 
         if (TargetFps <= 0)
             errors.Add("Target FPS must be greater than 0.");
 
         if (ThreadCount <= 0)
             errors.Add("Thread count must be greater than 0.");
+
+        if (Dither != DitherMode.None)
+            errors.Add("Dithering modes are not implemented yet. Use --dither=none.");
+
+        if (EnableKeyboard)
+            errors.Add("Keyboard input forwarding is not implemented yet. Omit --keyboard.");
+
+        if (TargetMonitor.HasValue)
+            errors.Add("Monitor selection is not implemented yet. Omit --monitor.");
+
+        if (CaptureRegion.HasValue)
+            errors.Add("Region capture is not implemented yet. Omit --region.");
 
         return errors;
     }
@@ -237,8 +267,17 @@ public sealed class Configuration
         if (!int.TryParse(parts[3], out int height))
             return false;
 
+        if (width <= 0 || height <= 0)
+            return false;
+
         region = new Rectangle(x, y, width, height);
         return true;
+    }
+
+    private static T AddParseError<T>(Configuration config, string message, T fallback)
+    {
+        config._parseErrors.Add(message);
+        return fallback;
     }
 
     private static bool DetectTrueColorSupport()
@@ -279,18 +318,18 @@ public sealed class Configuration
                 --grayscale, -g         Render in grayscale
                 --scale=<mode>          Scaling: fit, stretch, fill, pixel
                 --color=<depth>         Color depth: truecolor, 256, 16, ansi
-                --dither=<mode>         Dithering: none, ordered, floyd, atkinson
+                --dither=<mode>         Dithering: none (other modes reserved)
                 --charset=<set>         Characters: half, quarter, braille, block, ascii
                 --no-diff               Disable differential rendering
 
             CAPTURE OPTIONS:
-                --monitor=<n>           Capture specific monitor
-                --region=<x,y,w,h>      Capture specific region
+                --monitor=<n>           Reserved; not implemented
+                --region=<x,y,w,h>      Reserved; not implemented
                 --capture=<method>      Capture method: dxgi, gdi, auto
 
             INPUT OPTIONS:
                 --no-mouse              Disable mouse input forwarding
-                --keyboard, -k          Enable keyboard input forwarding
+                --keyboard, -k          Reserved; not implemented
 
             DISPLAY OPTIONS:
                 --debug, -d             Show debug overlay
