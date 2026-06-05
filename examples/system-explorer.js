@@ -140,9 +140,19 @@ function main() {
 
   function showScreen() {
     console.clear();
-    console.log('╔═══════════════════════════════════════════════════════════════════════════╗');
-    console.log('║                        TUI File System Explorer                            ║');
-    console.log('╚═══════════════════════════════════════════════════════════════════════════╝\n');
+    
+    // Dynamic header based on terminal width
+    const headerWidth = explorer.getTerminalWidth();
+    const headerBorder = '═'.repeat(headerWidth);
+    const title = 'TUI File System Explorer';
+    const padding = Math.max(0, headerWidth - title.length - 2);
+    const leftPad = Math.floor(padding / 2);
+    const rightPad = padding - leftPad;
+    
+    console.log(`╔${headerBorder}╗`);
+    console.log(`║${' '.repeat(leftPad)}${title}${' '.repeat(rightPad)}║`);
+    console.log(`╚${headerBorder}╝\n`);
+    
     console.log(explorer.render());
     console.log('\nNavigation: ↑↓ = Nav | Enter = Open Dir | Backspace = Back | q = Quit\n');
   }
