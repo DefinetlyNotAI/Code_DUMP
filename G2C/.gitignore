@@ -1,0 +1,23 @@
+# Environment variables
+.env*.local
+
+# Common ignores
+node_modules
+.next/
+.DS_Store
+
+.idea/
+obj/
+dist/
+build/
+logs/
+*.log
+bin/
+*.tmp
+*.bak
+*.swp
+*.swo
+*.zip
+*.tar.gz
+*.env
+*.env.*

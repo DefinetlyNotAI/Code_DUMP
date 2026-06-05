@@ -1,0 +1,580 @@
+// ============================================================================
+// G2C - GUI to CLI Terminal Renderer
+// Program.cs - Application entry point and main render loop
+// ============================================================================
+
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using G2C;
+using G2C.Capture;
+using G2C.DiffEngine;
+using G2C.FrameBuffer;
+using G2C.InputBridge;
+using G2C.Renderer;
+
+// ============================================================================
+// Application Entry Point
+// ============================================================================
+
+return await RunApplication(args);
+
+static async Task<int> RunApplication(string[] args)
+{
+    // Parse configuration from command line
+    var config = Configuration.Parse(args);
+
+    // Handle help/version requests
+    if (config.ShowHelp)
+    {
+        Configuration.PrintUsage();
+        return 0;
+    }
+
+    if (config.ShowVersion)
+    {
+        Configuration.PrintVersion();
+        return 0;
+    }
+
+    // Validate configuration
+    var validationErrors = config.Validate();
+    if (validationErrors.Count > 0)
+    {
+        Console.Error.WriteLine("Configuration errors:");
+        foreach (var error in validationErrors)
+        {
+            Console.Error.WriteLine($"  - {error}");
+        }
+        return 1;
+    }
+
+    // Setup console for proper rendering
+    TerminalUtils.SetupConsole(config.EnableMouse);
+    TerminalUtils.OptimizeConsoleForRendering();
+
+    // Initialize all components
+    using var app = new G2CApplication(config);
+
+    try
+    {
+        return await app.RunAsync();
+    }
+    catch (OperationCanceledException)
+    {
+        return 0;
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"\n[G2C] Fatal error: {ex.Message}");
+        if (config.ShowDebugInfo)
+        {
+            Console.Error.WriteLine(ex.StackTrace);
+        }
+        return 1;
+    }
+}
+
+// ============================================================================
+// Main Application Class
+// ============================================================================
+
+/// <summary>
+/// Main application class that orchestrates all G2C components.
+/// Implements IDisposable for proper resource cleanup.
+/// </summary>
+sealed class G2CApplication : IDisposable
+{
+    private readonly Configuration _config;
+    private readonly CancellationTokenSource _cts;
+    
+    // Components
+    private IScreenCapture? _capture;
+    private FrameBufferManager? _frameBuffer;
+    private AnsiRenderer? _renderer;
+    private DiffEngine? _diffEngine;
+    private InputBridge? _inputBridge;
+    private Process? _targetProcess;
+    private nint _targetWindowHandle;
+    
+    // Screen dimensions
+    private int _screenWidth;
+    private int _screenHeight;
+    
+    // Terminal dimensions (can change during runtime)
+    private int _termWidth;
+    private int _termHeight;
+    
+    // Performance tracking
+    private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
+    private readonly PerformanceTracker _perfTracker = new();
+    
+    // State
+    private bool _isDisposed;
+    private bool _showInfoOverlay;
+
+    public G2CApplication(Configuration config)
+    {
+        _config = config;
+        _cts = new CancellationTokenSource();
+        
+        // Setup Ctrl+C handler
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
+
+    /// <summary>
+    /// Runs the main application loop.
+    /// </summary>
+    public async Task<int> RunAsync()
+    {
+        // Initialize all components
+        if (!Initialize())
+        {
+            return 1;
+        }
+
+        // Enter main render loop
+        await MainLoopAsync();
+
+        return 0;
+    }
+
+    /// <summary>
+    /// Initializes all application components.
+    /// </summary>
+    private bool Initialize()
+    {
+        try
+        {
+            // Create screen capture
+            _capture = CreateCapture();
+            (_screenWidth, _screenHeight) = _capture.GetScreenSize();
+
+            if (_screenWidth <= 0 || _screenHeight <= 0)
+            {
+                Console.Error.WriteLine("[G2C] Failed to detect screen dimensions.");
+                return false;
+            }
+
+            // Get terminal size
+            TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
+            _termWidth = size.Columns;
+            _termHeight = size.Rows;
+
+            if (_termWidth <= 0 || _termHeight <= 0)
+            {
+                Console.Error.WriteLine("[G2C] Failed to detect terminal dimensions.");
+                return false;
+            }
+
+            CreateFrameBuffer();
+
+            // Create diff engine
+            _diffEngine = new DiffEngine(_config.NoDiff);
+
+            // Create renderer with appropriate color mode
+            _renderer = new AnsiRenderer(
+                _termWidth, _termHeight,
+                GetRendererColorMode(),
+                useAlternateBuffer: true,
+                enableSynchronizedOutput: _config.UseSynchronizedOutput);
+
+            _renderer.Initialize();
+
+            // Create input bridge if mouse is enabled
+            if (_config.EnableMouse && _config.TargetApplicationPath is null)
+            {
+                var frameBuffer = _frameBuffer ?? throw new InvalidOperationException("Frame buffer was not initialized.");
+                _inputBridge = new InputBridge(
+                    _screenWidth, _screenHeight,
+                    frameBuffer.TerminalToScreen);
+
+                if (_inputBridge.EnableMouse())
+                {
+                    _inputBridge.Start();
+                }
+                else
+                {
+                    Console.Error.WriteLine("[G2C] Warning: Failed to enable mouse input.");
+                }
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[G2C] Initialization failed: {ex.Message}");
+            return false;
+        }
+    }
+
+    private IScreenCapture CreateCapture()
+    {
+        if (_config.TargetApplicationPath is not { Length: > 0 } targetPath)
+            return ScreenCaptureFactory.Create(_config.PreferredCaptureMethod);
+
+        nint windowHandle = LaunchTargetAndWaitForWindow(targetPath);
+        return ScreenCaptureFactory.CreateForWindow(windowHandle);
+    }
+
+    private nint LaunchTargetAndWaitForWindow(string targetPath)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = targetPath,
+            UseShellExecute = true,
+            WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(targetPath)) ?? Environment.CurrentDirectory
+        };
+
+        _targetProcess = Process.Start(startInfo)
+            ?? null;
+
+        DateTime deadline = DateTime.UtcNow.AddSeconds(15);
+        while (DateTime.UtcNow < deadline)
+        {
+            if (_targetProcess is not null)
+            {
+                _targetProcess.Refresh();
+                if (_targetProcess.HasExited)
+                    throw new InvalidOperationException("Target application exited before creating a window.");
+
+                if (_targetProcess.MainWindowHandle != nint.Zero)
+                {
+                    _targetWindowHandle = _targetProcess.MainWindowHandle;
+                    return _targetWindowHandle;
+                }
+            }
+
+            nint foregroundWindow = NativeWindow.GetForegroundWindow();
+            if (foregroundWindow != nint.Zero &&
+                foregroundWindow != NativeWindow.GetConsoleWindow() &&
+                NativeWindow.IsWindowVisible(foregroundWindow))
+            {
+                _targetWindowHandle = foregroundWindow;
+                return _targetWindowHandle;
+            }
+
+            Thread.Sleep(100);
+        }
+
+        throw new InvalidOperationException("Timed out waiting for the target application window.");
+    }
+
+    private void CreateFrameBuffer()
+    {
+        _frameBuffer?.Dispose();
+        _frameBuffer = new FrameBufferManager(
+            _screenWidth, _screenHeight,
+            _termWidth, _termHeight,
+            _config.Grayscale,
+            _config.ScaleMode,
+            _config.CharacterSet,
+            _config.ThreadCount);
+    }
+
+    /// <summary>
+    /// Main render loop.
+    /// </summary>
+    private async Task MainLoopAsync()
+    {
+        // Frame timing
+        long targetFrameTimeMs = 1000 / _config.TargetFps;
+        int lastTermWidth = _termWidth;
+        int lastTermHeight = _termHeight;
+        bool isFirstFrame = true;
+
+        // Get capture method name for debug display
+        string captureMethodShort = _capture is DxgiCapture ? "DXGI" : "GDI";
+
+        while (!_cts.Token.IsCancellationRequested)
+        {
+            long frameStart = _stopwatch.ElapsedMilliseconds;
+
+            if ((_targetProcess is { HasExited: true }) ||
+                (_targetWindowHandle != nint.Zero && !NativeWindow.IsWindow(_targetWindowHandle)))
+                break;
+
+            if (HandleHotkeys())
+            {
+                isFirstFrame = true;
+            }
+
+            // Check for terminal resize
+            var resizeResult = await HandleTerminalResizeAsync(
+                lastTermWidth,
+                lastTermHeight);
+
+            lastTermWidth = resizeResult.width;
+            lastTermHeight = resizeResult.height;
+
+            if (resizeResult.resized)
+            {
+                isFirstFrame = true;
+            }
+
+            if (RefreshCaptureDimensions())
+            {
+                isFirstFrame = true;
+            }
+
+            // Capture frame
+            long captureStart = _stopwatch.ElapsedMilliseconds;
+            byte[] rawBuffer = _frameBuffer!.GetRawBuffer();
+            
+            if (!_capture!.CaptureFrame(rawBuffer, out int capturedWidth, out int capturedHeight))
+            {
+                // No new frame available, yield briefly
+                await Task.Delay(1, _cts.Token);
+                continue;
+            }
+            
+            long captureTime = _stopwatch.ElapsedMilliseconds - captureStart;
+
+            // Process frame (downscale to terminal resolution)
+            long processStart = _stopwatch.ElapsedMilliseconds;
+            _frameBuffer.ProcessFrame();
+            long processTime = _stopwatch.ElapsedMilliseconds - processStart;
+
+            // Compute diff between frames
+            long diffStart = _stopwatch.ElapsedMilliseconds;
+            var updates = _diffEngine!.ComputeDiff(
+                _frameBuffer.CurrentFrame,
+                _frameBuffer.PreviousFrame,
+                _termWidth, _termHeight,
+                out var diffStats);
+            long diffTime = _stopwatch.ElapsedMilliseconds - diffStart;
+
+            // Render frame
+            long renderStart = _stopwatch.ElapsedMilliseconds;
+            RenderFrame(updates, isFirstFrame);
+            long renderTime = _stopwatch.ElapsedMilliseconds - renderStart;
+
+            isFirstFrame = false;
+
+            // Update performance tracking
+            _perfTracker.RecordFrame(captureTime, processTime, diffTime, renderTime, updates.Count);
+
+            // Render info overlay only when toggled on.
+            if (_showInfoOverlay)
+            {
+                _renderer!.RenderDebugInfo(
+                    _perfTracker.CurrentFps,
+                    captureTime,
+                    renderTime,
+                    updates.Count,
+                    _termWidth * _termHeight,
+                    captureMethodShort,
+                    diffStats);
+            }
+
+            // Frame rate limiting
+            long frameTime = _stopwatch.ElapsedMilliseconds - frameStart;
+            if (frameTime < targetFrameTimeMs)
+            {
+                int sleepTime = (int)(targetFrameTimeMs - frameTime);
+                if (sleepTime > 0)
+                {
+                    await Task.Delay(sleepTime, _cts.Token);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Renders a frame using the most efficient method.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void RenderFrame(List<CellUpdate> updates, bool forceFullRedraw)
+    {
+        int totalCells = _termWidth * _termHeight;
+        
+        // Decide rendering strategy
+        bool useFullRedraw = forceFullRedraw || 
+                            updates.Count > totalCells / 2 ||
+                            updates.Count == totalCells;
+
+        if (useFullRedraw)
+        {
+            _renderer!.RenderFullFrame(_frameBuffer!.CurrentFrame);
+        }
+        else if (updates.Count > 0)
+        {
+            var runs = _diffEngine!.OptimizeUpdates(updates, _termWidth);
+            _renderer!.RenderRuns(runs);
+        }
+    }
+
+    private bool HandleHotkeys()
+    {
+        bool changed = false;
+
+        while (Console.KeyAvailable)
+        {
+            var key = Console.ReadKey(intercept: true);
+            if (key.Key == ConsoleKey.F6)
+            {
+                _showInfoOverlay = !_showInfoOverlay;
+                _renderer?.ResetScreen();
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool RefreshCaptureDimensions()
+    {
+        var (width, height) = _capture!.GetScreenSize();
+        if (width == _screenWidth && height == _screenHeight)
+            return false;
+
+        _screenWidth = width;
+        _screenHeight = height;
+        CreateFrameBuffer();
+        _diffEngine!.ResetAdaptiveState();
+        return true;
+    }
+
+    private ColorMode GetRendererColorMode()
+    {
+        if (_config.Grayscale)
+            return ColorMode.Grayscale;
+
+        return _config.ColorDepth switch
+        {
+            ColorDepth.Color256 => ColorMode.Color256,
+            ColorDepth.Color16 or ColorDepth.AnsiBasic => ColorMode.Color16,
+            _ => ColorMode.TrueColor
+        };
+    }
+
+    /// <summary>
+    /// Handles terminal resize events.
+    /// </summary>
+    private async Task<(bool resized, int width, int height)> HandleTerminalResizeAsync(
+        int lastWidth,
+        int lastHeight)
+    {
+        if (!TerminalUtils.HasTerminalSizeChanged(lastWidth, lastHeight))
+            return (false, lastWidth, lastHeight);
+
+        TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
+        int newWidth = size.Columns;
+        int newHeight = size.Rows;
+
+        if (newWidth == lastWidth && newHeight == lastHeight)
+            return (false, lastWidth, lastHeight);
+
+        _termWidth = newWidth;
+        _termHeight = newHeight;
+
+        _frameBuffer!.Resize(newWidth, newHeight);
+        _renderer!.Resize(newWidth, newHeight);
+        _renderer.ResetScreen();
+        _diffEngine!.ResetAdaptiveState();
+
+        await Task.Delay(50, _cts.Token);
+
+        return (true, newWidth, newHeight);
+    }
+
+    private void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)
+    {
+        e.Cancel = true; // Prevent immediate termination
+        _cts.Cancel();
+    }
+
+    public void Dispose()
+    {
+        if (_isDisposed) return;
+        _isDisposed = true;
+
+        // Unregister event handler
+        Console.CancelKeyPress -= OnCancelKeyPress;
+
+        // Cancel any pending operations
+        _cts.Cancel();
+
+        // Dispose components in reverse order of creation
+        _inputBridge?.Dispose();
+        _renderer?.Dispose();
+        _diffEngine?.Dispose();
+        _frameBuffer?.Dispose();
+        _capture?.Dispose();
+        _targetProcess?.Dispose();
+
+        _cts.Dispose();
+    }
+}
+
+static partial class NativeWindow
+{
+    [DllImport("user32.dll")]
+    public static extern nint GetForegroundWindow();
+
+    [DllImport("kernel32.dll")]
+    public static extern nint GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindowVisible(nint hWnd);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindow(nint hWnd);
+}
+
+// ============================================================================
+// Performance Tracking
+// ============================================================================
+
+/// <summary>
+/// Tracks rendering performance metrics.
+/// </summary>
+sealed class PerformanceTracker
+{
+    private readonly Stopwatch _fpsStopwatch = Stopwatch.StartNew();
+    private int _frameCount;
+    private int _fpsFrameCount;
+    private long _fpsStartTime;
+    
+    private double _totalCaptureTimeMs;
+    private double _totalProcessTimeMs;
+    private double _totalDiffTimeMs;
+    private double _totalRenderTimeMs;
+    private long _totalCellsUpdated;
+    
+    private double _currentFps;
+
+    public long TotalFrames => _frameCount;
+    public double CurrentFps => _currentFps;
+    public double AverageFps => _frameCount > 0 
+        ? _frameCount * 1000.0 / _fpsStopwatch.ElapsedMilliseconds 
+        : 0;
+    public double AverageCaptureTimeMs => _frameCount > 0 ? _totalCaptureTimeMs / _frameCount : 0;
+    public double AverageProcessTimeMs => _frameCount > 0 ? _totalProcessTimeMs / _frameCount : 0;
+    public double AverageDiffTimeMs => _frameCount > 0 ? _totalDiffTimeMs / _frameCount : 0;
+    public double AverageRenderTimeMs => _frameCount > 0 ? _totalRenderTimeMs / _frameCount : 0;
+    public double AverageCellsPerFrame => _frameCount > 0 ? _totalCellsUpdated / (double)_frameCount : 0;
+
+    public void RecordFrame(long captureMs, long processMs, long diffMs, long renderMs, int cellsUpdated)
+    {
+        _frameCount++;
+        _fpsFrameCount++;
+        
+        _totalCaptureTimeMs += captureMs;
+        _totalProcessTimeMs += processMs;
+        _totalDiffTimeMs += diffMs;
+        _totalRenderTimeMs += renderMs;
+        _totalCellsUpdated += cellsUpdated;
+
+        // Update FPS every second
+        long now = _fpsStopwatch.ElapsedMilliseconds;
+        if (now - _fpsStartTime >= 1000)
+        {
+            _currentFps = _fpsFrameCount * 1000.0 / (now - _fpsStartTime);
+            _fpsFrameCount = 0;
+            _fpsStartTime = now;
+        }
+    }
+}
