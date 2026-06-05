@@ -1,4 +1,4 @@
-# G2C - GUI to CLI
+# G2C - GUI 2 CLI
 
 <div align="center">
 
@@ -21,6 +21,9 @@
 *Render your entire Windows desktop in real-time using Unicode block characters and ANSI escape sequences*
 
 </div>
+
+> [!NOTE]
+> Barely working, just some bugs that does freeze up the terminal, tried continuing but gave up after hours of debugging.
 
 ---
 
