@@ -49,11 +49,7 @@ static async Task<int> RunApplication(string[] args)
     }
 
     // Setup console for proper rendering
-    if (!TerminalUtils.SetupConsole())
-    {
-        Console.Error.WriteLine("[G2C] Failed to setup console. Ensure you're running in a compatible terminal.");
-        return 1;
-    }
+    TerminalUtils.SetupConsole();
 
     // Initialize all components
     using var app = new G2CApplication(config);
@@ -163,7 +159,9 @@ sealed class G2CApplication : IDisposable
             }
 
             // Get terminal size
-            (_termWidth, _termHeight) = TerminalUtils.GetTerminalSize();
+            TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
+            _termWidth = size.Width;
+            _termHeight = size.Height;
 
             if (_termWidth <= 0 || _termHeight <= 0)
             {
@@ -268,9 +266,16 @@ sealed class G2CApplication : IDisposable
             long frameStart = _stopwatch.ElapsedMilliseconds;
 
             // Check for terminal resize
-            if (await HandleTerminalResizeAsync(ref lastTermWidth, ref lastTermHeight))
+            var resizeResult = await HandleTerminalResizeAsync(
+                lastTermWidth,
+                lastTermHeight);
+
+            lastTermWidth = resizeResult.width;
+            lastTermHeight = resizeResult.height;
+
+            if (resizeResult.resized)
             {
-                isFirstFrame = true; // Force full redraw after resize
+                isFirstFrame = true;
             }
 
             // Capture frame
@@ -363,33 +368,32 @@ sealed class G2CApplication : IDisposable
     /// <summary>
     /// Handles terminal resize events.
     /// </summary>
-    private async Task<bool> HandleTerminalResizeAsync(ref int lastWidth, ref int lastHeight)
+    private async Task<(bool resized, int width, int height)> HandleTerminalResizeAsync(
+        int lastWidth,
+        int lastHeight)
     {
         if (!TerminalUtils.HasTerminalSizeChanged(lastWidth, lastHeight))
-            return false;
+            return (false, lastWidth, lastHeight);
 
-        var (newWidth, newHeight) = TerminalUtils.GetTerminalSize();
-        
+        TerminalUtils.TerminalSize size = TerminalUtils.GetTerminalSize();
+        int newWidth = size.Width;
+        int newHeight = size.Height;
+
         if (newWidth == lastWidth && newHeight == lastHeight)
-            return false;
+            return (false, lastWidth, lastHeight);
 
-        lastWidth = newWidth;
-        lastHeight = newHeight;
         _termWidth = newWidth;
         _termHeight = newHeight;
 
-        // Resize all components
         _frameBuffer!.Resize(newWidth, newHeight);
         _renderer!.Resize(newWidth, newHeight);
         _diffEngine!.ResetAdaptiveState();
 
-        // Reinitialize renderer for clean slate
         _renderer.Initialize();
 
-        // Brief delay to let terminal settle
         await Task.Delay(50, _cts.Token);
 
-        return true;
+        return (true, newWidth, newHeight);
     }
 
     private void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs e)

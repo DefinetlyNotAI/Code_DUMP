@@ -61,6 +61,20 @@ public sealed class FrameBufferManager
         ? (double)_totalProcessingTimeMs / _totalFramesProcessed 
         : 0;
 
+    public void Dispose()
+    {
+        _rawBuffer = [];
+        _currentFrame = [];
+        _previousFrame = [];
+
+        _srcXLookup = [];
+        _srcYLookup = [];
+        _fracXLookup = [];
+        _fracYLookup = [];
+
+        GC.SuppressFinalize(this);
+    }
+
     public FrameBufferManager(
         int sourceWidth, 
         int sourceHeight, 
