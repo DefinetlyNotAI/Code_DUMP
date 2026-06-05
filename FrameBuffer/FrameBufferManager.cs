@@ -86,6 +86,12 @@ public sealed class FrameBufferManager
         CharacterSet characterSet = CharacterSet.HalfBlock,
         int maxDegreeOfParallelism = -1)
     {
+        if (sourceWidth < 2 || sourceHeight < 2)
+            throw new ArgumentOutOfRangeException(nameof(sourceWidth), "Source dimensions must be at least 2x2 pixels.");
+
+        if (terminalWidth <= 0 || terminalHeight <= 0)
+            throw new ArgumentOutOfRangeException(nameof(terminalWidth), "Terminal dimensions must be positive.");
+
         _sourceWidth = sourceWidth;
         _sourceHeight = sourceHeight;
         _grayscale = grayscale;
@@ -110,7 +116,7 @@ public sealed class FrameBufferManager
         };
         
         // Allocate raw capture buffer
-        _rawBuffer = new byte[sourceWidth * sourceHeight * 4];
+        _rawBuffer = new byte[CalculateBgraBufferSize(sourceWidth, sourceHeight)];
         _currentFrame = [];
         _previousFrame = [];
         
@@ -122,6 +128,9 @@ public sealed class FrameBufferManager
     /// </summary>
     public void Resize(int terminalWidth, int terminalHeight)
     {
+        if (terminalWidth <= 0 || terminalHeight <= 0)
+            throw new ArgumentOutOfRangeException(nameof(terminalWidth), "Terminal dimensions must be positive.");
+
         _terminalWidth = terminalWidth;
         _terminalHeight = terminalHeight;
 
@@ -133,7 +142,7 @@ public sealed class FrameBufferManager
         CalculateScaling(targetPixelWidth, targetPixelHeight);
 
         // Allocate frame buffers
-        int cellCount = terminalWidth * terminalHeight;
+        int cellCount = checked(terminalWidth * terminalHeight);
         _currentFrame = new TerminalCell[cellCount];
         _previousFrame = new TerminalCell[cellCount];
         
@@ -614,6 +623,11 @@ public sealed class FrameBufferManager
     {
         _totalFramesProcessed = 0;
         _totalProcessingTimeMs = 0;
+    }
+
+    private static int CalculateBgraBufferSize(int width, int height)
+    {
+        return checked(width * height * 4);
     }
 }
 

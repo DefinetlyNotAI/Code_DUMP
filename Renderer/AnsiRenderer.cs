@@ -126,6 +126,9 @@ public sealed class AnsiRenderer : IDisposable
         bool useAlternateBuffer = true,
         bool enableSynchronizedOutput = true)
     {
+        if (terminalWidth <= 0 || terminalHeight <= 0)
+            throw new ArgumentOutOfRangeException(nameof(terminalWidth), "Terminal dimensions must be positive.");
+
         _terminalWidth = terminalWidth;
         _terminalHeight = terminalHeight;
         _colorMode = colorMode;
@@ -133,7 +136,7 @@ public sealed class AnsiRenderer : IDisposable
         _enableSynchronizedOutput = enableSynchronizedOutput;
 
         // Calculate buffer sizes - estimate ~40 bytes per cell worst case
-        int estimatedSize = terminalWidth * terminalHeight * 40;
+        int estimatedSize = CalculateBufferSize(terminalWidth, terminalHeight);
         _charBuffer = ArrayPool<char>.Shared.Rent(estimatedSize);
         _byteBuffer = ArrayPool<byte>.Shared.Rent(estimatedSize);
 
@@ -164,6 +167,9 @@ public sealed class AnsiRenderer : IDisposable
     /// </summary>
     public void Resize(int width, int height)
     {
+        if (width <= 0 || height <= 0)
+            throw new ArgumentOutOfRangeException(nameof(width), "Terminal dimensions must be positive.");
+
         if (width == _terminalWidth && height == _terminalHeight)
             return;
 
@@ -171,7 +177,7 @@ public sealed class AnsiRenderer : IDisposable
         _terminalHeight = height;
 
         // Reallocate buffers if needed
-        int requiredSize = width * height * 40;
+        int requiredSize = CalculateBufferSize(width, height);
         if (_charBuffer.Length < requiredSize)
         {
             ArrayPool<char>.Shared.Return(_charBuffer);
@@ -686,6 +692,11 @@ public sealed class AnsiRenderer : IDisposable
             ArrayPool<byte>.Shared.Return(_byteBuffer);
             _byteBuffer = newBuffer;
         }
+    }
+
+    private static int CalculateBufferSize(int width, int height)
+    {
+        return checked(width * height * 40);
     }
 
     /// <summary>

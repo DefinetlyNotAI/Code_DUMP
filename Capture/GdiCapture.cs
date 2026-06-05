@@ -125,7 +125,7 @@ public sealed class GdiCapture : IScreenCapture
                 biPlanes = 1,
                 biBitCount = 32, // BGRA format
                 biCompression = BI_RGB,
-                biSizeImage = (uint)(_screenWidth * _screenHeight * 4)
+                biSizeImage = checked((uint)GetRequiredBufferSize())
             }
         };
 
@@ -277,7 +277,7 @@ public sealed class GdiCapture : IScreenCapture
 
     public (int Width, int Height) GetScreenSize() => (_screenWidth, _screenHeight);
 
-    public int GetRequiredBufferSize() => _screenWidth * _screenHeight * 4;
+    public int GetRequiredBufferSize() => checked(_screenWidth * _screenHeight * 4);
 
     public CaptureStats GetStats()
     {

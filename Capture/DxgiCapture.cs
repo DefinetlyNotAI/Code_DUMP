@@ -367,8 +367,19 @@ public sealed class DxgiCapture : IScreenCapture
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private unsafe void CopyTextureData(D3D11_MAPPED_SUBRESOURCE mappedResource, byte[] buffer)
     {
-        int rowPitch = (int)mappedResource.RowPitch;
-        int destRowPitch = _screenWidth * 4;
+        if (mappedResource.pData == nint.Zero)
+            throw new InvalidOperationException("DXGI mapped texture data pointer was null.");
+
+        int rowPitch = checked((int)mappedResource.RowPitch);
+        int destRowPitch = checked(_screenWidth * 4);
+        int requiredSize = GetRequiredBufferSize();
+
+        if (buffer.Length < requiredSize)
+            throw new ArgumentException("Destination buffer is too small for the captured frame.", nameof(buffer));
+
+        if (rowPitch < destRowPitch)
+            throw new InvalidOperationException(
+                $"DXGI mapped row pitch {rowPitch} is smaller than expected row size {destRowPitch}.");
 
         fixed (byte* dst = buffer)
         {
@@ -377,7 +388,7 @@ public sealed class DxgiCapture : IScreenCapture
             if (rowPitch == destRowPitch)
             {
                 // Fast path: no row pitch difference
-                Buffer.MemoryCopy(src, dst, buffer.Length, destRowPitch * _screenHeight);
+                Buffer.MemoryCopy(src, dst, buffer.Length, requiredSize);
             }
             else
             {
@@ -434,7 +445,7 @@ public sealed class DxgiCapture : IScreenCapture
 
     public (int Width, int Height) GetScreenSize() => (_screenWidth, _screenHeight);
 
-    public int GetRequiredBufferSize() => _screenWidth * _screenHeight * 4;
+    public int GetRequiredBufferSize() => checked(_screenWidth * _screenHeight * 4);
 
     public CaptureStats GetStats()
     {
