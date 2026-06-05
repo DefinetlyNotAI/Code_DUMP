@@ -16,6 +16,7 @@ public static class TerminalUtils
 
     private const int STD_OUTPUT_HANDLE = -11;
     private const int STD_INPUT_HANDLE = -10;
+    private const int SW_MAXIMIZE = 3;
     
     // Output mode flags
     private const uint ENABLE_PROCESSED_OUTPUT = 0x0001;
@@ -451,6 +452,56 @@ public static class TerminalUtils
         }
     }
 
+    public static void OptimizeConsoleForRendering()
+    {
+        try
+        {
+            nint consoleWindow = GetConsoleWindow();
+            if (consoleWindow != nint.Zero)
+                ShowWindow(consoleWindow, SW_MAXIMIZE);
+        }
+        catch { }
+
+        TrySetTinyConsoleFont();
+        TryUseLargestConsoleWindow();
+    }
+
+    private static void TrySetTinyConsoleFont()
+    {
+        try
+        {
+            nint stdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+            var font = new CONSOLE_FONT_INFOEX
+            {
+                cbSize = (uint)Marshal.SizeOf<CONSOLE_FONT_INFOEX>(),
+                nFont = 0,
+                dwFontSize = new COORD { X = 4, Y = 6 },
+                FontFamily = 54,
+                FontWeight = 400,
+                FaceName = "Consolas"
+            };
+
+            SetCurrentConsoleFontEx(stdOut, false, ref font);
+        }
+        catch { }
+    }
+
+    private static void TryUseLargestConsoleWindow()
+    {
+        try
+        {
+            int width = Math.Max(1, Console.LargestWindowWidth);
+            int height = Math.Max(1, Console.LargestWindowHeight);
+
+            Console.SetBufferSize(
+                Math.Max(Console.BufferWidth, width),
+                Math.Max(Console.BufferHeight, height));
+            Console.SetWindowSize(width, height);
+            Console.SetBufferSize(width, height);
+        }
+        catch { }
+    }
+
     /// <summary>
     /// Preserves current console modes for later restoration.
     /// </summary>
@@ -640,8 +691,28 @@ public static class TerminalUtils
         public COLORREF[] ColorTable;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    private struct CONSOLE_FONT_INFOEX
+    {
+        public uint cbSize;
+        public uint nFont;
+        public COORD dwFontSize;
+        public int FontFamily;
+        public int FontWeight;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string FaceName;
+    }
+
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern nint GetStdHandle(int nStdHandle);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern nint GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -656,6 +727,13 @@ public static class TerminalUtils
     private static extern bool GetConsoleScreenBufferInfoEx(
         nint hConsoleOutput, 
         ref CONSOLE_SCREEN_BUFFER_INFOEX lpConsoleScreenBufferInfoEx);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool SetCurrentConsoleFontEx(
+        nint consoleOutput,
+        bool maximumWindow,
+        ref CONSOLE_FONT_INFOEX consoleCurrentFontEx);
 
     [DllImport("ntdll.dll")]
     private static extern int NtQueryInformationProcess(

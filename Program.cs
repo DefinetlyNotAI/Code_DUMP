@@ -50,6 +50,7 @@ static async Task<int> RunApplication(string[] args)
 
     // Setup console for proper rendering
     TerminalUtils.SetupConsole();
+    TerminalUtils.OptimizeConsoleForRendering();
 
     // Initialize all components
     using var app = new G2CApplication(config);
