@@ -71,7 +71,7 @@ pixels per terminal cell.
 |--------------------------|-------------------------------------------------------------|
 | **ANSI Truecolor**       | Full 24-bit RGB color support (16,777,216 colors)           |
 | **Half-Block Rendering** | 2 vertical pixels per cell using `▀` character              |
-| **Multi-Mode Scaling**   | Bilinear, Bicubic, Lanczos, and Nearest Neighbor algorithms |
+| **Multi-Mode Scaling**   | Fit, fill, stretch, and pixel-perfect scaling modes         |
 | **SIMD Acceleration**    | Hardware-accelerated pixel processing using AVX2/SSE        |
 | **Diff-Based Updates**   | Smart change detection - only redraw modified cells         |
 | **Color Space Support**  | RGB, HSL, HSV, LAB, LCH with perceptual color distance      |
@@ -211,24 +211,19 @@ g2c.exe
 
 ```bash
 # High quality local viewing
-g2c.exe --fps=60 --scale-mode=bicubic
+g2c.exe --fps=60 --scale=fit --color=truecolor
 
 # Low bandwidth SSH session
-g2c.exe --fps=15 --grayscale --color-mode=256
+g2c.exe --fps=15 --grayscale --color=256
 
 # Debugging and development
-g2c.exe --debug --log-level=trace --log-file=g2c.log
+g2c.exe --debug --stats
 
 # View-only mode (no mouse interaction)
 g2c.exe --no-mouse
 
-# Capture specific monitor
-g2c.exe --monitor=1
-
-# Use presets
-g2c.exe --preset=high    # 60 FPS, bicubic scaling
-g2c.exe --preset=low     # 15 FPS, nearest neighbor, grayscale
-g2c.exe --preset=ssh     # Optimized for remote connections
+# Use a specific capture backend
+g2c.exe --capture=dxgi
 ```
 
 ---
@@ -241,59 +236,41 @@ g2c.exe --preset=ssh     # Optimized for remote connections
 g2c [OPTIONS]
 
 DISPLAY OPTIONS:
-  --fps=<N>              Target frame rate (1-144, default: 30)
+  --fps=<N>              Target frame rate (1-120, default: 24)
   --grayscale            Render in grayscale instead of color
-  --color-mode=<MODE>    Color output mode:
+  --color=<MODE>         Color output mode:
                            truecolor  - 24-bit RGB (default)
                            256        - 256-color palette
                            16         - 16-color ANSI
-                           grayscale  - 256 grayscale levels
-  --scale=<N>            Manual scale factor (0.1-2.0)
-  --scale-mode=<MODE>    Scaling algorithm:
-                           bilinear   - Smooth interpolation (default)
-                           bicubic    - Higher quality, slower
-                           lanczos    - Best quality, slowest
-                           nearest    - Fastest, pixelated
+                           ansi       - 16-color ANSI alias
+  --scale=<MODE>         Scaling: fit, stretch, fill, pixel
+  --charset=<SET>        Characters: half, quarter, braille, block, ascii
+  --dither=none          Dithering placeholder; other modes are rejected
 
 CAPTURE OPTIONS:
   --capture=<METHOD>     Capture method:
                            auto       - Best available (default)
                            dxgi       - Force DXGI Desktop Duplication
                            gdi        - Force GDI capture
-  --monitor=<N>          Monitor index to capture (0-based, default: 0)
-  --region=<X,Y,W,H>     Capture specific region
+  --monitor=<N>          Reserved; currently rejected
+  --region=<X,Y,W,H>     Reserved; currently rejected
 
 INPUT OPTIONS:
   --no-mouse             Disable mouse input bridging
-  --no-keyboard          Disable keyboard input forwarding
-  --mouse-scale=<N>      Mouse sensitivity multiplier (0.1-10.0)
+  --keyboard, -k         Reserved; currently rejected
 
 PERFORMANCE OPTIONS:
   --no-diff              Disable diff engine (redraw all cells)
-  --no-simd              Disable SIMD acceleration
-  --buffer-count=<N>     Frame buffer count (2-4, default: 2)
-  --parallel             Enable parallel processing
+  --threads=<N>          Framebuffer worker limit (1-64)
+  --low-latency          Prefer low-latency settings
 
 DEBUG OPTIONS:
   --debug                Show performance overlay
-  --log-level=<LEVEL>    Logging level (trace/debug/info/warn/error)
-  --log-file=<PATH>      Write logs to file
-  --metrics              Enable detailed metrics collection
-  --benchmark            Run performance benchmark and exit
-
-PRESETS:
-  --preset=<NAME>        Use predefined configuration:
-                           high       - Maximum quality
-                           medium     - Balanced (default equivalent)
-                           low        - Minimum bandwidth
-                           ssh        - Optimized for SSH
-                           lan        - Optimized for LAN
+  --stats                Show performance statistics
 
 OTHER:
   --help, -h             Display this help message
   --version, -v          Display version information
-  --list-monitors        List available monitors and exit
-  --list-terminals       Show terminal capability detection
 ```
 
 ### Environment Variables
@@ -368,8 +345,8 @@ When mouse bridging is enabled:
 │  │  │                 │  │                 │  │  ┌───────────┐  │           │   │
 │  │  │  • RGB/HSL/LAB  │  │  • Downscaling  │  │  │ Previous  │  │           │   │
 │  │  │  • Grayscale    │  │  • Bilinear     │  │  │ Frame     │  │           │   │
-│  │  │  • Dithering    │  │  • Bicubic      │  │  └─────┬─────┘  │           │   │
-│  │  │  • Quantization │  │  • Lanczos      │  │        │        │           │   │
+│  │  │  • ANSI Palettes│  │  • Fit/Fill     │  │  └─────┬─────┘  │           │   │
+│  │  │  • Quantization │  │  • Pixel Mode   │  │        │        │           │   │
 │  │  │                 │  │  • SIMD Accel   │  │  ┌─────▼─────┐  │           │   │
 │  │  └────────┬────────┘  └────────┬────────┘  │  │ Current   │  │           │   │
 │  │           │                    │           │  │ Frame     │  │           │   │
@@ -615,14 +592,14 @@ public class FrameBufferManager : IDisposable
 }
 ```
 
-**Scaling Algorithms:**
+**Scaling Modes:**
 
 | Mode       | Quality | Speed   | Use Case                        |
 |------------|---------|---------|---------------------------------|
-| `Nearest`  | Lowest  | Fastest | Pixel art, performance critical |
-| `Bilinear` | Good    | Fast    | Default, balanced               |
-| `Bicubic`  | Better  | Medium  | High quality viewing            |
-| `Lanczos`  | Best    | Slow    | Maximum quality                 |
+| `Fit`      | Good    | Fast    | Preserve aspect ratio           |
+| `Fill`     | Good    | Fast    | Fill terminal, crop overflow    |
+| `Stretch`  | Basic   | Fastest | Use every terminal cell         |
+| `Pixel`    | Sharp   | Fast    | Pixel-perfect where possible    |
 
 ### Diff Engine Module (`DiffEngine/`)
 
@@ -879,11 +856,8 @@ g2c.exe --simd  # Enabled by default if supported
 G2C automatically detects terminal capabilities:
 
 ```bash
-# Check detected capabilities
-g2c.exe --list-terminals
-
 # Force specific color mode
-g2c.exe --color-mode=256
+g2c.exe --color=256
 ```
 
 ### SSH Configuration
@@ -941,23 +915,9 @@ G2C uses several strategies to minimize GC pressure:
 3. **ArrayPool**: Rented arrays for temporary storage
 4. **Value Types**: Structs for Pixel, Cell, etc.
 
-### Multi-Monitor Support
+### Multi-Monitor And Region Capture
 
-```bash
-# List available monitors
-g2c.exe --list-monitors
-
-# Output:
-# Monitor 0: 1920x1080 @ (0, 0) [Primary]
-# Monitor 1: 2560x1440 @ (1920, 0)
-# Monitor 2: 1920x1080 @ (-1920, 0)
-
-# Capture specific monitor
-g2c.exe --monitor=1
-
-# Capture region across monitors
-g2c.exe --region=1920,0,2560,1440
-```
+Multi-monitor selection and region capture are reserved CLI options but are not implemented in the current binary. Passing `--monitor` or `--region` returns a configuration error instead of being silently ignored.
 
 ---
 
@@ -966,17 +926,14 @@ g2c.exe --region=1920,0,2560,1440
 ### Diagnostic Commands
 
 ```bash
-# Run built-in diagnostics
-g2c.exe --diagnose
+# Show CLI help
+g2c.exe --help
 
-# Performance benchmark
-g2c.exe --benchmark
+# Show version and runtime information
+g2c.exe --version
 
-# Capture method test
-g2c.exe --test-capture
-
-# Terminal capability test
-g2c.exe --test-terminal
+# Show render performance overlay
+g2c.exe --debug --stats
 ```
 
 ### Common Issues
@@ -1002,7 +959,7 @@ g2c.exe --test-terminal
 
 | Cause                  | Solution                  |
 |------------------------|---------------------------|
-| No truecolor support   | Use `--color-mode=256`    |
+| No truecolor support   | Use `--color=256`         |
 | Terminal misconfigured | Set `COLORTERM=truecolor` |
 | Color profile mismatch | Check monitor ICC profile |
 
@@ -1127,7 +1084,7 @@ G2C/
 │   └── AnsiRenderer.cs           # ANSI escape sequence generation
 │
 ├── InputBridge/                  # Input handling
-│   └── InputBridge.cs            # Mouse/keyboard bridging
+│   └── InputBridge.cs            # Mouse bridging
 │
 ├── Color/                        # Color processing
 │   └── ColorProcessor.cs         # Color space conversions
@@ -1155,10 +1112,10 @@ G2C/
 - Initial release
 - DXGI and GDI capture support
 - Truecolor, 256-color, and 16-color output modes
-- Bilinear, bicubic, and Lanczos scaling
+- Fit, fill, stretch, and pixel-perfect scaling
+- Half-block, quadrant, braille, full-block, and shade character modes
 - Diff-based rendering optimization
 - Mouse input bridging
-- Multi-monitor support
 - Performance metrics and logging
 
 ---
