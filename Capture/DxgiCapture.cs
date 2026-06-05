@@ -71,6 +71,7 @@ public sealed class DxgiCapture : IScreenCapture
         }
         catch (Exception ex)
         {
+            Cleanup();
             Debug.WriteLine($"[DxgiCapture] Initialization failed: {ex.Message}");
             IsAvailable = false;
         }
@@ -439,6 +440,7 @@ public sealed class DxgiCapture : IScreenCapture
         }
         catch (Exception ex)
         {
+            Cleanup();
             Debug.WriteLine($"[DxgiCapture] Reinitialization failed: {ex.Message}");
         }
     }
@@ -486,6 +488,9 @@ public sealed class DxgiCapture : IScreenCapture
             SafeRelease(ref _duplication);
             SafeRelease(ref _context);
             SafeRelease(ref _device);
+
+            _initialized = false;
+            IsAvailable = false;
         }
     }
 

@@ -59,6 +59,7 @@ public sealed class GdiCapture : IScreenCapture
         }
         catch (Exception ex)
         {
+            CleanupGdiResources();
             Debug.WriteLine($"[GdiCapture] Initialization failed: {ex.Message}");
             IsAvailable = false;
         }
@@ -340,6 +341,9 @@ public sealed class GdiCapture : IScreenCapture
             ReleaseDC(nint.Zero, _hdcScreen);
             _hdcScreen = nint.Zero;
         }
+
+        _initialized = false;
+        IsAvailable = false;
     }
 
     public void Dispose()
