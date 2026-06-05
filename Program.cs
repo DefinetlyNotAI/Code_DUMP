@@ -174,7 +174,8 @@ sealed class G2CApplication : IDisposable
                 _termWidth, _termHeight,
                 _config.Grayscale,
                 _config.ScaleMode,
-                _config.CharacterSet);
+                _config.CharacterSet,
+                _config.ThreadCount);
 
             // Create diff engine
             _diffEngine = new DiffEngine(_config.NoDiff);

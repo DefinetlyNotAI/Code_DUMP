@@ -25,6 +25,7 @@ public sealed class FrameBufferManager
     private readonly bool _grayscale;
     private readonly ScaleMode _scaleMode;
     private readonly CharacterSet _characterSet;
+    private readonly ParallelOptions _parallelOptions;
     
     // Scaling parameters
     private float _scaleX;
@@ -82,13 +83,20 @@ public sealed class FrameBufferManager
         int terminalHeight,
         bool grayscale = false, 
         ScaleMode scaleMode = ScaleMode.Fit,
-        CharacterSet characterSet = CharacterSet.HalfBlock)
+        CharacterSet characterSet = CharacterSet.HalfBlock,
+        int maxDegreeOfParallelism = -1)
     {
         _sourceWidth = sourceWidth;
         _sourceHeight = sourceHeight;
         _grayscale = grayscale;
         _scaleMode = scaleMode;
         _characterSet = characterSet;
+        _parallelOptions = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = maxDegreeOfParallelism > 0
+                ? maxDegreeOfParallelism
+                : Environment.ProcessorCount
+        };
         
         // Determine pixels per cell based on character set
         (_pixelsPerCellX, _pixelsPerCellY) = characterSet switch
@@ -288,7 +296,7 @@ public sealed class FrameBufferManager
         // Use parallel processing for larger frames
         if (_terminalWidth * _terminalHeight > 1000)
         {
-            Parallel.For(0, scaledHeightCells, y =>
+            Parallel.For(0, scaledHeightCells, _parallelOptions, y =>
             {
                 ProcessHalfBlockRow(y, offsetXCells, offsetYCells, scaledWidthCells);
             });
@@ -337,7 +345,7 @@ public sealed class FrameBufferManager
         int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
         int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
 
-        Parallel.For(0, scaledHeightCells, y =>
+        Parallel.For(0, scaledHeightCells, _parallelOptions, y =>
         {
             int termY = y + offsetYCells;
             if (termY < 0 || termY >= _terminalHeight) return;
@@ -381,7 +389,7 @@ public sealed class FrameBufferManager
         int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
         int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
 
-        Parallel.For(0, scaledHeightCells, y =>
+        Parallel.For(0, scaledHeightCells, _parallelOptions, y =>
         {
             int termY = y + offsetYCells;
             if (termY < 0 || termY >= _terminalHeight) return;
@@ -439,7 +447,7 @@ public sealed class FrameBufferManager
         int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
         int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
 
-        Parallel.For(0, scaledHeightCells, y =>
+        Parallel.For(0, scaledHeightCells, _parallelOptions, y =>
         {
             int termY = y + offsetYCells;
             if (termY < 0 || termY >= _terminalHeight) return;
@@ -465,7 +473,7 @@ public sealed class FrameBufferManager
         int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
         int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
 
-        Parallel.For(0, scaledHeightCells, y =>
+        Parallel.For(0, scaledHeightCells, _parallelOptions, y =>
         {
             int termY = y + offsetYCells;
             if (termY < 0 || termY >= _terminalHeight) return;
@@ -608,3 +616,4 @@ public sealed class FrameBufferManager
         _totalProcessingTimeMs = 0;
     }
 }
+
