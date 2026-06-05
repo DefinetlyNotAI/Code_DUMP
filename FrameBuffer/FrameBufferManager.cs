@@ -262,6 +262,12 @@ public sealed class FrameBufferManager
             case CharacterSet.Braille:
                 ProcessBrailleFrame();
                 break;
+            case CharacterSet.FullBlock:
+                ProcessFullBlockFrame();
+                break;
+            case CharacterSet.AsciiShade:
+                ProcessAsciiShadeFrame();
+                break;
             default:
                 ProcessHalfBlockFrame();
                 break;
@@ -361,10 +367,8 @@ public sealed class FrameBufferManager
                     br = br.ToGrayscale();
                 }
 
-                // For simplicity, use half-block cell with averaged colors
-                var top = Pixel.Lerp(tl, tr, 0.5f);
-                var bottom = Pixel.Lerp(bl, br, 0.5f);
-                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(top, bottom);
+                var (glyph, foreground, background) = new QuadrantCell(tl, tr, bl, br).GetBestRepresentation();
+                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(foreground, background, glyph);
             }
         });
     }
@@ -387,22 +391,105 @@ public sealed class FrameBufferManager
                 int termX = x + offsetXCells;
                 if (termX < 0 || termX >= _terminalWidth) continue;
 
-                // For braille, we need 8 samples (2x4)
-                // Convert to grayscale for threshold
+                int sampleIndex = 0;
                 int sum = 0;
+                int r = 0;
+                int g = 0;
+                int b = 0;
+                ulong packedLuminances = 0;
+
                 for (int py = 0; py < 4; py++)
                 {
                     for (int px = 0; px < 2; px++)
                     {
                         var p = SamplePixelBilinear(x * 2 + px, y * 4 + py);
-                        sum += p.Luminance;
+                        byte luminance = p.Luminance;
+                        packedLuminances |= (ulong)luminance << (sampleIndex * 8);
+                        sampleIndex++;
+                        sum += luminance;
+                        r += p.R;
+                        g += p.G;
+                        b += p.B;
                     }
                 }
 
-                // Use average luminance for cell color
-                byte avgLum = (byte)(sum / 8);
-                var color = new Pixel(avgLum, avgLum, avgLum);
-                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(color, Pixel.Black);
+                byte threshold = (byte)(sum / 8);
+                byte brailleBits = 0;
+                for (int i = 0; i < 8; i++)
+                {
+                    byte luminance = (byte)(packedLuminances >> (i * 8));
+                    if (threshold == 0 ? luminance > 0 : luminance >= threshold)
+                        brailleBits |= (byte)(1 << i);
+                }
+
+                char glyph = new BrailleCell(brailleBits).ToChar();
+                var color = _grayscale
+                    ? new Pixel((byte)(sum / 8), (byte)(sum / 8), (byte)(sum / 8))
+                    : new Pixel((byte)(r / 8), (byte)(g / 8), (byte)(b / 8));
+
+                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(color, Pixel.Black, glyph);
+            }
+        });
+    }
+
+    private void ProcessFullBlockFrame()
+    {
+        int offsetXCells = _offsetX / _pixelsPerCellX;
+        int offsetYCells = _offsetY / _pixelsPerCellY;
+        int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
+        int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
+
+        Parallel.For(0, scaledHeightCells, y =>
+        {
+            int termY = y + offsetYCells;
+            if (termY < 0 || termY >= _terminalHeight) return;
+
+            for (int x = 0; x < scaledWidthCells; x++)
+            {
+                int termX = x + offsetXCells;
+                if (termX < 0 || termX >= _terminalWidth) continue;
+
+                var pixel = SamplePixelBilinear(x, y);
+                if (_grayscale)
+                    pixel = pixel.ToGrayscale();
+
+                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(pixel, Pixel.Black, '█');
+            }
+        });
+    }
+
+    private void ProcessAsciiShadeFrame()
+    {
+        int offsetXCells = _offsetX / _pixelsPerCellX;
+        int offsetYCells = _offsetY / _pixelsPerCellY;
+        int scaledWidthCells = _scaledWidth / _pixelsPerCellX;
+        int scaledHeightCells = _scaledHeight / _pixelsPerCellY;
+
+        Parallel.For(0, scaledHeightCells, y =>
+        {
+            int termY = y + offsetYCells;
+            if (termY < 0 || termY >= _terminalHeight) return;
+
+            for (int x = 0; x < scaledWidthCells; x++)
+            {
+                int termX = x + offsetXCells;
+                if (termX < 0 || termX >= _terminalWidth) continue;
+
+                var pixel = SamplePixelBilinear(x, y);
+                byte luminance = pixel.Luminance;
+                char glyph = luminance switch
+                {
+                    < 32 => ' ',
+                    < 96 => '░',
+                    < 160 => '▒',
+                    < 224 => '▓',
+                    _ => '█'
+                };
+
+                if (_grayscale)
+                    pixel = pixel.ToGrayscale();
+
+                _currentFrame[termY * _terminalWidth + termX] = new TerminalCell(pixel, Pixel.Black, glyph);
             }
         });
     }

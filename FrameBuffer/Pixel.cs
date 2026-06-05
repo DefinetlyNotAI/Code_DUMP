@@ -179,11 +179,13 @@ public readonly struct TerminalCell : IEquatable<TerminalCell>
 {
     public readonly Pixel Foreground; // Top pixel (▀ character color)
     public readonly Pixel Background; // Bottom pixel (cell background)
+    public readonly char Glyph;
 
-    public TerminalCell(Pixel foreground, Pixel background)
+    public TerminalCell(Pixel foreground, Pixel background, char glyph = '▀')
     {
         Foreground = foreground;
         Background = background;
+        Glyph = glyph;
     }
 
     /// <summary>
@@ -197,7 +199,8 @@ public readonly struct TerminalCell : IEquatable<TerminalCell>
     /// </summary>
     public bool IsSimilarTo(TerminalCell other, int threshold = 8)
     {
-        return Foreground.DistanceSquared(other.Foreground) < threshold * threshold &&
+        return Glyph == other.Glyph &&
+               Foreground.DistanceSquared(other.Foreground) < threshold * threshold &&
                Background.DistanceSquared(other.Background) < threshold * threshold;
     }
 
@@ -214,13 +217,13 @@ public readonly struct TerminalCell : IEquatable<TerminalCell>
     /// <summary>
     /// Creates a cell for letterboxing (black bars).
     /// </summary>
-    public static readonly TerminalCell Letterbox = new(Pixel.Black, Pixel.Black);
+    public static readonly TerminalCell Letterbox = new(Pixel.Black, Pixel.Black, ' ');
 
     public bool Equals(TerminalCell other) =>
-        Foreground == other.Foreground && Background == other.Background;
+        Foreground == other.Foreground && Background == other.Background && Glyph == other.Glyph;
 
     public override bool Equals(object? obj) => obj is TerminalCell other && Equals(other);
-    public override int GetHashCode() => HashCode.Combine(Foreground.GetHashCode(), Background.GetHashCode());
+    public override int GetHashCode() => HashCode.Combine(Foreground.GetHashCode(), Background.GetHashCode(), Glyph);
     
     public static bool operator ==(TerminalCell left, TerminalCell right) => left.Equals(right);
     public static bool operator !=(TerminalCell left, TerminalCell right) => !left.Equals(right);

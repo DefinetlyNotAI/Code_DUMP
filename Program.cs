@@ -180,10 +180,9 @@ sealed class G2CApplication : IDisposable
             _diffEngine = new DiffEngine(_config.NoDiff);
 
             // Create renderer with appropriate color mode
-            var colorMode = _config.Grayscale ? ColorMode.Grayscale : ColorMode.TrueColor;
             _renderer = new AnsiRenderer(
                 _termWidth, _termHeight,
-                colorMode,
+                GetRendererColorMode(),
                 useAlternateBuffer: true,
                 enableSynchronizedOutput: _config.UseSynchronizedOutput);
 
@@ -361,6 +360,19 @@ sealed class G2CApplication : IDisposable
             var runs = _diffEngine!.OptimizeUpdates(updates, _termWidth);
             _renderer!.RenderRuns(runs);
         }
+    }
+
+    private ColorMode GetRendererColorMode()
+    {
+        if (_config.Grayscale)
+            return ColorMode.Grayscale;
+
+        return _config.ColorDepth switch
+        {
+            ColorDepth.Color256 => ColorMode.Color256,
+            ColorDepth.Color16 or ColorDepth.AnsiBasic => ColorMode.Color16,
+            _ => ColorMode.TrueColor
+        };
     }
 
     /// <summary>

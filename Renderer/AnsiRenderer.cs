@@ -95,7 +95,6 @@ public sealed class AnsiRenderer : IDisposable
     private static readonly byte[] InverseOff = Encoding.ASCII.GetBytes("\x1b[27m");
 
     // Character constants
-    private const char HalfBlockUpper = '▀';
     private const char HalfBlockLower = '▄';
     private const char FullBlock = '█';
     private const char LightShade = '░';
@@ -419,8 +418,8 @@ public sealed class AnsiRenderer : IDisposable
             _colorsInitialized = true;
         }
 
-        // Append the half-block character (UTF-8: 3 bytes)
-        AppendUtf8Char(HalfBlockUpper);
+        EnsureCapacity(4);
+        AppendUtf8Char(cell.Glyph);
 
         return (fgChanged, bgChanged, escapes, colors);
     }
@@ -675,7 +674,14 @@ public sealed class AnsiRenderer : IDisposable
     {
         if (_bytePos + needed > _byteBuffer.Length)
         {
-            var newBuffer = ArrayPool<byte>.Shared.Rent(_byteBuffer.Length * 2);
+            int newSize = _byteBuffer.Length;
+            do
+            {
+                newSize *= 2;
+            }
+            while (_bytePos + needed > newSize);
+
+            var newBuffer = ArrayPool<byte>.Shared.Rent(newSize);
             _byteBuffer.AsSpan(0, _bytePos).CopyTo(newBuffer);
             ArrayPool<byte>.Shared.Return(_byteBuffer);
             _byteBuffer = newBuffer;
