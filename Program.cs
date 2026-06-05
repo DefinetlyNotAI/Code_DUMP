@@ -108,6 +108,7 @@ sealed class G2CApplication : IDisposable
     
     // State
     private bool _isDisposed;
+    private bool _showInfoOverlay;
 
     public G2CApplication(Configuration config)
     {
@@ -128,12 +129,6 @@ sealed class G2CApplication : IDisposable
         {
             return 1;
         }
-
-        // Display startup info
-        PrintStartupInfo();
-
-        // Brief pause to show info
-        await Task.Delay(1500, _cts.Token);
 
         // Enter main render loop
         await MainLoopAsync();
@@ -260,36 +255,6 @@ sealed class G2CApplication : IDisposable
     }
 
     /// <summary>
-    /// Prints startup information to the console.
-    /// </summary>
-    private void PrintStartupInfo()
-    {
-        string captureMethod = _capture switch
-        {
-            DxgiCapture => "DXGI Desktop Duplication",
-            GdiCapture => "GDI BitBlt",
-            _ => "Unknown"
-        };
-
-        Console.WriteLine("╔══════════════════════════════════════════════════════════════╗");
-        Console.WriteLine("║                   G2C - GUI to CLI                           ║");
-        Console.WriteLine("║          Render your desktop in the terminal                 ║");
-        Console.WriteLine("╠══════════════════════════════════════════════════════════════╣");
-        Console.WriteLine($"║  Screen:     {_screenWidth}x{_screenHeight} pixels".PadRight(65) + "║");
-        Console.WriteLine($"║  Terminal:   {_termWidth}x{_termHeight} cells".PadRight(65) + "║");
-        Console.WriteLine($"║  Capture:    {captureMethod}".PadRight(65) + "║");
-        Console.WriteLine($"║  Target FPS: {_config.TargetFps}".PadRight(65) + "║");
-        Console.WriteLine($"║  Scale:      {_config.ScaleMode}".PadRight(65) + "║");
-        Console.WriteLine($"║  Grayscale:  {(_config.Grayscale ? "Yes" : "No")}".PadRight(65) + "║");
-        Console.WriteLine($"║  Diff:       {(_config.NoDiff ? "Disabled" : "Enabled")}".PadRight(65) + "║");
-        Console.WriteLine($"║  Mouse:      {(_config.EnableMouse ? "Enabled" : "Disabled")}".PadRight(65) + "║");
-        Console.WriteLine("╠══════════════════════════════════════════════════════════════╣");
-        Console.WriteLine("║  Press Ctrl+C to exit                                        ║");
-        Console.WriteLine("╚══════════════════════════════════════════════════════════════╝");
-        Console.WriteLine();
-    }
-
-    /// <summary>
     /// Main render loop.
     /// </summary>
     private async Task MainLoopAsync()
@@ -309,6 +274,11 @@ sealed class G2CApplication : IDisposable
 
             if (_targetProcess is { HasExited: true })
                 break;
+
+            if (HandleHotkeys())
+            {
+                isFirstFrame = true;
+            }
 
             // Check for terminal resize
             var resizeResult = await HandleTerminalResizeAsync(
@@ -365,8 +335,8 @@ sealed class G2CApplication : IDisposable
             // Update performance tracking
             _perfTracker.RecordFrame(captureTime, processTime, diffTime, renderTime, updates.Count);
 
-            // Render debug overlay if enabled
-            if (_config.ShowDebugInfo)
+            // Render info overlay only when toggled on.
+            if (_showInfoOverlay)
             {
                 _renderer!.RenderDebugInfo(
                     _perfTracker.CurrentFps,
@@ -413,6 +383,24 @@ sealed class G2CApplication : IDisposable
             var runs = _diffEngine!.OptimizeUpdates(updates, _termWidth);
             _renderer!.RenderRuns(runs);
         }
+    }
+
+    private bool HandleHotkeys()
+    {
+        bool changed = false;
+
+        while (Console.KeyAvailable)
+        {
+            var key = Console.ReadKey(intercept: true);
+            if (key.Key == ConsoleKey.F6)
+            {
+                _showInfoOverlay = !_showInfoOverlay;
+                _renderer?.ResetScreen();
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     private bool RefreshCaptureDimensions()
@@ -463,9 +451,8 @@ sealed class G2CApplication : IDisposable
 
         _frameBuffer!.Resize(newWidth, newHeight);
         _renderer!.Resize(newWidth, newHeight);
+        _renderer.ResetScreen();
         _diffEngine!.ResetAdaptiveState();
-
-        _renderer.Initialize();
 
         await Task.Delay(50, _cts.Token);
 
@@ -496,15 +483,6 @@ sealed class G2CApplication : IDisposable
         _frameBuffer?.Dispose();
         _capture?.Dispose();
         _targetProcess?.Dispose();
-
-        // Print farewell message
-        Console.WriteLine();
-        Console.WriteLine("[G2C] Session statistics:");
-        Console.WriteLine($"  Total frames:   {_perfTracker.TotalFrames}");
-        Console.WriteLine($"  Average FPS:    {_perfTracker.AverageFps:F1}");
-        Console.WriteLine($"  Avg capture:    {_perfTracker.AverageCaptureTimeMs:F2}ms");
-        Console.WriteLine($"  Avg render:     {_perfTracker.AverageRenderTimeMs:F2}ms");
-        Console.WriteLine("[G2C] Goodbye!");
 
         _cts.Dispose();
     }

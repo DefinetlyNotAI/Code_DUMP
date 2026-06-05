@@ -191,6 +191,19 @@ public sealed class AnsiRenderer : IDisposable
         _lastCursorY = -1;
     }
 
+    public void ResetScreen()
+    {
+        _bytePos = 0;
+        _colorsInitialized = false;
+        _lastCursorX = -1;
+        _lastCursorY = -1;
+
+        AppendBytes(Reset);
+        AppendBytes(ClearScreen);
+        AppendBytes(Home);
+        FlushBuffer();
+    }
+
     /// <summary>
     /// Initializes the terminal for rendering.
     /// </summary>
