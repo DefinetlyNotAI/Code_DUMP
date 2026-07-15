@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spc-simulated-pc"
+version = "0.1.0"
+description = "SPC: Simulated PC, a chunked world simulation seeded from host hardware."
+requires-python = ">=3.11"
+dependencies = [
+  "pygame-ce>=2.5.2",
+  "requests>=2.32.0",
+  "rich>=13.7.1",
+]
+
+[tool.setuptools]
+packages = ["spc"]
