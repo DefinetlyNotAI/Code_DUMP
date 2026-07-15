@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!--suppress HtmlUnknownTarget -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!--suppress HtmlUnknownTarget -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+<!-- Auto-refresh toggle -->
+<div class="toggle-container">
+    <span class="text-sm font-medium">Auto-refresh</span>
+    <div id="refreshToggle" class="toggle-button active" role="button" tabindex="0"></div>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    <header class="dashboard-header">
+        <h1 class="text-3xl font-bold mb-2">Windows Network Monitor</h1>
+        <p class="text-gray-400">System Administration Dashboard</p>
+    </header>
+
+    <!-- Network Graph -->
+    <div class="metric-card mb-8">
+        <h2 class="text-xl font-semibold mb-4">Network Activity Graph</h2>
+        <div id="networkGraph" class="w-full h-96"></div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Active Connections -->
+        <div class="metric-card">
+            <h3 class="text-lg font-semibold mb-4">Active Connections</h3>
+            <div id="activeConnections" class="overflow-auto max-h-60">
+                <table class="w-full text-sm">
+                    <thead>
+                    <tr class="text-gray-400">
+                        <th class="text-left py-2">Local</th>
+                        <th class="text-left py-2">Remote</th>
+                        <th class="text-left py-2">State</th>
+                    </tr>
+                    </thead>
+                    <tbody id="connectionsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Network Adapters -->
+        <div class="metric-card">
+            <h3 class="text-lg font-semibold mb-4">Network Adapters</h3>
+            <div id="networkAdapters" class="space-y-4"></div>
+        </div>
+
+        <!-- IP Information -->
+        <div class="metric-card">
+            <h3 class="text-lg font-semibold mb-4">IP Configuration</h3>
+            <div id="ipInfo" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Firewall Rules -->
+    <div class="metric-card">
+        <h2 class="text-xl font-semibold mb-4">Active Firewall Rules</h2>
+        <div id="firewallRules" class="overflow-auto max-h-96">
+            <table class="w-full text-sm">
+                <thead>
+                <tr class="text-gray-400">
+                    <th class="text-left py-2">Name</th>
+                    <th class="text-left py-2">Direction</th>
+                    <th class="text-left py-2">Action</th>
+                    <th class="text-left py-2">Profile</th>
+                </tr>
+                </thead>
+                <tbody id="firewallTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

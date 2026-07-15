@@ -1,0 +1,7 @@
+[*] Functions and Classes:
+  Function: is_empty_tuple_truthy() @ line 1
+  Function: weird_addition() @ line 4
+  Function: greet() @ line 8
+  Class: Impostor @ line 11
+  Function: __init__() @ line 12
+  Function: act_normal() @ line 15
