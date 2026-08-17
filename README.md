@@ -118,14 +118,14 @@
 ---
 
 ### Available GitHub webpages to test can be found here
-- [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Old%20BulletHell%20Engine/)
-- [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/WesHack%20Showcase%20Template)
-- [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/WesMun%20WIP%20Page%20Example)
-- [WuWa Pull Calculator](https://definetlynotai.github.io/Code_DUMP/WuWa%20Pull%20Calculator)
-- [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Locked%20Website%20Template/lockdown)
-- [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/LeetCoin%20Calculator)
-- [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/IGCSE%20Grade%20Equivelancy%20Calculator)
-- [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/VulnScan%20Data/NN%20features/Loss_Landscape_3D.html)
+- [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Projects/Old%20BulletHell%20Engine/)
+- [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/Projects/WesHack%20Showcase%20Template)
+- [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/Projects/WesMun%20WIP%20Page%20Example)
+- [WuWa Pull Calculator](https://definetlynotai.github.io/Code_DUMP/Projects/WuWa%20Pull%20Calculator)
+- [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Projects/Locked%20Website%20Template/lockdown)
+- [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/Projects/LeetCoin%20Calculator)
+- [IGCSE Grade Equivelancy Calculator](https://definetlynotai.github.io/Code_DUMP/Projects/IGCSE%20Grade%20Equivelancy%20Calculator)
+- [VulnScan 3D Loss Graph](https://definetlynotai.github.io/Code_DUMP/Projects/VulnScan%20Data/NN%20features/Loss_Landscape_3D.html)
 
 ---
 
