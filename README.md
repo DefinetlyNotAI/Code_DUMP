@@ -121,7 +121,7 @@
 ### Available GitHub webpages to test can be found here
 - [Bullet Hell Test Engine: EBF](https://definetlynotai.github.io/Code_DUMP/Projects/Old%20BulletHell%20Engine/)
 - [Wes:Hack Project Showcase Template - Unused](https://definetlynotai.github.io/Code_DUMP/Projects/WesHack%20Showcase%20Template)
-- [WIP Page Template - Used in WESMUN](https://definetlynotai.github.io/Code_DUMP/Projects/WesMun%20WIP%20Page%20Example)
+- [WIP Page Template - Used in WESMUN 24](https://definetlynotai.github.io/Code_DUMP/Projects/WESMUN%20WIP%20Page%20Example)
 - [WuWa Pull Calculator](https://definetlynotai.github.io/Code_DUMP/Projects/WuWa%20Pull%20Calculator)
 - [Locked/Seized Page Template](https://definetlynotai.github.io/Code_DUMP/Projects/Locked%20Website%20Template/lockdown)
 - [LeetCoin Merch Calculator](https://definetlynotai.github.io/Code_DUMP/Projects/LeetCoin%20Calculator)
