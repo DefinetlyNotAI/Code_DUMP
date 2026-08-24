@@ -1,0 +1,13 @@
+Bug: [browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+bug: GET /.well-known/gpc.json 404 in 315ms (next.js: 278ms, application-code: 37ms)
+
+Add a page for DM's/GM's to setup the resources like enemies and weapons and items and status effects and EVERYTHING the game saves/offers, this way this is where a DM will need to act and interfere and the rest is upto the user
+
+Starting fresh must provide NOTHING, and purely an empty slate
+
+Gacha pull should include a pull animation and a output overlay (Pool entries should include % chances and allow edits to change or remove)
+
+Allow entering a player as a separate page styled like a character card
+
+Change the fighting stage to completely be featureless and only as a counter for HP, TP, round number, status effects and history etc (for dmg, each ability of a player has a ATK% value that deals ATK x ATK% with a dice roll depending on the attack where it can miss, self-harm, be dodged, crit, or attack weaker or attack normal)
