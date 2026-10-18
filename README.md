@@ -2,13 +2,13 @@
 
 <div align="center">
   <a href="https://github.com/DefinetlyNotAI/Code_DUMP">
-    <img src="https://img.shields.io/github/repo-size/DefinetlyNotAI/Code_DUMP" alt="Repo Size" />
+    <img src="https://img.shields.io/github/repo-size/DefinetlyNotAI/Code_DUMP?style=flat-square" alt="Repo Size" />
   </a>
-  <a href="https://github.com/DefinetlyNotAI/Code_DUMP/commits">
-    <img src="https://img.shields.io/github/last-commit/DefinetlyNotAI/Code_DUMP" alt="Last Commit" />
+  <a href="https://github.com/DefinetlyNotAI/Code_DUMP/commits/main">
+    <img src="https://img.shields.io/github/last-commit/DefinetlyNotAI/Code_DUMP?style=flat-square" alt="Last Commit" />
   </a>
   <a href="https://github.com/DefinetlyNotAI/Code_DUMP/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/DefinetlyNotAI/Code_DUMP" alt="License" />
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="MIT License" />
   </a>
 </div>
 
