@@ -38,7 +38,7 @@
   },
   "pnpm": {
     "overrides": {
-      "hono": "4.13.9"
+      "hono": "4.13.13"
     },
     "onlyBuiltDependencies": [
       "better-sqlite3"
